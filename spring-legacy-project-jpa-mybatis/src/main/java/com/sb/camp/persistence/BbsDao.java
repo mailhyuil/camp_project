@@ -2,6 +2,8 @@ package com.sb.camp.persistence;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.sb.camp.domain.Bbs;
 import com.sb.camp.domain.Image;
 import com.sb.camp.domain.Pagination;
@@ -14,4 +16,6 @@ public interface BbsDao extends GenericDao<Bbs, Long>{
     public List<Image> getImagesByBbsId(long bbsId);
     public int insertVideo(Video video);
     public Video getVideoByBbsId(long bbsId);
+    
+    public List<Image> findImages(@Param(value = "limit") int limit, @Param(value = "offset") int offset);
 }

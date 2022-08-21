@@ -1,11 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<html lang="ko" 
+	xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
 <h1>글쓰기</h1>
 <form th:action="@{/bbs/insert}" method="post" enctype="multipart/form-data">
     <input name="title" type="text" placeholder="제목을 입력해주세요"/>
@@ -18,5 +16,5 @@
     <input id="file" name="video" type="file" accept="application/mp4">
     <button>글작성</button>
 </form>
-</body>
+</th:block>
 </html>

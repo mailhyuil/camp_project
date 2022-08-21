@@ -60,6 +60,9 @@
 		SELECT * FROM image WHERE bbsId = #{bbsId}
 	</select>
 	
+	<select id="findImages" resultType="Image">
+		SELECT * FROM image LIMIT #{limit} OFFSET #{offset} 
+	</select>
 	<!-- VIDEO UPLOAD -->
 	<insert id="insertVideo" parameterType="Video">
 		INSERT INTO video(bbsId, data, username

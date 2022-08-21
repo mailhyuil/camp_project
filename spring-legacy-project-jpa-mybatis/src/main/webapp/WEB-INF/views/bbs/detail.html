@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" 
+	xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
 
-<head>
-	<meta charset="UTF-8">
-	<title>Title</title>
-</head>
-
-<body>
 	<h1>detail</h1>
 	<h1 th:text="${BBS.title}"></h1>
 	<h5 th:text="${BBS.username}"></h5>
+	<div style="display:flex;flex-direction:column;">
 	<h2 th:text="${BBS.content}"></h2>
 	<th:block th:if="${BBS.imgs != null}" th:each="img:${BBS.imgs}">
 		<img th:src="|@{/upload/}${img.img}|" />
 	</th:block>
 	<video width="720px" height="480px" controls></video>
-</body>
+	</div>
 <script th:inline="javascript">
 /*<![CDATA[*/
 	const videoScreen = document.querySelector("video");
@@ -23,5 +22,5 @@
 	videoScreen.src = "http://localhost:8080/video/" + /*[[${BBS.id}]]*/;
 /*]]>*/
 </script>
-
+</th:block>
 </html>

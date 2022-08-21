@@ -53,8 +53,8 @@ public class BbsController {
         return null;
     }
 
-    @GetMapping("/video")
-    public String video(){
+    @GetMapping("/collection")
+    public String collection(){
         return null;
     }
 }

@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="ko"
-      xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+	xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
 <h1>게시판</h1>
 <table>
     <tr>
@@ -71,5 +69,5 @@
         location.href = url;
     }
 </script>
-</body>
+</th:block>
 </html>
