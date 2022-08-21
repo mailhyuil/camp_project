@@ -1,5 +1,6 @@
-<html lagn="ko" 
-      xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" 
+      xmlns:th="http://www.thymeleaf.org"
+	  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
        
     <!--headerFragment 선언-->
     <div th:fragment="headerFragment">
@@ -7,9 +8,9 @@
 	    <nav>
 			<ul>
 				<li>둘러보기</li>
-				<li><a th:href="@{/user/login}">로그인</a></li>
-				<li><a th:href="@{/user/join}">회원가입</a></li>
-				<li>about</li>
+				<li sec:authorize="isAnonymous()"><a th:href="@{/user/login}">로그인</a></li>
+				<li sec:authorize="isAnonymous()"><a th:href="@{/user/join}">회원가입</a></li>
+				<li sec:authorize="isAuthenticated() AND hasRole('ROLE_USER')"><a th:href="@{/user/join}">마이페이지</a></li>				
 			</ul>
 		</nav>
     </div>

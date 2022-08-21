@@ -11,11 +11,12 @@
 
 	<select id="findById" resultType="Camp">
 		SELECT * from camp where
-		camp_id = #{camp_id}
+		contentId = #{contentId}
 	</select>
+	
 	<insert id="insertAPI" parameterType="Camp">
-		INSERT INTO camp(
-		camp_id,
+		INSERT IGNORE INTO camp(
+		contentId,
 		facltNm,
 		lineIntro,
 		intro,
@@ -30,7 +31,7 @@
 		VALUES
 		<foreach collection="list" item="vo" separator=", ">
 			(
-			#{vo.camp_id},
+			#{vo.contentId},
 			#{vo.facltNm},
 			#{vo.lineIntro},
 			#{vo.intro},
@@ -45,9 +46,10 @@
 			)
 		</foreach>
 	</insert>
+	
 	<insert id="insert" parameterType="Camp">
 		INSERT INTO camp(
-		camp_id,
+		contentId,
 		facltNm,
 		lineIntro,
 		intro,
@@ -60,7 +62,7 @@
 		homepage,
 		firstImageUrl
 		) VALUES (
-		#{camp_id},
+		#{contentId},
 		#{facltNm},
 		#{lineIntro},
 		#{intro},

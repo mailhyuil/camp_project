@@ -2,11 +2,14 @@
 <html lang="ko"
 	xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout}">
+	layout:decorate="~{layout/layout}"
+	xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <th:block layout:fragment="content">
 	<main>
-		<form>
-			<input>
+		<form th:action="@{/camp}" method="post">
+			<input name="doNm">
+			<input name="sigunguNm">
+			<input name="facltNm">
 			<button>검색</button>
 		</form>
 	</main>
