@@ -1,0 +1,17 @@
+<html lagn="ko" 
+      xmlns:th="http://www.thymeleaf.org">
+       
+    <!--headerFragment 선언-->
+    <div th:fragment="headerFragment">
+        <h1>HEADER</h1>
+	    <nav>
+			<ul>
+				<li>둘러보기</li>
+				<li><a th:href="@{/user/login}">로그인</a></li>
+				<li><a th:href="@{/user/join}">회원가입</a></li>
+				<li>about</li>
+			</ul>
+		</nav>
+    </div>
+    
+</html>

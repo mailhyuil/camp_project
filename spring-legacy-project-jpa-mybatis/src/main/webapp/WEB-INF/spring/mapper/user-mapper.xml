@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sb.camp.persistence.UserDao">
+
+	<select id="selectAll" resultType="User">
+		SELECT * FROM users
+	</select>
+	
+	<select id="findById" resultType="User">
+		SELECT * from users where username = #{username}
+	</select>
+	
+	<insert id="insert" parameterType="User">
+		INSERT INTO users(username, password, enabled, email, nickname
+		) VALUES (
+			#{username}, #{password}, #{enabled}, #{email}, #{nickname}
+		)
+	</insert>
+	
+	 <!-- 권한 정보 불러오기 -->
+ 	<select id="findAuthsById" resultType="Authority">
+ 		SELECT * FROM authorities WHERE username = #{uesrname}
+ 	</select>
+ 	
+ 	 <insert id="insertRole">
+ 		INSERT INTO authorities(username, authority)
+ 		VALUES
+ 		<foreach collection="list" item="vo" separator=", ">
+ 			(#{vo.username},#{vo.authority})
+ 		</foreach>
+ 	</insert>
+ 	
+	<update id="update"></update>
+	<delete id="delete"></delete>
+
+</mapper> 

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sb.camp.persistence.CampDao">
+
+	<select id="selectAll" resultType="Camp">
+		SELECT * FROM camp
+	</select>
+
+	<select id="findById" resultType="Camp">
+		SELECT * from camp where
+		camp_id = #{camp_id}
+	</select>
+	<insert id="insertAPI" parameterType="Camp">
+		INSERT INTO camp(
+		camp_id,
+		facltNm,
+		lineIntro,
+		intro,
+		doNm,
+		featureNm,
+		sigunguNm,
+		zipcode,
+		addr1,
+		tel,
+		homepage,
+		firstImageUrl)
+		VALUES
+		<foreach collection="list" item="vo" separator=", ">
+			(
+			#{vo.camp_id},
+			#{vo.facltNm},
+			#{vo.lineIntro},
+			#{vo.intro},
+			#{vo.doNm},
+			#{vo.featureNm},
+			#{vo.sigunguNm},
+			#{vo.zipcode},
+			#{vo.addr1},
+			#{vo.tel},
+			#{vo.homepage},
+			#{vo.firstImageUrl}
+			)
+		</foreach>
+	</insert>
+	<insert id="insert" parameterType="Camp">
+		INSERT INTO camp(
+		camp_id,
+		facltNm,
+		lineIntro,
+		intro,
+		doNm,
+		featureNm,
+		sigunguNm,
+		zipcode,
+		addr1,
+		tel,
+		homepage,
+		firstImageUrl
+		) VALUES (
+		#{camp_id},
+		#{facltNm},
+		#{lineIntro},
+		#{intro},
+		#{doNm},
+		#{featureNm},
+		#{sigunguNm},
+		#{zipcode},
+		#{addr1},
+		#{tel},
+		#{homepage},
+		#{firstImageUrl}
+		)
+	</insert>
+
+	<update id="update"></update>
+	<delete id="delete"></delete>
+
+</mapper> 
