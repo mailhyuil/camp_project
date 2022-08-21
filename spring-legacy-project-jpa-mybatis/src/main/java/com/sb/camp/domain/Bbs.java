@@ -29,7 +29,8 @@ import lombok.ToString;
 @Entity
 @Table(name = "bbs")
 public class Bbs {
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id 
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String title;
     private String date;

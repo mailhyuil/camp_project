@@ -22,7 +22,8 @@ import lombok.ToString;
 
 @Entity
 public class Image {
-	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
 	private long bbsId;
