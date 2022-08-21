@@ -6,8 +6,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import com.sb.camp.domain.Camp;
 import com.sb.camp.service.CampService;
 
 @Controller
@@ -18,14 +18,16 @@ public class CampController {
 	CampService campService;
 	
 	@GetMapping({"/",""})
-	public String home() {
+	public String home(Model model, String doNm, String sigunguNm, String facltNm,
+			@RequestParam(required = false, defaultValue = "1") int page) {
+		campService.findByKeywords(model, doNm, sigunguNm, facltNm, page);
 		return "/camp/home";
 	}
 	
-	@PostMapping({"/",""})
-	public String home(Model model, String doNm, String sigunguNm, String facltNm) {
-		campService.findByKeywords(doNm, sigunguNm, facltNm);
-		return "/camp/home";
+	@GetMapping("/detail")
+	public String home(Model model, String id) {
+		model.addAttribute("CAMP", campService.findCampById(id));
+		return "/camp/detail";
 	}
 	
 }

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>글쓰기</h1>
+<form th:action="@{/bbs/insert}" method="post" enctype="multipart/form-data">
+    <input name="title" type="text" placeholder="제목을 입력해주세요"/>
+    <textarea name="content" placeholder="글을 작성해주세요"></textarea>
+
+    <label>Image File</label>
+    <input name="files" type="file" multiple="multiple" accept="images/*">
+
+    <label for="video">Video File</label>
+    <input id="file" name="video" type="file" accept="application/mp4">
+    <button>글작성</button>
+</form>
+</body>
+</html>

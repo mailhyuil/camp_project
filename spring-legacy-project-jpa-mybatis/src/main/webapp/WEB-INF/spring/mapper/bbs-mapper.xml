@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sb.camp.persistence.BbsDao">
+
+	<select id="selectAll" resultType="Bbs">
+		SELECT * FROM bbs
+	</select>
+
+	<select id="findById" resultType="Bbs">
+		SELECT * FROM bbs where id =
+		#{id}
+	</select>
+
+	<insert id="insert" parameterType="Bbs" useGeneratedKeys="true"
+		keyProperty="id" keyColumn="id">
+		INSERT INTO bbs(title, username, date,
+		time, content
+		) VALUES (
+		#{title}, #{username}, #{date}, #{time}, #{content}
+		)
+	</insert>
+
+	<select id="getBoardListCnt" resultType="int">
+		SELECT count(*) AS listCnt FROM bbs
+	</select>
+
+	<select id="getBoardList" resultType="Bbs">
+		SELECT * FROM bbs LIMIT #{cri}, #{LIST_SIZE}
+	</select>
+	<!-- IMAGE UPLOAD -->
+	<insert id="insertImage" parameterType="Image">
+		INSERT INTO image(bbsId, img, original_img, username
+		) VALUES (
+		#{bbsId}, #{img}, #{original_img}, #{username}
+		)
+	</insert>
+
+	<insert id="insertImages" parameterType="Image">
+		INSERT INTO image
+			(
+			bbsId,
+			img,
+			original_img,
+			username
+			)
+		VALUES
+		<foreach collection="list" item="vo" separator=", ">
+			(
+			#{vo.bbsId},
+			#{vo.img},
+			#{vo.original_img},
+			#{vo.username}
+			)
+		</foreach>
+	</insert>
+	<select id="getImagesByBbsId" resultType="Image">
+		SELECT * FROM image WHERE bbsId = #{bbsId}
+	</select>
+	
+	<!-- VIDEO UPLOAD -->
+	<insert id="insertVideo" parameterType="Video">
+		INSERT INTO video(bbsId, data, username
+		) VALUES (
+		#{bbsId}, #{data}, #{username}
+		)
+	</insert>
+	<select id="getVideoByBbsId" resultType="Video">
+		SELECT * FROM video WHERE bbsId = #{bbsId}
+	</select>
+	<update id="update"></update>
+	<delete id="delete"></delete>
+
+</mapper> 

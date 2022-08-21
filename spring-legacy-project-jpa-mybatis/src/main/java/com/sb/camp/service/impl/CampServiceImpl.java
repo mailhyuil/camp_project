@@ -1,7 +1,5 @@
 package com.sb.camp.service.impl;
 
-import static com.sb.camp.domain.QCamp.camp;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -11,16 +9,15 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
-import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sb.camp.domain.Camp;
+import com.sb.camp.domain.Pagination;
 import com.sb.camp.domain.api.Root;
 import com.sb.camp.persistence.CampDao;
 import com.sb.camp.service.CampService;
-
-import static org.springframework.util.StringUtils.hasText;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,15 +31,15 @@ public class CampServiceImpl implements CampService{
 	@Autowired
 	private JPAQueryFactory queryFactory;
 	
-    private BooleanExpression nameContain(String name) {
-        return hasText(name) ? camp.facltNm.contains(name) : null;
-    }
-    private BooleanExpression sigunguNmContain(String sigunguNm) {
-        return hasText(sigunguNm) ? camp.sigunguNm.contains(sigunguNm) : null;
-    }
-    private BooleanExpression doNmContain(String doNm) {
-        return hasText(doNm) ? camp.doNm.contains(doNm) : null;
-    }
+//    private BooleanExpression nameContain(String name) {
+//        return hasText(name) ? camp.facltNm.contains(name) : null;
+//    }
+//    private BooleanExpression sigunguNmContain(String sigunguNm) {
+//        return hasText(sigunguNm) ? camp.sigunguNm.contains(sigunguNm) : null;
+//    }
+//    private BooleanExpression doNmContain(String doNm) {
+//        return hasText(doNm) ? camp.doNm.contains(doNm) : null;
+//    }
     
 	@Autowired
 	@Override
@@ -73,15 +70,26 @@ public class CampServiceImpl implements CampService{
 	}
 
 	@Override
-	public List<Camp> findByKeywords(String doNm, String sigunguNm, String name) {
+	public void findByKeywords(Model model, String doNm, String sigunguNm, String facltNm, int page) {
 		
-        List<Camp> content = queryFactory
-                .selectFrom(camp)
-                .where(nameContain(name), doNmContain(doNm), sigunguNmContain(sigunguNm))
-                .fetch();
-        
-        System.out.println(content);
-		return null;
+//        List<Camp> content = queryFactory
+//                .selectFrom(camp)
+//                .where(nameContain(name), doNmContain(doNm), sigunguNmContain(sigunguNm))
+//                .fetch();
+		
+		int totalListCount = campDao.getCampListCnt(doNm, sigunguNm, facltNm);
+		
+		Pagination pagination = new Pagination();
+		
+		pagination.paginate(page, totalListCount);
+		
+        model.addAttribute("pagination", pagination);
+        model.addAttribute("CAMP_LIST", campDao.getCampList(doNm, sigunguNm, facltNm, pagination.getCri(), pagination.getLIST_SIZE()));
+	}
+
+	@Override
+	public Camp findCampById(String id) {
+		return campDao.findById(id);
 	}
 
 }

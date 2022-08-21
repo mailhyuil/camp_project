@@ -1,9 +1,95 @@
 <!DOCTYPE html>
-<html lang="ko"
-	xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-    layout:decorate="~{layout/layout}">
-	<th:block layout:fragment="content">
-		<h1>camp 페이지</h1>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
+	<h1>camp 페이지</h1>
+	<th:block th:each="camp:${CAMP_LIST}">
+	<div>
+	<a th:href="|@{/camp/detail?id=}${camp.contentId}|">
+		<h1 th:text="${camp.facltNm}"></h1>		
+	</a>
+	</div>
 	</th:block>
+	<ul style="list-style: none; display: flex">
+		<li style="padding: .5rem 1rem; margin: 2px; background-color: skyblue; color: white;"><a
+				th:onclick="|fn_first()|">&#60;&#60;</a></li>
+		<th:block th:if="${pagination.prev}">
+			<li style="padding: .5rem 1rem; margin: 2px; background-color: skyblue; color: white;"><a
+					th:onclick="|fn_prev(${pagination.currentPage})|">&#60;</a></li>
+		</th:block>
+		<th:block th:each="index:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+			<li
+				th:style="|padding:.5rem 1rem;margin:2px;color:white;${pagination.currentPage==index?'background-color:red':'background-color:skyblue'}|">
+				<a th:onclick="|fn_pagination(${index})|" th:text="${index}"></a>
+			</li>
+		</th:block>
+		<th:block th:if="${pagination.next}">
+			<li style="padding: .5rem 1rem; margin: 2px; background-color: skyblue; color: white;"><a
+					th:onclick="|fn_next(${pagination.currentPage})|">&#62;</a></li>
+		</th:block>
+		<li style="padding: .5rem 1rem; margin: 2px; background-color: skyblue; color: white;"><a
+				th:onclick="|fn_last(${pagination.theLastPage})|">&#62;&#62;</a>
+		</li>
+	</ul>
+	<script>
+		function fn_prev(currentPage) {
+
+			const urlParams = new URLSearchParams(location.search);
+			var page = currentPage - 1;
+
+			const doNm = urlParams.get('doNm')
+			const sigunguNm = urlParams.get('sigunguNm')
+			const facltNm = urlParams.get('facltNm')
+
+			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
+			location.href = url;
+		}
+
+		function fn_pagination(page) {
+			const urlParams = new URLSearchParams(location.search);
+
+			const doNm = urlParams.get('doNm')
+			const sigunguNm = urlParams.get('sigunguNm')
+			const facltNm = urlParams.get('facltNm')
+			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
+			location.href = url;
+		}
+
+		function fn_next(currentPage) {
+			var page = currentPage + 1;
+
+			const urlParams = new URLSearchParams(location.search);
+
+			const doNm = urlParams.get('doNm')
+			const sigunguNm = urlParams.get('sigunguNm')
+			const facltNm = urlParams.get('facltNm')
+
+			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
+			location.href = url;
+		}
+
+		function fn_first() {
+			const urlParams = new URLSearchParams(location.search);
+
+			const doNm = urlParams.get('doNm')
+			const sigunguNm = urlParams.get('sigunguNm')
+			const facltNm = urlParams.get('facltNm')
+
+			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=1`;
+			location.href = url;
+		}
+
+		function fn_last(theLastPage) {
+			const urlParams = new URLSearchParams(location.search);
+
+			const doNm = urlParams.get('doNm')
+			const sigunguNm = urlParams.get('sigunguNm')
+			const facltNm = urlParams.get('facltNm')
+
+			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${theLastPage}`;
+			location.href = url;
+		}
+	</script>
+</th:block>
+
 </html>

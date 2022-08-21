@@ -1,0 +1,20 @@
+package com.sb.camp.service;
+
+import java.security.Principal;
+import java.util.List;
+
+import org.springframework.ui.Model;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import com.sb.camp.domain.Bbs;
+
+public interface BbsService {
+    public List<Bbs> selectAll();
+
+    public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal);
+
+    public Bbs findBbsById(Model model, long id);
+
+	public void getBbsList(Model model, int page);
+}

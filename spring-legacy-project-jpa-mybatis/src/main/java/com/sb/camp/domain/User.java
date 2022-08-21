@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
@@ -45,7 +46,7 @@ public class User implements UserDetails  {
 	@Column(columnDefinition = "boolean default false")
 	private boolean credentialsNonExpired;
 	
-    @OneToMany(targetEntity = Authority.class)
+    @OneToMany(targetEntity = Authority.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "username")
 	private Collection<? extends GrantedAuthority> authorities;
 	

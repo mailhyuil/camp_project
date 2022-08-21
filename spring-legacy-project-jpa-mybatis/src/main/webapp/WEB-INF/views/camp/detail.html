@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
+	<h1>detail 페이지</h1>
+		<h5 th:text="${CAMP.contentId}"></h5>      
+		<h5 th:text="${CAMP.facltNm}"></h5>      
+		<h5 th:text="${CAMP.lineIntro}"></h5>      
+		<h5 th:text="${CAMP.intro}"></h5>      
+		<h5 th:text="${CAMP.doNm}"></h5>      
+		<h5 th:text="${CAMP.featureNm}"></h5>      
+		<h5 th:text="${CAMP.sigunguNm}"></h5>      
+		<h5 th:text="${CAMP.zipcode}"></h5>      
+		<h5 th:text="${CAMP.addr1}"></h5>      
+		<h5 th:text="${CAMP.tel}"></h5>      
+		<h5><a th:href="${CAMP.homepage}" th:text="${CAMP.homepage}"></a></h5>      
+		<img th:src="${CAMP.firstImageUrl}"/>
+		<h4><a th:href="|@{/bbs/board?id=}${CAMP.contentId}|">게시판으로 가기</a></h4>
+</th:block>
+
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ko"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>게시판</h1>
+<table>
+    <tr>
+        <th>id</th>
+        <th>작성일</th>
+        <th>작성시간</th>
+        <th>제목</th>
+        <th>작성자</th>
+    </tr>
+    <th:block th:each="bbs:${BBS_LIST}">
+        <tr>
+            <td th:text="${bbs.id}"></td>
+            <td th:text="${bbs.date}"></td>
+            <td th:text="${bbs.time}"></td>
+            <td><a th:text="${bbs.title}" th:href="@{/bbs/detail(id=${bbs.id})}"></a></td>
+            <td th:text="${bbs.username}"></td>
+        </tr>
+    </th:block>
+</table>
+<a th:href="@{/bbs/insert}">글쓰기</a>
+<ul style="list-style:none; display: flex">
+    <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
+            th:onclick="|location.href = '/bbs/board?page=1'|">&#60;&#60;</a>
+    </li>
+    <th:block th:if="${pagination.prev}">
+        <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
+                th:onclick="|fn_prev(${pagination.currentPage})|">&#60;</a>
+        </li>
+    </th:block>
+    <th:block th:each="index:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+        <li th:style="|padding:.5rem 1rem;margin:2px;color:white;${pagination.currentPage==index?'background-color:red':'background-color:skyblue'}|">
+            <a th:onclick="|fn_pagination(${index})|"
+               th:text="${index}"></a>
+        </li>
+    </th:block>
+    <th:block th:if="${pagination.next}">
+        <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
+                th:onclick="|fn_next(${pagination.currentPage})|">&#62;</a>
+        </li>
+    </th:block>
+    <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
+            th:onclick="|location.href = '/bbs/board?page=${pagination.theLastPage}'|">&#62;&#62;</a>
+    </li>
+</ul>
+<script>
+    function fn_prev(currentPage) {
+        var page = currentPage - 1;
+        var url = "/bbs/board";
+        url = url + "?page=" + page;
+        location.href = url;
+    }
+
+    function fn_pagination(page) {
+        var url = "/bbs/board";
+        url = url + "?page=" + page;
+        location.href = url;
+    }
+
+    function fn_next(currentPage) {
+        var page = currentPage + 1;
+        var url = "/bbs/board";
+        url = url + "?page=" + page;
+        location.href = url;
+    }
+</script>
+</body>
+</html>
