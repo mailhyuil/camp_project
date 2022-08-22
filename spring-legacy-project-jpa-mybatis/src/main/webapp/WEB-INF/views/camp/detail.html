@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 	<h1>detail 페이지</h1>
@@ -8,22 +7,59 @@
 	<div>
 		<img th:src="|http://openweathermap.org/img/w/${WEATHER.icon}.png|">
 		<h6 th:text="|${WEATHER.main} ${WEATHER.description}|"></h6>
-		<h6 th:text="|${MAIN.temp} ${MAIN.feels_like} ${MAIN.temp_min} ${MAIN.temp_max} ${MAIN.pressure} ${MAIN.humidity}|"></h6>
+		<h6
+			th:text="|${MAIN.temp} ${MAIN.feels_like} ${MAIN.temp_min} ${MAIN.temp_max} ${MAIN.pressure} ${MAIN.humidity}|">
+		</h6>
 		<h6 th:text="|${WIND.speed} ${WIND.deg} ${WIND.gust}|"></h6>
 	</div>
-		<h5 th:text="${CAMP.contentId}"></h5>      
-		<h5 th:text="${CAMP.facltNm}"></h5>      
-		<h5 th:text="${CAMP.lineIntro}"></h5>      
-		<h5 th:text="${CAMP.intro}"></h5>      
-		<h5 th:text="${CAMP.doNm}"></h5>      
-		<h5 th:text="${CAMP.featureNm}"></h5>      
-		<h5 th:text="${CAMP.sigunguNm}"></h5>      
-		<h5 th:text="${CAMP.zipcode}"></h5>      
-		<h5 th:text="${CAMP.addr1}"></h5>      
-		<h5 th:text="${CAMP.tel}"></h5>      
-		<h5><a th:href="${CAMP.homepage}" th:text="${CAMP.homepage}"></a></h5>      
-		<img th:src="${CAMP.firstImageUrl}"/>
-		<h4><a th:href="|@{/bbs/board?id=}${CAMP.contentId}|">게시판으로 가기</a></h4>
+	<h5 th:text="${CAMP.contentId}"></h5>
+	<h5 th:text="${CAMP.facltNm}"></h5>
+	<h5 th:text="${CAMP.lineIntro}"></h5>
+	<h5 th:text="${CAMP.intro}"></h5>
+	<h5 th:text="${CAMP.doNm}"></h5>
+	<h5 th:text="${CAMP.featureNm}"></h5>
+	<h5 th:text="${CAMP.sigunguNm}"></h5>
+	<h5 th:text="${CAMP.zipcode}"></h5>
+	<h5 th:text="${CAMP.addr1}"></h5>
+	<h5 th:text="${CAMP.tel}"></h5>
+	<h5><a th:href="${CAMP.homepage}" th:text="${CAMP.homepage}"></a></h5>
+	<img th:src="${CAMP.firstImageUrl}" />
+	<div id="map" style="width:600px;height:350px;"></div>
+	<h4><a th:href="|@{/bbs/board?id=}${CAMP.contentId}|">게시판으로 가기</a></h4>
+	<script type="text/javascript"
+		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2e1d9784e6d6ac580791dd4e2c958267&libraries=services"></script>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		const id = /*[[${CAMP.contentId}]]*/;
+		/*]]>*/
+
+
+		fetch('http://localhost:8080/camp/getLatAndLon?id=' + id)
+			.then(res => res.json())
+			.then(json => {
+
+				// 이미지 지도에서 마커가 표시될 위치입니다 
+				let markerPosition = new kakao.maps.LatLng(json.lat, json.lon);
+
+
+
+				let mapContainer = document.getElementById('map') // 이미지 지도를 표시할 div  
+				
+				let	mapOption = {
+						center: markerPosition, // 이미지 지도의 중심좌표
+						level: 4, // 이미지 지도의 확대 레벨
+					};
+
+				// 이미지 지도를 생성합니다
+				var map = new kakao.maps.Map(mapContainer, mapOption);
+				
+				var marker = new kakao.maps.Marker({
+				    position: markerPosition
+				});
+				
+				marker.setMap(map);
+			})
+	</script>
 </th:block>
 
 </html>
