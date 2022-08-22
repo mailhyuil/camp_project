@@ -25,7 +25,7 @@
 	<h5><a th:href="${CAMP.homepage}" th:text="${CAMP.homepage}"></a></h5>
 	<img th:src="${CAMP.firstImageUrl}" />
 	<div id="map" style="width:600px;height:350px;"></div>
-	<h4><a th:href="|@{/bbs/board?id=}${CAMP.contentId}|">게시판으로 가기</a></h4>
+	<h3><a th:href="|@{/bbs/board?id=}${CAMP.contentId}|">방명록</a></h3>
 	<script type="text/javascript"
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2e1d9784e6d6ac580791dd4e2c958267&libraries=services"></script>
 	<script th:inline="javascript">
