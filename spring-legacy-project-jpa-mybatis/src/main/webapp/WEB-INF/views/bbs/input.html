@@ -6,14 +6,20 @@
 <th:block layout:fragment="content">
 <h1>글쓰기</h1>
 <form th:action="@{/bbs/insert}" method="post" enctype="multipart/form-data">
+<div>
     <input name="title" type="text" placeholder="제목을 입력해주세요"/>
+</div>
+<div>
     <textarea name="content" placeholder="글을 작성해주세요"></textarea>
-
+</div>
+<div>
     <label>Image File</label>
     <input name="files" type="file" multiple="multiple" accept="images/*">
-
+</div>
+<div>
     <label for="video">Video File</label>
     <input id="file" name="video" type="file" accept="application/mp4">
+</div>
     <button>글작성</button>
 </form>
 </th:block>
