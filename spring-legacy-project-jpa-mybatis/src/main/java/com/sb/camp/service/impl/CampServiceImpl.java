@@ -15,7 +15,7 @@ import org.springframework.web.client.RestTemplate;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sb.camp.domain.Camp;
 import com.sb.camp.domain.Pagination;
-import com.sb.camp.domain.api.Root;
+import com.sb.camp.domain.campapi.Root;
 import com.sb.camp.persistence.CampDao;
 import com.sb.camp.service.CampService;
 

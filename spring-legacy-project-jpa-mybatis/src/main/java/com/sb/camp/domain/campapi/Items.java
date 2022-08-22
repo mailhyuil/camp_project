@@ -1,4 +1,4 @@
-package com.sb.camp.domain.api;
+package com.sb.camp.domain.campapi;
 
 
 import java.util.List;

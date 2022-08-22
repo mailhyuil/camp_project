@@ -4,6 +4,13 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 	<h1>detail 페이지</h1>
+	<h2>날씨</h2>
+	<div>
+		<img th:src="|http://openweathermap.org/img/w/${WEATHER.icon}.png|">
+		<h6 th:text="|${WEATHER.main} ${WEATHER.description}|"></h6>
+		<h6 th:text="|${MAIN.temp} ${MAIN.feels_like} ${MAIN.temp_min} ${MAIN.temp_max} ${MAIN.pressure} ${MAIN.humidity}|"></h6>
+		<h6 th:text="|${WIND.speed} ${WIND.deg} ${WIND.gust}|"></h6>
+	</div>
 		<h5 th:text="${CAMP.contentId}"></h5>      
 		<h5 th:text="${CAMP.facltNm}"></h5>      
 		<h5 th:text="${CAMP.lineIntro}"></h5>      

@@ -27,6 +27,7 @@ public class Camp {
     private String contentId;
 	private String facltNm;
 	private String lineIntro;
+	@Column(columnDefinition = "varchar(1024)")
 	private String intro;
 	private String doNm;
 	private String featureNm;
@@ -36,4 +37,6 @@ public class Camp {
 	private String tel;
 	private String homepage;
 	private String firstImageUrl;
+	private String mapX;
+	private String mapY;
 }

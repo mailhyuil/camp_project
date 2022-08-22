@@ -27,7 +27,9 @@
 		addr1,
 		tel,
 		homepage,
-		firstImageUrl)
+		firstImageUrl,
+		mapX,
+		mapY)
 		VALUES
 		<foreach collection="list" item="vo" separator=", ">
 			(
@@ -42,7 +44,9 @@
 			#{vo.addr1},
 			#{vo.tel},
 			#{vo.homepage},
-			#{vo.firstImageUrl}
+			#{vo.firstImageUrl},
+			#{vo.mapX},
+			#{vo.mapY}
 			)
 		</foreach>
 	</insert>
@@ -60,7 +64,9 @@
 		addr1,
 		tel,
 		homepage,
-		firstImageUrl
+		firstImageUrl,
+		mapX,
+		mapY
 		) VALUES (
 		#{contentId},
 		#{facltNm},
@@ -73,26 +79,31 @@
 		#{addr1},
 		#{tel},
 		#{homepage},
-		#{firstImageUrl}
+		#{firstImageUrl},
+		#{mapX},
+		#{mapY}
 		)
 	</insert>
 
 	<select id="getCampListCnt" resultType="int">
-		SELECT count(*) AS listCnt FROM (
+		SELECT count(*) AS
+		listCnt FROM (
 		SELECT * FROM camp
-		WHERE doNm LIKE CONCAT('%', #{doNm}, '%' )
+		WHERE doNm LIKE CONCAT('%', #{doNm},
+		'%' )
 		AND sigunguNm LIKE CONCAT('%',#{sigunguNm} , '%' )
-		AND facltNm LIKE CONCAT('%',#{facltNm} , '%' )
+		AND facltNm
+		LIKE CONCAT('%',#{facltNm} , '%' )
 		) AS SUB
 	</select>
 
 	<select id="getCampList" resultType="Camp">
 		SELECT * FROM (
-			SELECT * FROM camp
-				WHERE doNm LIKE CONCAT('%', #{doNm}, '%' )
-				AND sigunguNm LIKE CONCAT('%',#{sigunguNm} , '%' )
-				AND facltNm LIKE CONCAT('%',#{facltNm} , '%' )
-			) AS SUB
+		SELECT * FROM camp
+		WHERE doNm LIKE CONCAT('%', #{doNm}, '%' )
+		AND sigunguNm LIKE CONCAT('%',#{sigunguNm} , '%' )
+		AND facltNm LIKE CONCAT('%',#{facltNm} , '%' )
+		) AS SUB
 		LIMIT #{cri}, #{LIST_SIZE}
 	</select>
 
