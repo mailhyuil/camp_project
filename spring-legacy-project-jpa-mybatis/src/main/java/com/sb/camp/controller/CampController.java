@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -51,4 +52,10 @@ public class CampController {
                 .ok(latlon);
 	}
 	
+	//TODO 미완성
+	@GetMapping("/like/{id}")
+	public String like(@PathVariable("id") String id) {
+		campService.increaseLike(id);
+		return "redirect:/camp/detail?id="+id;
+	}
 }

@@ -10,4 +10,5 @@ public interface CampService {
 	public void findByKeywords(Model model, String doNm, String sigunguNm, String facltNm, int page);
 	public void insertAPI();
 	public Camp findCampById(String id);
+	public void increaseLike(String id);
 }

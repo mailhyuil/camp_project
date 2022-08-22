@@ -9,14 +9,17 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sb.camp.domain.Camp;
 import com.sb.camp.domain.Pagination;
 import com.sb.camp.domain.campapi.Root;
 import com.sb.camp.persistence.CampDao;
+import com.sb.camp.repository.CampRepository;
 import com.sb.camp.service.CampService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -27,9 +30,8 @@ public class CampServiceImpl implements CampService{
 	
 	@Autowired
 	private CampDao campDao;
-	
 	@Autowired
-	private JPAQueryFactory queryFactory;
+	private CampRepository campRepository;
 	
 //    private BooleanExpression nameContain(String name) {
 //        return hasText(name) ? camp.facltNm.contains(name) : null;
@@ -90,6 +92,13 @@ public class CampServiceImpl implements CampService{
 	@Override
 	public Camp findCampById(String id) {
 		return campDao.findById(id);
+	}
+
+	@Override
+	public void increaseLike(String id) {
+		Camp camp = campRepository.findById(id).get();
+		System.out.println(camp.toString());
+		campRepository.saveAndFlush(camp);
 	}
 
 }

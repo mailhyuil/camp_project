@@ -42,6 +42,7 @@
 		<property name="dataSource" ref="ds"/>
 	</bean>
 	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
 	<!-- mybatis-scan -->
 	<mybatis-spring:scan base-package="com.sb.camp.persistence"/>
 </beans>

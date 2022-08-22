@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
@@ -29,6 +30,7 @@ import com.sb.camp.repository.ImageRepository;
 import com.sb.camp.service.BbsService;
 
 @Service
+@Transactional
 public class BbsServiceImpl implements BbsService {
 
 	@Autowired
@@ -123,4 +125,6 @@ public class BbsServiceImpl implements BbsService {
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("BBS_LIST", bbsDao.getBoardList(pagination));
 	}
+	
+	
 }

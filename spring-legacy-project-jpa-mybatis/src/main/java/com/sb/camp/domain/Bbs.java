@@ -41,7 +41,7 @@ public class Bbs {
     private String content;
     private String username;
     
-    @OneToMany(targetEntity = Image.class, fetch = FetchType.LAZY)
+    @OneToMany(targetEntity = Image.class, fetch = FetchType.EAGER)
     @JoinColumn(name = "bbsId")
     private List<Image> imgs = new ArrayList<>();
 }

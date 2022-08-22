@@ -39,4 +39,6 @@ public class Camp {
 	private String firstImageUrl;
 	private String mapX;
 	private String mapY;
+	
+	private long like;
 }

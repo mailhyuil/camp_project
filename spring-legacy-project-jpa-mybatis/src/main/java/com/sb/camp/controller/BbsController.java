@@ -23,7 +23,6 @@ public class BbsController {
     @Autowired
     private BbsService bbsService;
 
-
     @GetMapping("/board")
     public String board(Model model,
                         @RequestParam(required = false, defaultValue = "1") int page){

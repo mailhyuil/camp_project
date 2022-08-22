@@ -3,6 +3,8 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 	<h1>detail 페이지</h1>
+	<h5 th:text="${CAMP.like}"></h5>
+	<h5><a th:href="|@{/camp/like/}${CAMP.contentId}|">좋아요!</a></h5>
 	<h2>날씨</h2>
 	<div>
 		<img th:src="|http://openweathermap.org/img/w/${WEATHER.icon}.png|">
