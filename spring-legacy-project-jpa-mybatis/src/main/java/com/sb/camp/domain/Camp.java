@@ -40,5 +40,5 @@ public class Camp {
 	private String mapX;
 	private String mapY;
 	
-	private long like;
+//	private long like;
 }

@@ -19,33 +19,38 @@
 		INSERT INTO bbs(title, username, date,
 		time, content
 		) VALUES (
-		#{title}, #{username}, #{date}, #{time}, #{content}
+		#{title}, #{username}, #{date}, #{time},
+		#{content}
 		)
 	</insert>
 
 	<select id="getBoardListCnt" resultType="int">
-		SELECT count(*) AS listCnt FROM bbs
+		SELECT count(*) AS
+		listCnt FROM bbs
 	</select>
 
 	<select id="getBoardList" resultType="Bbs">
-		SELECT * FROM bbs LIMIT #{cri}, #{LIST_SIZE}
+		SELECT * FROM bbs LIMIT
+		#{cri}, #{LIST_SIZE}
 	</select>
 	<!-- IMAGE UPLOAD -->
 	<insert id="insertImage" parameterType="Image">
-		INSERT INTO image(bbsId, img, original_img, username
+		INSERT INTO image(bbsId,
+		img, original_img, username
 		) VALUES (
-		#{bbsId}, #{img}, #{original_img}, #{username}
+		#{bbsId}, #{img},
+		#{original_img}, #{username}
 		)
 	</insert>
 
 	<insert id="insertImages" parameterType="Image">
 		INSERT INTO image
-			(
-			bbsId,
-			img,
-			original_img,
-			username
-			)
+		(
+		bbsId,
+		img,
+		original_img,
+		username
+		)
 		VALUES
 		<foreach collection="list" item="vo" separator=", ">
 			(
@@ -57,23 +62,39 @@
 		</foreach>
 	</insert>
 	<select id="getImagesByBbsId" resultType="Image">
-		SELECT * FROM image WHERE bbsId = #{bbsId}
+		SELECT * FROM image
+		WHERE bbsId = #{bbsId}
 	</select>
-	
+
 	<select id="findImages" resultType="Image">
-		SELECT * FROM image LIMIT #{limit} OFFSET #{offset} 
+		SELECT * FROM image LIMIT
+		#{limit} OFFSET #{offset}
 	</select>
 	<!-- VIDEO UPLOAD -->
 	<insert id="insertVideo" parameterType="Video">
-		INSERT INTO video(bbsId, data, username
+		INSERT INTO video(bbsId,
+		data, username
 		) VALUES (
 		#{bbsId}, #{data}, #{username}
 		)
 	</insert>
 	<select id="getVideoByBbsId" resultType="Video">
-		SELECT * FROM video WHERE bbsId = #{bbsId}
+		SELECT * FROM video
+		WHERE bbsId = #{bbsId}
 	</select>
-	<update id="update"></update>
-	<delete id="delete"></delete>
+	<update id="update" parameterType="Bbs">
+		UPDATE bbs
+		SET
+		title = #{title},
+		content = #{content}
+		WHERE id = #{id}
+	</update>
+	<delete id="delete" parameterType="Long">
+		DELETE FROM bbs WHERE id =
+		#{id}
+	</delete>
+	<delete id="deleteImage" parameterType="Long">
+		DELETE FROM image WHERE id = #{id}
+	</delete>
 
 </mapper> 

@@ -17,4 +17,8 @@ public interface BbsService {
     public Bbs findBbsById(Model model, long id);
 
 	public void getBbsList(Model model, int page);
+
+	public void deleteBbs(long id);
+
+	public void updateBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files);
 }

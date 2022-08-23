@@ -18,4 +18,5 @@ public interface BbsDao extends GenericDao<Bbs, Long>{
     public Video getVideoByBbsId(long bbsId);
     
     public List<Image> findImages(@Param(value = "limit") int limit, @Param(value = "offset") int offset);
+	public void deleteImage(long id);
 }

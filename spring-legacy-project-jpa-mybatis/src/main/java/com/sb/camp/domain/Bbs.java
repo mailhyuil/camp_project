@@ -3,6 +3,7 @@ package com.sb.camp.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -41,7 +42,8 @@ public class Bbs {
     private String content;
     private String username;
     
-    @OneToMany(targetEntity = Image.class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = Image.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "bbsId")
     private List<Image> imgs = new ArrayList<>();
+    
 }

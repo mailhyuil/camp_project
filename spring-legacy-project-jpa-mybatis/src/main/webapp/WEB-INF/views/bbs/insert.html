@@ -5,12 +5,12 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 <h1>글쓰기</h1>
-<form th:action="@{/bbs/insert}" method="post" enctype="multipart/form-data">
+<form th:action="@{/bbs/insert(${_csrf.parameterName}=${_csrf.token})}" method="post" enctype="multipart/form-data">
 <div>
-    <input name="title" type="text" placeholder="제목을 입력해주세요"/>
+    <input name="title" type="text" placeholder="제목을 입력해주세요" th:value="${BBS.title}"/>
 </div>
 <div>
-    <textarea name="content" placeholder="글을 작성해주세요"></textarea>
+    <textarea name="content" placeholder="글을 작성해주세요"  th:value="${BBS.content}" th:text="${BBS.content}"></textarea>
 </div>
 <div>
     <label for="image">Image File</label>

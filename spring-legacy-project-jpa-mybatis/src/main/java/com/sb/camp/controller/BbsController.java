@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,8 +37,8 @@ public class BbsController {
     }
 
     @GetMapping("/insert")
-    public String insert(@ModelAttribute("bbs") Bbs bbs){
-        return "/bbs/input";
+    public String insert(@ModelAttribute("BBS") Bbs bbs){
+        return "/bbs/insert";
     }
 
     @PostMapping ("/insert")
@@ -51,7 +52,25 @@ public class BbsController {
         bbsService.findBbsById(model, id);
         return null;
     }
-
+    
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable(name = "id") long id){
+    	bbsService.deleteBbs(id);
+        return "redirect:/bbs/board?id=" + id;
+    }
+    
+    @GetMapping("/update/{id}")
+    public String update(Model model, @PathVariable(name = "id") long id){
+    	bbsService.findBbsById(model, id);
+        return "/bbs/update";
+    }
+    
+    @PostMapping("/update/{id}")
+    public String update(Bbs bbs, MultipartHttpServletRequest files, @RequestParam("video") MultipartFile file){
+    	bbsService.updateBbs(bbs, file, files);
+        return "redirect:/bbs/board?id=" + bbs.getId();
+    }
+    
     @GetMapping("/collection")
     public String collection(){
         return null;

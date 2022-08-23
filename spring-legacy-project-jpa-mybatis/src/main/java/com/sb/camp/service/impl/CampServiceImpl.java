@@ -30,8 +30,6 @@ public class CampServiceImpl implements CampService{
 	
 	@Autowired
 	private CampDao campDao;
-	@Autowired
-	private CampRepository campRepository;
 	
 //    private BooleanExpression nameContain(String name) {
 //        return hasText(name) ? camp.facltNm.contains(name) : null;
@@ -96,9 +94,6 @@ public class CampServiceImpl implements CampService{
 
 	@Override
 	public void increaseLike(String id) {
-		Camp camp = campRepository.findById(id).get();
-		System.out.println(camp.toString());
-		campRepository.saveAndFlush(camp);
 	}
 
 }

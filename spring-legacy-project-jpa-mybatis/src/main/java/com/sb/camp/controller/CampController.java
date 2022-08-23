@@ -53,9 +53,9 @@ public class CampController {
 	}
 	
 	//TODO 미완성
-	@GetMapping("/like/{id}")
-	public String like(@PathVariable("id") String id) {
-		campService.increaseLike(id);
-		return "redirect:/camp/detail?id="+id;
-	}
+//	@GetMapping("/like/{id}")
+//	public String like(@PathVariable("id") String id) {
+//		campService.increaseLike(id);
+//		return "redirect:/camp/detail?id="+id;
+//	}
 }

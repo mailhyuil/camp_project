@@ -34,14 +34,10 @@ import com.sb.camp.service.BbsService;
 public class BbsServiceImpl implements BbsService {
 
 	@Autowired
-	private BbsRepository bbsRepository;
-	@Autowired
-	private ImageRepository ImageRepository;
-	@Autowired
 	private BbsDao bbsDao;
 	@PersistenceContext
 	private EntityManager em;
-	
+
 	@Override
 	public List<Bbs> selectAll() {
 		return bbsDao.selectAll();
@@ -49,55 +45,47 @@ public class BbsServiceImpl implements BbsService {
 
 	@Override
 	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) {
-        String loggedInUser = principal.getName();
-        
-        Date date = new Date(System.currentTimeMillis());
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-        
-        bbs.setDate(dateFormat.format(date));
-        bbs.setTime(timeFormat.format(date));
-        bbs.setUsername(loggedInUser);
-        
-        bbsDao.insert(bbs);
-        
-        List<MultipartFile> imgList = files.getFiles("files");
-        
-        List<Image> imgs = new ArrayList<>();
-        
-		for(MultipartFile img : imgList) {
-	        String uuid = UUID.randomUUID().toString();
-	        String uuidImg = uuid + img.getOriginalFilename();
-	        Image imgVO = Image.builder()
-	        		.img(uuidImg)
-	        		.original_img(img.getOriginalFilename())
-	        		.username(loggedInUser)
-	        		.bbsId(bbs.getId())
-	        		.build();
-	        
-	        File uploadFile = new File("c:/Temp/upload/", uuidImg);
-	        
-	        try {
-	        	img.transferTo(uploadFile);
-	        } catch (IOException e) {
-	            throw new RuntimeException(e);
-	        }
-	        
-	        imgs.add(imgVO);
+		String loggedInUser = principal.getName();
+
+		Date date = new Date(System.currentTimeMillis());
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+
+		bbs.setDate(dateFormat.format(date));
+		bbs.setTime(timeFormat.format(date));
+		bbs.setUsername(loggedInUser);
+
+		bbsDao.insert(bbs);
+
+		List<MultipartFile> imgList = files.getFiles("files");
+
+		List<Image> imgs = new ArrayList<>();
+
+		for (MultipartFile img : imgList) {
+			String uuid = UUID.randomUUID().toString();
+			String uuidImg = uuid + img.getOriginalFilename();
+			Image imgVO = Image.builder().img(uuidImg).original_img(img.getOriginalFilename()).username(loggedInUser)
+					.bbsId(bbs.getId()).build();
+
+			File uploadFile = new File("c:/Temp/upload/", uuidImg);
+
+			try {
+				img.transferTo(uploadFile);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+			imgs.add(imgVO);
 		}
-		
-        bbsDao.insertImages(imgs);
-        
+
+		bbsDao.insertImages(imgs);
+
 //      em.persist(img); // 안됨 @Transactional 사용해도 안됨
 //      ImageRepository.save(img); // 안됨
 //		bbsRepository.save(bbs); // 안됨
-        
-        try {
-			Video video = Video.builder()
-					.bbsId(bbs.getId())
-					.data(file.getBytes())
-					.username(loggedInUser)
-					.build();
+
+		try {
+			Video video = Video.builder().bbsId(bbs.getId()).data(file.getBytes()).username(loggedInUser).build();
 			bbsDao.insertVideo(video);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -109,8 +97,8 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Bbs findBbsById(Model model, long id) {
 		Bbs bbs = bbsDao.findById(id);
-        bbs.setImgs(bbsDao.getImagesByBbsId(bbs.getId()));
-        model.addAttribute("BBS", bbs);
+		bbs.setImgs(bbsDao.getImagesByBbsId(bbs.getId()));
+		model.addAttribute("BBS", bbs);
 		return bbs;
 	}
 
@@ -125,6 +113,67 @@ public class BbsServiceImpl implements BbsService {
 		model.addAttribute("pagination", pagination);
 		model.addAttribute("BBS_LIST", bbsDao.getBoardList(pagination));
 	}
-	
-	
+
+	@Override
+	public void deleteBbs(long id) {
+		List<Image> imgs = bbsDao.getImagesByBbsId(id);
+		for (Image img : imgs) {
+
+			File file = new File("c:/Temp/upload", img.getImg());
+
+			if (file.exists()) {
+				file.delete();
+			}
+		}
+		bbsDao.delete(id);
+	}
+
+	@Override
+	public void updateBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files) {
+		bbsDao.update(bbs);
+		
+		List<Image> imgs = bbsDao.getImagesByBbsId(bbs.getId());
+		
+		for (Image img : imgs) {
+
+			File imgFile = new File("c:/Temp/upload", img.getImg());
+
+			if (imgFile.exists()) {
+				imgFile.delete();
+				bbsDao.deleteImage(img.getId());
+			}
+		}
+		
+		List<MultipartFile> imgList = files.getFiles("files");
+
+		List<Image> newImgs = new ArrayList<>();
+
+		for (MultipartFile img : imgList) {
+			String uuid = UUID.randomUUID().toString();
+			String uuidImg = uuid + img.getOriginalFilename();
+			Image imgVO = Image.builder().img(uuidImg).original_img(img.getOriginalFilename()).username(bbs.getUsername())
+					.bbsId(bbs.getId()).build();
+
+			File uploadFile = new File("c:/Temp/upload/", uuidImg);
+
+			try {
+				img.transferTo(uploadFile);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+
+			newImgs.add(imgVO);
+		}
+
+		bbsDao.insertImages(newImgs);
+
+		try {
+			Video video = Video.builder().bbsId(bbs.getId()).data(file.getBytes()).username(bbs.getUsername()).build();
+			bbsDao.insertVideo(video);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
 }

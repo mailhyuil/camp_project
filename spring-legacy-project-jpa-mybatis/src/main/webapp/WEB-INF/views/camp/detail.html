@@ -3,8 +3,6 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 	<h1>detail 페이지</h1>
-	<h5 th:text="${CAMP.like}"></h5>
-	<h5><a th:href="|@{/camp/like/}${CAMP.contentId}|">좋아요!</a></h5>
 	<h2>날씨</h2>
 	<div>
 		<img th:src="|http://openweathermap.org/img/w/${WEATHER.icon}.png|">
@@ -14,7 +12,7 @@
 		</h6>
 		<h6 th:text="|${WIND.speed} ${WIND.deg} ${WIND.gust}|"></h6>
 	</div>
-	<h5 th:text="${CAMP.contentId}"></h5>
+	<h2>캠프 정보</h2>
 	<h5 th:text="${CAMP.facltNm}"></h5>
 	<h5 th:text="${CAMP.lineIntro}"></h5>
 	<h5 th:text="${CAMP.intro}"></h5>
@@ -26,6 +24,7 @@
 	<h5 th:text="${CAMP.tel}"></h5>
 	<h5><a th:href="${CAMP.homepage}" th:text="${CAMP.homepage}"></a></h5>
 	<img th:src="${CAMP.firstImageUrl}" />
+	<h2>지도</h2>
 	<div id="map" style="width:600px;height:350px;"></div>
 	<h3><a th:href="|@{/bbs/board?id=}${CAMP.contentId}|">방명록</a></h3>
 	<script type="text/javascript"
@@ -39,23 +38,20 @@
 		fetch('http://localhost:8080/camp/getLatAndLon?id=' + id)
 			.then(res => res.json())
 			.then(json => {
-
 				// 이미지 지도에서 마커가 표시될 위치입니다 
-				let markerPosition = new kakao.maps.LatLng(json.lat, json.lon);
+				const markerPosition = new kakao.maps.LatLng(json.lat, json.lon);
 
-
-
-				let mapContainer = document.getElementById('map') // 이미지 지도를 표시할 div  
+				const mapContainer = document.getElementById('map') // 이미지 지도를 표시할 div  
 				
-				let	mapOption = {
+				const	mapOption = {
 						center: markerPosition, // 이미지 지도의 중심좌표
 						level: 4, // 이미지 지도의 확대 레벨
 					};
 
 				// 이미지 지도를 생성합니다
-				var map = new kakao.maps.Map(mapContainer, mapOption);
+				const map = new kakao.maps.Map(mapContainer, mapOption);
 				
-				var marker = new kakao.maps.Marker({
+				const marker = new kakao.maps.Marker({
 				    position: markerPosition
 				});
 				
