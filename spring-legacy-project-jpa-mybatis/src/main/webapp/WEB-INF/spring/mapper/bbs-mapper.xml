@@ -10,17 +10,15 @@
 	</select>
 
 	<select id="findById" resultType="Bbs">
-		SELECT * FROM bbs where id =
-		#{id}
+		SELECT * FROM bbs where bbs_id =
+		#{bbsId}
 	</select>
 
 	<insert id="insert" parameterType="Bbs" useGeneratedKeys="true"
-		keyProperty="id" keyColumn="id">
-		INSERT INTO bbs(title, username, date,
-		time, content
+		keyProperty="bbsId" keyColumn="bbs_id">
+		INSERT INTO bbs(title, username, date, time, content
 		) VALUES (
-		#{title}, #{username}, #{date}, #{time},
-		#{content}
+		#{title}, #{user.username}, #{date}, #{time}, #{content}
 		)
 	</insert>
 
@@ -35,18 +33,18 @@
 	</select>
 	<!-- IMAGE UPLOAD -->
 	<insert id="insertImage" parameterType="Image">
-		INSERT INTO image(bbsId,
+		INSERT INTO image(bbs_id,
 		img, original_img, username
 		) VALUES (
-		#{bbsId}, #{img},
-		#{original_img}, #{username}
+		#{bbs.bbsId}, #{img},
+		#{original_img}, #{user.username}
 		)
 	</insert>
 
 	<insert id="insertImages" parameterType="Image">
 		INSERT INTO image
 		(
-		bbsId,
+		bbs_id,
 		img,
 		original_img,
 		username
@@ -54,16 +52,16 @@
 		VALUES
 		<foreach collection="list" item="vo" separator=", ">
 			(
-			#{vo.bbsId},
+			#{vo.bbs.bbsId},
 			#{vo.img},
 			#{vo.original_img},
-			#{vo.username}
+			#{vo.user.username}
 			)
 		</foreach>
 	</insert>
 	<select id="getImagesByBbsId" resultType="Image">
 		SELECT * FROM image
-		WHERE bbsId = #{bbsId}
+		WHERE bbs_id = #{bbs.bbsId}
 	</select>
 
 	<select id="findImages" resultType="Image">
@@ -72,29 +70,34 @@
 	</select>
 	<!-- VIDEO UPLOAD -->
 	<insert id="insertVideo" parameterType="Video">
-		INSERT INTO video(bbsId,
+		INSERT INTO video(bbs_id,
 		data, username
 		) VALUES (
-		#{bbsId}, #{data}, #{username}
+		#{bbs.bbsId}, #{data}, #{user.username}
 		)
 	</insert>
 	<select id="getVideoByBbsId" resultType="Video">
 		SELECT * FROM video
-		WHERE bbsId = #{bbsId}
+		WHERE bbs_id = #{bbs.bbsId}
 	</select>
+	
 	<update id="update" parameterType="Bbs">
 		UPDATE bbs
 		SET
 		title = #{title},
 		content = #{content}
-		WHERE id = #{id}
+		WHERE bbs_id = #{bbsId}
 	</update>
+	
 	<delete id="delete" parameterType="Long">
-		DELETE FROM bbs WHERE id =
-		#{id}
+		DELETE FROM bbs WHERE bbs_id =
+		#{bbsId}
 	</delete>
+	
 	<delete id="deleteImage" parameterType="Long">
-		DELETE FROM image WHERE id = #{id}
+		DELETE FROM image WHERE image_id = #{imageId}
 	</delete>
-
+	<delete id="deleteVideo" parameterType="Video">
+		DELETE FROM video WHERE video_id = #{videoId}
+	</delete>
 </mapper> 

@@ -7,18 +7,18 @@
 <h1>방명록</h1>
 <table>
     <tr>
-        <th>id</th>
+        <th>No.</th>
         <th>작성일</th>
         <th>작성시간</th>
         <th>제목</th>
         <th>작성자</th>
     </tr>
-    <th:block th:each="bbs:${BBS_LIST}">
+    <th:block th:each="bbs,index:${BBS_LIST}">
         <tr>
-            <td th:text="${bbs.id}"></td>
+            <td th:text="${index.count}"></td>
             <td th:text="${bbs.date}"></td>
             <td th:text="${bbs.time}"></td>
-            <td><a th:text="${bbs.title}" th:href="@{/bbs/detail(id=${bbs.id})}"></a></td>
+            <td><a th:text="${bbs.title}" th:href="@{/bbs/detail(id=${bbs.bbsId})}"></a></td>
             <td th:text="${bbs.username}"></td>
         </tr>
     </th:block>

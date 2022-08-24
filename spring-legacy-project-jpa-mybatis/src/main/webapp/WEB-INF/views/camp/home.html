@@ -5,8 +5,8 @@
 	<h1>camp 페이지</h1>
 	<th:block th:each="camp:${CAMP_LIST}">
 	<div>
-	<a th:href="|@{/camp/detail?id=}${camp.contentId}|">
-		<h1 th:text="${camp.facltNm}"></h1>		
+	<a th:href="|@{/camp/detail?id=}${camp.campId}|">
+		<h1 th:text="${camp.facltNm}"></h1>
 	</a>
 	</div>
 	</th:block>

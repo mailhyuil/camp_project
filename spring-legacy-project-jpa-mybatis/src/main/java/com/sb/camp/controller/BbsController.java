@@ -66,9 +66,10 @@ public class BbsController {
     }
     
     @PostMapping("/update/{id}")
-    public String update(Bbs bbs, MultipartHttpServletRequest files, @RequestParam("video") MultipartFile file){
+    public String update(@PathVariable(name = "id") long id, Bbs bbs, MultipartHttpServletRequest files, @RequestParam("video") MultipartFile file){
+    	bbs.setBbsId(id);
     	bbsService.updateBbs(bbs, file, files);
-        return "redirect:/bbs/board?id=" + bbs.getId();
+        return "redirect:/bbs/board?id=" + bbs.getBbsId();
     }
     
     @GetMapping("/collection")

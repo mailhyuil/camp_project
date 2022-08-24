@@ -3,22 +3,28 @@ package com.sb.camp.service.impl;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+import java.util.Optional;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
 import com.sb.camp.domain.Camp;
+import com.sb.camp.domain.CampLike;
 import com.sb.camp.domain.Pagination;
+import com.sb.camp.domain.User;
 import com.sb.camp.domain.campapi.Root;
+import com.sb.camp.exception.CustomException;
+import com.sb.camp.exception.ErrorCode;
 import com.sb.camp.persistence.CampDao;
+import com.sb.camp.persistence.UserDao;
+import com.sb.camp.repository.CampLikeRepository;
 import com.sb.camp.repository.CampRepository;
 import com.sb.camp.service.CampService;
 
@@ -30,7 +36,12 @@ public class CampServiceImpl implements CampService{
 	
 	@Autowired
 	private CampDao campDao;
-	
+	@Autowired
+	private UserDao userDao;
+	@Autowired
+	private CampRepository campRepository;
+	@Autowired
+	private CampLikeRepository campLikeRepository;
 //    private BooleanExpression nameContain(String name) {
 //        return hasText(name) ? camp.facltNm.contains(name) : null;
 //    }
@@ -88,12 +99,35 @@ public class CampServiceImpl implements CampService{
 	}
 
 	@Override
-	public Camp findCampById(String id) {
+	public Camp findCampById(long id) {
 		return campDao.findById(id);
 	}
 
 	@Override
-	public void increaseLike(String id) {
+	@Transactional
+	public void likeCamp(long id, String username) {
+		Camp foundCamp = campRepository.findById(id).orElseThrow(()->{
+			throw new CustomException(ErrorCode.NOT_FOUND_CAMP, "ID에 맞는 캠핑장이 없습니다");
+		});
+		
+		User foundUser = userDao.findById(username);
+		
+		Optional<CampLike> campLike = campLikeRepository.findByCampAndUser(foundCamp, foundUser);
+		
+		if (campLike.isPresent()) {
+            foundCamp.decreaseCampLikeCnt();
+            campLikeRepository.deleteById(campLike.get().getId());
+        } else {
+        	foundCamp.increaseCampLikeCnt();
+        	CampLike saveCampLike = campLikeRepository.save(CampLike.builder()
+                    .camp(foundCamp)
+                    .user(foundUser)
+                    .build());
+        	foundCamp.getCampLikeList().add(saveCampLike);
+        }
+		
+		Camp camp = campRepository.save(foundCamp);
+		
+		System.out.println(camp);
 	}
-
 }

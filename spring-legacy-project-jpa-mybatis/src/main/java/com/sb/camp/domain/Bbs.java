@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
@@ -26,24 +27,28 @@ import lombok.ToString;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 
 @Entity
 @Table(name = "bbs")
 public class Bbs {
     @Id 
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    @Column(name = "bbs_id")
+    private long bbsId;
     @Column(columnDefinition = "varchar(50)")
     private String title;
     private String date;
     private String time;
 	@Column(columnDefinition = "varchar(2048)")
     private String content;
-    private String username;
-    
-    @OneToMany(targetEntity = Image.class, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name = "bbsId")
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "username")
+    private User user;
+	
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bbs")
     private List<Image> imgs = new ArrayList<>();
     
+    @Transient
+    private String username;
 }

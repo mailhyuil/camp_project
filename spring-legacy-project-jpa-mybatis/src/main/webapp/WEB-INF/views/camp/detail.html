@@ -3,6 +3,9 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 	<h1>detail 페이지</h1>
+	<h2>좋아요</h2>
+	<h5 th:text="${CAMP.likeCnt}"></h5>
+	<a th:href="|@{/camp/like/}${CAMP.campId}|">좋아요!</a>
 	<h2>날씨</h2>
 	<div>
 		<img th:src="|http://openweathermap.org/img/w/${WEATHER.icon}.png|">
@@ -26,12 +29,12 @@
 	<img th:src="${CAMP.firstImageUrl}" />
 	<h2>지도</h2>
 	<div id="map" style="width:600px;height:350px;"></div>
-	<h3><a th:href="|@{/bbs/board?id=}${CAMP.contentId}|">방명록</a></h3>
+	<h3><a th:href="|@{/bbs/board?id=}${CAMP.campId}|">방명록</a></h3>
 	<script type="text/javascript"
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2e1d9784e6d6ac580791dd4e2c958267&libraries=services"></script>
 	<script th:inline="javascript">
 		/*<![CDATA[*/
-		const id = /*[[${CAMP.contentId}]]*/;
+		const id = /*[[${CAMP.campId}]]*/;
 		/*]]>*/
 
 

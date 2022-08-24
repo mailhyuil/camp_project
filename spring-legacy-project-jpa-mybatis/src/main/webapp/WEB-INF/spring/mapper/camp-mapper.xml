@@ -11,12 +11,11 @@
 
 	<select id="findById" resultType="Camp">
 		SELECT * from camp where
-		contentId = #{contentId}
+		camp_id = #{id}
 	</select>
 
 	<insert id="insertAPI" parameterType="Camp">
 		INSERT IGNORE INTO camp(
-		contentId,
 		facltNm,
 		lineIntro,
 		intro,
@@ -33,7 +32,6 @@
 		VALUES
 		<foreach collection="list" item="vo" separator=", ">
 			(
-			#{vo.contentId},
 			#{vo.facltNm},
 			#{vo.lineIntro},
 			#{vo.intro},
@@ -53,7 +51,6 @@
 
 	<insert id="insert" parameterType="Camp">
 		INSERT INTO camp(
-		contentId,
 		facltNm,
 		lineIntro,
 		intro,
@@ -68,7 +65,6 @@
 		mapX,
 		mapY
 		) VALUES (
-		#{contentId},
 		#{facltNm},
 		#{lineIntro},
 		#{intro},
@@ -90,19 +86,36 @@
 		listCnt FROM (
 		SELECT * FROM camp
 		WHERE doNm LIKE CONCAT('%', #{doNm},
-		'%' )
-		AND sigunguNm LIKE CONCAT('%',#{sigunguNm} , '%' )
-		AND facltNm
-		LIKE CONCAT('%',#{facltNm} , '%' )
+		'%')
+		AND sigunguNm LIKE CONCAT('%', #{sigunguNm}, '%')
+		AND facltNm LIKE
+		CONCAT('%', #{facltNm}, '%')
 		) AS SUB
 	</select>
 
 	<select id="getCampList" resultType="Camp">
-		SELECT * FROM (
+		SELECT camp_id AS campId,
+				addr1,
+				doNm,
+				facltNm,
+				featureNm,
+				firstImageUrl,
+				homepage,
+				intro,
+				likeCnt,
+				lineIntro,
+				mapX,
+				mapY,
+				sigunguNm,
+				tel,
+				zipcode
+		FROM (
 		SELECT * FROM camp
-		WHERE doNm LIKE CONCAT('%', #{doNm}, '%' )
-		AND sigunguNm LIKE CONCAT('%',#{sigunguNm} , '%' )
-		AND facltNm LIKE CONCAT('%',#{facltNm} , '%' )
+		WHERE doNm LIKE CONCAT('%', #{doNm}, '%')
+		AND
+		sigunguNm LIKE CONCAT('%', #{sigunguNm}, '%')
+		AND facltNm LIKE
+		CONCAT('%', #{facltNm}, '%')
 		) AS SUB
 		LIMIT #{cri}, #{LIST_SIZE}
 	</select>

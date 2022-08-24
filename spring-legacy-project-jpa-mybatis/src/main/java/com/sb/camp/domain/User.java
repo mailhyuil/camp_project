@@ -35,7 +35,9 @@ import lombok.ToString;
 public class User implements UserDetails  {
 
 	private static final long serialVersionUID = 1L;
+	
 	@Id
+	@Column(columnDefinition = "VARCHAR(25)")
 	private String username;
 	@Column(columnDefinition = "VARCHAR(255)")
 	private String password;

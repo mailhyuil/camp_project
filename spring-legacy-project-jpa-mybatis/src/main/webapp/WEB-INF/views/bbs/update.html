@@ -5,7 +5,7 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 <h1>수정하기</h1>
-<form th:action="|@{/bbs/update/}${BBS.id}?${_csrf.parameterName}=${_csrf.token}|" method="post" enctype="multipart/form-data">
+<form th:action="|@{/bbs/update/}${BBS.bbsId}?${_csrf.parameterName}=${_csrf.token}|" method="post" enctype="multipart/form-data">
 <div>
     <input name="title" type="text" placeholder="제목을 입력해주세요" th:value="${BBS.title}"/>
 </div>

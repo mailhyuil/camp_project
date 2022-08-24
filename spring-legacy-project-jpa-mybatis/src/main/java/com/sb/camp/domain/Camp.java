@@ -1,9 +1,15 @@
 package com.sb.camp.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -11,20 +17,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-@Builder
 
 @Entity
 @Table(name = "camp")
 public class Camp {
-    @Id
-    private String contentId;
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "camp_id")
+    private long campId;
+    
 	private String facltNm;
 	private String lineIntro;
 	@Column(columnDefinition = "varchar(1024)")
@@ -39,6 +44,24 @@ public class Camp {
 	private String firstImageUrl;
 	private String mapX;
 	private String mapY;
+	private int likeCnt;
 	
-//	private long like;
+    @OneToMany(mappedBy = "camp",fetch = FetchType.EAGER)
+    private List<CampLike> campLikeList = new ArrayList<>();
+    
+    public void increaseCampLikeCnt() {
+        this.likeCnt++;
+    }
+
+    public void decreaseCampLikeCnt() {
+        this.likeCnt--;
+    }
+	
+	@Override
+	public String toString() {
+		return "Camp [campId=" + campId + ", facltNm=" + facltNm + ", lineIntro=" + lineIntro + ", intro=" + intro
+				+ ", doNm=" + doNm + ", featureNm=" + featureNm + ", sigunguNm=" + sigunguNm + ", zipcode=" + zipcode
+				+ ", addr1=" + addr1 + ", tel=" + tel + ", homepage=" + homepage + ", firstImageUrl=" + firstImageUrl
+				+ ", mapX=" + mapX + ", mapY=" + mapY + ", likeCnt=" + likeCnt + "]";
+	}
 }

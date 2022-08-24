@@ -10,22 +10,25 @@
 	<h5 th:text="${BBS.username}"></h5>
 	<div style="display:flex;flex-direction:column;">
 	<h2 th:text="${BBS.content}"></h2>
-	<th:block th:if="${BBS.imgs != null}" th:each="img:${BBS.imgs}">
+	<th:block th:if="${not #strings.isEmpty(BBS.imgs)}" th:each="img:${BBS.imgs}">
 		<img th:src="|@{/upload/}${img.img}|" />
 	</th:block>
-	<video style="display:none" width="720px" height="480px" controls></video>
+	<div class="video_list">
+		<video style="display:none" width="720px" height="480px" controls></video>
+	</div>
+
 	<h2 th:if="${#authentication.name} == ${BBS.username}">
-		<a th:href="|@{/bbs/update/}${BBS.id}|">수정하기</a>
+		<a th:href="|@{/bbs/update/}${BBS.bbsId}|">수정하기</a>
 	</h2>
 	<h2 th:if="${#authentication.name} == ${BBS.username}">
-		<a th:href="|@{/bbs/delete/}${BBS.id}|">삭제하기</a>
+		<a th:href="|@{/bbs/delete/}${BBS.bbsId}|">삭제하기</a>
 	</h2>
 	</div>
 <script th:inline="javascript">
 /*<![CDATA[*/
 	const videoScreen = document.querySelector("video");
 	/* get videoData */
-	videoScreen.src = "http://localhost:8080/video/" + /*[[${BBS.id}]]*/;
+	videoScreen.src = "http://localhost:8080/video/" + /*[[${BBS.bbsId}]]*/;
 	videoScreen.style.display="block"
 /*]]>*/
 </script>

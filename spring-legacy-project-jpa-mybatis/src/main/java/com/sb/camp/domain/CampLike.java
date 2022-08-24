@@ -14,7 +14,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Setter
 @Getter
@@ -23,21 +22,16 @@ import lombok.ToString;
 @Builder
 
 @Entity
-public class Image {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
-	private long imageId;
-	
+public class CampLike {
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "camp_like_id")
+    private long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bbs_id")
-	private Bbs bbs;
-    
+    @JoinColumn(name = "camp_id")
+    private Camp camp;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "username")
     private User user;
-	
-	private String img;
-	private String original_img;
-	
 }

@@ -1,5 +1,6 @@
 package com.sb.camp.controller;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -25,7 +26,6 @@ public class CampController {
 	CampService campService;
 	@Autowired
 	WeatherService weatherService;
-	
 	@GetMapping({"/",""})
 	public String home(Model model, String doNm, String sigunguNm, String facltNm,
 			@RequestParam(required = false, defaultValue = "1") int page) {
@@ -34,7 +34,7 @@ public class CampController {
 	}
 	
 	@GetMapping("/detail")
-	public String detail(Model model, String id) {
+	public String detail(Model model, long id) {
 		Camp camp = campService.findCampById(id);
 		weatherService.getWeatherByLatAndLon(model, camp.getMapY(), camp.getMapX());
 		model.addAttribute("CAMP", campService.findCampById(id));
@@ -43,7 +43,7 @@ public class CampController {
 	
 	@ResponseBody
 	@GetMapping("/getLatAndLon")
-	public ResponseEntity<Map<String,String>> getLatAndLon(String id) {
+	public ResponseEntity<Map<String,String>> getLatAndLon(long id) {
 		Camp camp = campService.findCampById(id);
 		Map<String, String> latlon = new HashMap<>();
 		latlon.put("lat", camp.getMapY());
@@ -53,9 +53,9 @@ public class CampController {
 	}
 	
 	//TODO 미완성
-//	@GetMapping("/like/{id}")
-//	public String like(@PathVariable("id") String id) {
-//		campService.increaseLike(id);
-//		return "redirect:/camp/detail?id="+id;
-//	}
+	@GetMapping("/like/{id}")
+	public String like(@PathVariable("id") long id, Principal principal) {
+		campService.likeCamp(id, principal.getName());
+		return "redirect:/camp/detail?id="+id;
+	}
 }

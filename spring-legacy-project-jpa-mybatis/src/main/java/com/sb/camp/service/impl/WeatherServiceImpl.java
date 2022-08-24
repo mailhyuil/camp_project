@@ -46,7 +46,6 @@ public class WeatherServiceImpl implements WeatherService{
 				entity,
 				new ParameterizedTypeReference<WeatherRoot>() {});
 				
-		System.out.println(respEntity.getBody().getWeather());
 		model.addAttribute("WEATHER", respEntity.getBody().getWeather().get(0));
 		model.addAttribute("MAIN", respEntity.getBody().getMain());
 		model.addAttribute("WIND", respEntity.getBody().getWind());

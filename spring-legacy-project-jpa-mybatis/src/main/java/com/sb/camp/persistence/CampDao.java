@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.sb.camp.domain.Camp;
 
-public interface CampDao extends GenericDao<Camp, String> {
+public interface CampDao extends GenericDao<Camp, Long> {
 	public void insertAPI(List<Camp> json);
 	public int getCampListCnt(@Param(value = "doNm") String doNm,
 			@Param(value = "sigunguNm") String sigunguNm,

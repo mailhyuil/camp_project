@@ -9,12 +9,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,8 +22,7 @@ import com.sb.camp.domain.Image;
 import com.sb.camp.domain.Pagination;
 import com.sb.camp.domain.Video;
 import com.sb.camp.persistence.BbsDao;
-import com.sb.camp.repository.BbsRepository;
-import com.sb.camp.repository.ImageRepository;
+import com.sb.camp.persistence.UserDao;
 import com.sb.camp.service.BbsService;
 
 @Service
@@ -35,9 +31,9 @@ public class BbsServiceImpl implements BbsService {
 
 	@Autowired
 	private BbsDao bbsDao;
-	@PersistenceContext
-	private EntityManager em;
-
+	@Autowired
+	private UserDao userDao;
+	
 	@Override
 	public List<Bbs> selectAll() {
 		return bbsDao.selectAll();
@@ -53,19 +49,20 @@ public class BbsServiceImpl implements BbsService {
 
 		bbs.setDate(dateFormat.format(date));
 		bbs.setTime(timeFormat.format(date));
-		bbs.setUsername(loggedInUser);
+		bbs.setUser(userDao.findById(loggedInUser));
 
-		bbsDao.insert(bbs);
 
+		
 		List<MultipartFile> imgList = files.getFiles("files");
 
 		List<Image> imgs = new ArrayList<>();
 
 		for (MultipartFile img : imgList) {
+			if(!img.isEmpty()) {
 			String uuid = UUID.randomUUID().toString();
 			String uuidImg = uuid + img.getOriginalFilename();
-			Image imgVO = Image.builder().img(uuidImg).original_img(img.getOriginalFilename()).username(loggedInUser)
-					.bbsId(bbs.getId()).build();
+			Image imgVO = Image.builder().img(uuidImg).original_img(img.getOriginalFilename()).user(userDao.findById(loggedInUser))
+					.bbs(bbs).build();
 
 			File uploadFile = new File("c:/Temp/upload/", uuidImg);
 
@@ -76,16 +73,21 @@ public class BbsServiceImpl implements BbsService {
 			}
 
 			imgs.add(imgVO);
+			}
 		}
-
-		bbsDao.insertImages(imgs);
+		
+		bbsDao.insert(bbs);
+		
+		if(!imgs.isEmpty()) {
+			bbsDao.insertImages(imgs);
+		}
 
 //      em.persist(img); // 안됨 @Transactional 사용해도 안됨
 //      ImageRepository.save(img); // 안됨
 //		bbsRepository.save(bbs); // 안됨
 
 		try {
-			Video video = Video.builder().bbsId(bbs.getId()).data(file.getBytes()).username(loggedInUser).build();
+			Video video = Video.builder().bbs(bbs).data(file.getBytes()).user(userDao.findById(loggedInUser)).build();
 			bbsDao.insertVideo(video);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -97,7 +99,7 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Bbs findBbsById(Model model, long id) {
 		Bbs bbs = bbsDao.findById(id);
-		bbs.setImgs(bbsDao.getImagesByBbsId(bbs.getId()));
+		bbs.setImgs(bbsDao.getImagesByBbsId(bbs.getBbsId()));
 		model.addAttribute("BBS", bbs);
 		return bbs;
 	}
@@ -132,15 +134,15 @@ public class BbsServiceImpl implements BbsService {
 	public void updateBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files) {
 		bbsDao.update(bbs);
 		
-		List<Image> imgs = bbsDao.getImagesByBbsId(bbs.getId());
+		List<Image> imgs = bbsDao.getImagesByBbsId(bbs.getBbsId());
 		
 		for (Image img : imgs) {
-
+			
 			File imgFile = new File("c:/Temp/upload", img.getImg());
-
+			
 			if (imgFile.exists()) {
 				imgFile.delete();
-				bbsDao.deleteImage(img.getId());
+				bbsDao.deleteImage(img.getImageId());
 			}
 		}
 		
@@ -149,10 +151,11 @@ public class BbsServiceImpl implements BbsService {
 		List<Image> newImgs = new ArrayList<>();
 
 		for (MultipartFile img : imgList) {
+			if(!img.isEmpty()) {
 			String uuid = UUID.randomUUID().toString();
 			String uuidImg = uuid + img.getOriginalFilename();
-			Image imgVO = Image.builder().img(uuidImg).original_img(img.getOriginalFilename()).username(bbs.getUsername())
-					.bbsId(bbs.getId()).build();
+			Image imgVO = Image.builder().img(uuidImg).original_img(img.getOriginalFilename()).user(bbs.getUser())
+					.bbs(bbs).build();
 
 			File uploadFile = new File("c:/Temp/upload/", uuidImg);
 
@@ -163,17 +166,23 @@ public class BbsServiceImpl implements BbsService {
 			}
 
 			newImgs.add(imgVO);
+			}
+		}
+		if(!newImgs.isEmpty()) {
+			bbsDao.insertImages(newImgs);
 		}
 
-		bbsDao.insertImages(newImgs);
-
 		try {
-			Video video = Video.builder().bbsId(bbs.getId()).data(file.getBytes()).username(bbs.getUsername()).build();
+			if(!file.isEmpty()) {
+			Video video = Video.builder().bbs(bbs).data(file.getBytes()).user(bbs.getUser()).build();
 			bbsDao.insertVideo(video);
+			} else {
+				
+			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-
+	
 }
