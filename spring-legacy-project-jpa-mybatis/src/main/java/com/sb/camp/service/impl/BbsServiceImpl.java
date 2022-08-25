@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.sb.camp.domain.Bbs;
+import com.sb.camp.domain.Camp;
 import com.sb.camp.domain.Image;
 import com.sb.camp.domain.Pagination;
 import com.sb.camp.domain.Video;
@@ -113,15 +114,15 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public void getBbsList(Model model, int page) {
-		int totalListCount = bbsDao.getBoardListCnt();
+	public void getBbsList(Model model, int page, long campId) {
+		int totalListCount = bbsDao.getBoardListCnt(campId);
 
 		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
 
 		pagination.paginate(page, totalListCount); // 페이지네이션 초기화
 
 		model.addAttribute("pagination", pagination);
-		model.addAttribute("BBS_LIST", bbsDao.getBoardList(pagination));
+		model.addAttribute("BBS_LIST", bbsDao.getBoardList(pagination, campId));
 	}
 
 	@Override
@@ -205,6 +206,5 @@ public class BbsServiceImpl implements BbsService {
 		model.addAttribute("IMG_LIST", bbsDao.findImages(pagination));
 		return null;
 	}
-
 	
 }

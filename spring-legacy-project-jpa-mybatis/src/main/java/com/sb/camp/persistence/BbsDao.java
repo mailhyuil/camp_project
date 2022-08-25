@@ -10,8 +10,8 @@ import com.sb.camp.domain.Pagination;
 import com.sb.camp.domain.Video;
 
 public interface BbsDao extends GenericDao<Bbs, Long>{
-	public int getBoardListCnt();
-    public List<Bbs> getBoardList(Pagination pagination);
+	public int getBoardListCnt(long campId);
+    public List<Bbs> getBoardList(@Param(value = "pagination") Pagination pagination, @Param(value = "campId") long campId);
     
     public int insertImages(List<Image> img);
     public List<Image> getImagesByBbsId(long bbsId);

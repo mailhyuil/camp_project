@@ -23,7 +23,7 @@
         </tr>
     </th:block>
 </table>
-<a th:href="@{/bbs/insert}">글쓰기</a>
+<a th:href="|@{/bbs/insert?id=}${campId}|">글쓰기</a>
 <ul style="list-style:none; display: flex">
     <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
             th:onclick="|location.href = '/bbs/board?page=1'|">&#60;&#60;</a>

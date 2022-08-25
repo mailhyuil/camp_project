@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -38,11 +39,18 @@ public class Image {
     @JoinColumn(name = "bbs_id")
 	private Bbs bbs;
     
+    @Transient
+    private long bbsId;
+    
     @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.REMOVE})
     @JoinColumn(name = "username",insertable = false,updatable = false)
     private User user;
-	
+    
+    @Transient
+	private String username;
+    
 	private String img;
+	
 	private String original_img;
 	
 }

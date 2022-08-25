@@ -16,20 +16,20 @@
 
 	<insert id="insert" parameterType="Bbs" useGeneratedKeys="true"
 		keyProperty="bbsId" keyColumn="bbs_id">
-		INSERT INTO bbs(title, username, date, time, content
+		INSERT INTO bbs(title, username, date, time, content, camp_id
 		) VALUES (
-		#{title}, #{user.username}, #{date}, #{time}, #{content}
+		#{title}, #{user.username}, #{date}, #{time}, #{content}, #{campId}
 		)
 	</insert>
 
 	<select id="getBoardListCnt" resultType="int">
 		SELECT count(*) AS
-		listCnt FROM bbs
+		listCnt FROM bbs WHERE camp_id = #{campId}
 	</select>
 
 	<select id="getBoardList" resultType="Bbs">
-		SELECT * FROM bbs LIMIT
-		#{cri}, #{LIST_SIZE}
+		SELECT * FROM bbs WHERE camp_id = #{campId} LIMIT
+		#{pagination.cri}, #{pagination.LIST_SIZE}
 	</select>
 	<!-- IMAGE UPLOAD -->
 	<insert id="insertImage" parameterType="Image">

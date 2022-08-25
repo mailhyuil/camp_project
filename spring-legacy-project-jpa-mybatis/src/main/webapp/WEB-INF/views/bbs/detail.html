@@ -18,10 +18,10 @@
 	</div>
 
 	<h2 th:if="${#authentication.name} == ${BBS.username}">
-		<a th:href="|@{/bbs/update/}${BBS.bbsId}|">수정하기</a>
+		<a th:href="|@{/bbs/update/}${BBS.campId}/${BBS.bbsId}|">수정하기</a>
 	</h2>
 	<h2 th:if="${#authentication.name} == ${BBS.username}">
-		<a th:href="|@{/bbs/delete/}${BBS.bbsId}|">삭제하기</a>
+		<a th:href="|@{/bbs/delete/}${BBS.campId}/${BBS.bbsId}|">삭제하기</a>
 	</h2>
 	</div>
 <script th:inline="javascript">

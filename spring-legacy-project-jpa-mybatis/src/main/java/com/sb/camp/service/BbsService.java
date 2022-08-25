@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.sb.camp.domain.Bbs;
+import com.sb.camp.domain.Camp;
 import com.sb.camp.domain.Image;
 
 public interface BbsService {
@@ -17,7 +18,7 @@ public interface BbsService {
 
     public Bbs findBbsById(Model model, long id);
 
-	public void getBbsList(Model model, int page);
+	public void getBbsList(Model model, int page, long campId);
 
 	public void deleteBbs(long id);
 

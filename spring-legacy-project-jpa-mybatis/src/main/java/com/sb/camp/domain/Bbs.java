@@ -36,13 +36,15 @@ public class Bbs {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "bbs_id")
     private long bbsId;
+    
     @Column(columnDefinition = "varchar(50)")
     private String title;
     private String date;
     private String time;
 	@Column(columnDefinition = "varchar(2048)")
     private String content;
-	
+	@Column(name = "camp_id")
+	private long campId;
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
 	@JoinColumn(name = "username")
     private User user;
