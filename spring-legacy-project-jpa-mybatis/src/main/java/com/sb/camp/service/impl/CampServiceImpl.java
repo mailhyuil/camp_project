@@ -2,14 +2,17 @@ package com.sb.camp.service.impl;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -23,6 +26,7 @@ import com.sb.camp.domain.campapi.Root;
 import com.sb.camp.exception.CustomException;
 import com.sb.camp.exception.ErrorCode;
 import com.sb.camp.persistence.CampDao;
+import com.sb.camp.persistence.CampLikeDao;
 import com.sb.camp.persistence.UserDao;
 import com.sb.camp.repository.CampLikeRepository;
 import com.sb.camp.repository.CampRepository;
@@ -42,6 +46,8 @@ public class CampServiceImpl implements CampService{
 	private CampRepository campRepository;
 	@Autowired
 	private CampLikeRepository campLikeRepository;
+	@Autowired
+	private CampLikeDao campLikeDao;
 //    private BooleanExpression nameContain(String name) {
 //        return hasText(name) ? camp.facltNm.contains(name) : null;
 //    }
@@ -65,14 +71,18 @@ public class CampServiceImpl implements CampService{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		HttpHeaders headers = new HttpHeaders();
 		
+		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				
+		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);
 		RestTemplate restTemplate  = new RestTemplate();
 				
 		ResponseEntity<Root> responseEntity =
 		restTemplate.exchange(
 				uri, 
 				HttpMethod.GET,
-				null,
+				entity,
 				new ParameterizedTypeReference<Root>() {});
 		
 		List<Camp> camps = responseEntity.getBody().response.body.items.item;
@@ -105,29 +115,36 @@ public class CampServiceImpl implements CampService{
 
 	@Override
 	@Transactional
-	public void likeCamp(long id, String username) {
+	public void likeCamp(long id, String username, Model model) {
 		Camp foundCamp = campRepository.findById(id).orElseThrow(()->{
 			throw new CustomException(ErrorCode.NOT_FOUND_CAMP, "ID에 맞는 캠핑장이 없습니다");
 		});
+		// camp 찾기 성공
+		System.out.println("Camp " + foundCamp);
 		
 		User foundUser = userDao.findById(username);
+		// 유저 찾기 성공
+		System.out.println("User " + foundUser);
 		
-		Optional<CampLike> campLike = campLikeRepository.findByCampAndUser(foundCamp, foundUser);
+		CampLike campLike = campLikeDao.findByCampIdAndUsername(foundCamp.getCampId(), foundUser.getUsername());
+		System.out.println("campLike " + campLike);
 		
-		if (campLike.isPresent()) {
-            foundCamp.decreaseCampLikeCnt();
-            campLikeRepository.deleteById(campLike.get().getId());
+		// 좋아요 찾기 성공
+		if (campLike == null) {
+			model.addAttribute("isLiked", "FALSE");
+			foundCamp.increaseCampLikeCnt();
+			CampLike saveCampLike = CampLike.builder()
+					.camp(foundCamp)
+					.user(foundUser)
+					.build();
+			campLikeDao.save(saveCampLike);
         } else {
-        	foundCamp.increaseCampLikeCnt();
-        	CampLike saveCampLike = campLikeRepository.save(CampLike.builder()
-                    .camp(foundCamp)
-                    .user(foundUser)
-                    .build());
-        	foundCamp.getCampLikeList().add(saveCampLike);
+        	model.addAttribute("isLiked", "TRUE");
+        	foundCamp.decreaseCampLikeCnt();
+        	campLikeDao.deleteById(campLike.getCampLikeId());
         }
+		campDao.update(foundCamp);
+		// 저장 실패
 		
-		Camp camp = campRepository.save(foundCamp);
-		
-		System.out.println(camp);
 	}
 }

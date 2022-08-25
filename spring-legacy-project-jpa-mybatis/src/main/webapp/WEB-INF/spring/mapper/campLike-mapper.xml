@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sb.camp.persistence.CampLikeDao">
+	<select id="findByCampIdAndUsername" resultType="CampLike">
+		SELECT camp_like_id, camp_id, username FROM camplike where camp_id = #{camp_id} AND username = #{username}
+	</select>
+	
+	<insert id="save" parameterType="CampLike">
+		insert into camplike (
+		camp_id,
+		username
+		)values(
+		#{camp.campId},
+		#{user.username}
+		)
+	</insert>
+
+	<delete id="deleteById" parameterType="Long">
+		delete from camplike where camp_like_id = #{camp_like_id}
+	</delete>
+
+</mapper> 

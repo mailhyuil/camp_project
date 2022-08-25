@@ -25,8 +25,7 @@ public class Pagination {
         this.LIST_SIZE = 5;
 
         this.theLastPage = (int) Math.ceil(totalListSize / (double) LIST_SIZE); // * int값으로만 나누면 자동 형변환 돼버린다
-        System.out.println(totalListSize);
-        System.out.println(theLastPage);
+        
         this.currentPage = currentPage;
 
         this.endPage = (int) (Math.ceil(currentPage / (double) PAGE_SIZE)) * PAGE_SIZE;

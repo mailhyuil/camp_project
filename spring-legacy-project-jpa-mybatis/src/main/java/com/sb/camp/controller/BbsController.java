@@ -1,6 +1,7 @@
 package com.sb.camp.controller;
 
 import java.security.Principal;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.sb.camp.domain.Bbs;
+import com.sb.camp.domain.Image;
 import com.sb.camp.service.BbsService;
 
 @Controller
@@ -73,7 +75,9 @@ public class BbsController {
     }
     
     @GetMapping("/collection")
-    public String collection(){
+    public String collection(Model model,
+            @RequestParam(required = false, defaultValue = "1") int page){
+    	List<Image> imgList = bbsService.findImageList(model, page);
         return null;
     }
 }

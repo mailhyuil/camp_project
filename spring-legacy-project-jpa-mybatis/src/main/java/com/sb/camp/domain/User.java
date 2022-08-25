@@ -56,6 +56,6 @@ public class User implements UserDetails  {
 	private String email;
 	private String nickname;
 	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
 	private Set<Authority> auths;
 }

@@ -4,16 +4,16 @@
 <th:block layout:fragment="content">
 	<h1>detail 페이지</h1>
 	<h2>좋아요</h2>
-	<h5 th:text="${CAMP.likeCnt}"></h5>
-	<a th:href="|@{/camp/like/}${CAMP.campId}|">좋아요!</a>
+	<h3 th:text="${CAMP.likeCnt}"></h3>
+	<h4><a th:href="|@{/camp/like/}${CAMP.campId}|">❤️</a></h4>
 	<h2>날씨</h2>
 	<div>
 		<img th:src="|http://openweathermap.org/img/w/${WEATHER.icon}.png|">
-		<h6 th:text="|${WEATHER.main} ${WEATHER.description}|"></h6>
-		<h6
-			th:text="|${MAIN.temp} ${MAIN.feels_like} ${MAIN.temp_min} ${MAIN.temp_max} ${MAIN.pressure} ${MAIN.humidity}|">
-		</h6>
-		<h6 th:text="|${WIND.speed} ${WIND.deg} ${WIND.gust}|"></h6>
+		<h5 th:text="|날씨:${WEATHER.main} 자세히:${WEATHER.description}|"></h5>
+		<h5
+			th:text="|기온:${MAIN.temp} 체감온도:${MAIN.feels_like} 최저기온:${MAIN.temp_min} 최고기온:${MAIN.temp_max} 습도:${MAIN.humidity}|">
+		</h5>
+		<h5 th:text="|풍속:${WIND.speed} 풍향:${WIND.deg}|"></h5>
 	</div>
 	<h2>캠프 정보</h2>
 	<h5 th:text="${CAMP.facltNm}"></h5>
@@ -36,8 +36,6 @@
 		/*<![CDATA[*/
 		const id = /*[[${CAMP.campId}]]*/;
 		/*]]>*/
-
-
 		fetch('http://localhost:8080/camp/getLatAndLon?id=' + id)
 			.then(res => res.json())
 			.then(json => {

@@ -1,5 +1,6 @@
 package com.sb.camp.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -8,6 +9,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,11 +34,12 @@ public class Image {
 	private long imageId;
 	
     @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name = "bbs_id")
 	private Bbs bbs;
     
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "username")
+    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.REMOVE})
+    @JoinColumn(name = "username",insertable = false,updatable = false)
     private User user;
 	
 	private String img;

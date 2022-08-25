@@ -1,0 +1,11 @@
+
+<th:block th:fragment="searchFragment">
+	<main>
+		<form th:action="@{/camp}">
+			<input name="doNm" placeholder="도, 시">
+			<input name="sigunguNm" placeholder="시, 군, 구">
+			<input name="facltNm" placeholder="캠핑장 이름">
+			<button>검색</button>
+		</form>
+	</main>
+</th:block>

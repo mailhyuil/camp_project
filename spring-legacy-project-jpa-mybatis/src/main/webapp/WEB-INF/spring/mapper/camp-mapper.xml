@@ -94,7 +94,7 @@
 	</select>
 
 	<select id="getCampList" resultType="Camp">
-		SELECT camp_id AS campId,
+		SELECT camp_id,
 				addr1,
 				doNm,
 				facltNm,
@@ -119,5 +119,11 @@
 		) AS SUB
 		LIMIT #{cri}, #{LIST_SIZE}
 	</select>
+	<update id="update" parameterType="Camp">
+		UPDATE camp
+		SET
+		likeCnt = #{likeCnt}
+		WHERE camp_id = #{campId}
+	</update>
 
 </mapper> 

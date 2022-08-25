@@ -12,6 +12,7 @@ import java.util.UUID;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,8 @@ import com.sb.camp.domain.Bbs;
 import com.sb.camp.domain.Image;
 import com.sb.camp.domain.Pagination;
 import com.sb.camp.domain.Video;
+import com.sb.camp.exception.CustomException;
+import com.sb.camp.exception.ErrorCode;
 import com.sb.camp.persistence.BbsDao;
 import com.sb.camp.persistence.UserDao;
 import com.sb.camp.service.BbsService;
@@ -99,6 +102,11 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Bbs findBbsById(Model model, long id) {
 		Bbs bbs = bbsDao.findById(id);
+		
+		if(bbs == null) {
+			throw new CustomException(ErrorCode.NOT_FOUND_POST, "게시글을 찾을 수 없습니다.");
+		}
+		
 		bbs.setImgs(bbsDao.getImagesByBbsId(bbs.getBbsId()));
 		model.addAttribute("BBS", bbs);
 		return bbs;
@@ -184,5 +192,19 @@ public class BbsServiceImpl implements BbsService {
 			e.printStackTrace();
 		}
 	}
+
+	@Override
+	public List<Image> findImageList(Model model, int page) {
+		int totalListCount = bbsDao.getImageCount();
+
+		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
+
+		pagination.paginate(page, totalListCount); // 페이지네이션 초기화
+
+		model.addAttribute("pagination", pagination);
+		model.addAttribute("BBS_LIST", bbsDao.findImages(pagination));
+		return null;
+	}
+
 	
 }

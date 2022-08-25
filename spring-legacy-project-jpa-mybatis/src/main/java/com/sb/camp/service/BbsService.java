@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.sb.camp.domain.Bbs;
+import com.sb.camp.domain.Image;
 
 public interface BbsService {
     public List<Bbs> selectAll();
@@ -21,4 +22,6 @@ public interface BbsService {
 	public void deleteBbs(long id);
 
 	public void updateBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files);
+
+	public List<Image> findImageList(Model model, int page);
 }

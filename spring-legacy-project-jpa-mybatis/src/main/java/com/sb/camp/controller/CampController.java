@@ -48,14 +48,13 @@ public class CampController {
 		Map<String, String> latlon = new HashMap<>();
 		latlon.put("lat", camp.getMapY());
 		latlon.put("lon", camp.getMapX());
-		return ResponseEntity
-                .ok(latlon);
+		return ResponseEntity.ok(latlon);
 	}
 	
 	//TODO 미완성
 	@GetMapping("/like/{id}")
-	public String like(@PathVariable("id") long id, Principal principal) {
-		campService.likeCamp(id, principal.getName());
+	public String like(Model model, @PathVariable("id") long id, Principal principal) {
+		campService.likeCamp(id, principal.getName(), model);
 		return "redirect:/camp/detail?id="+id;
 	}
 }

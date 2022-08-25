@@ -63,11 +63,16 @@
 		SELECT * FROM image
 		WHERE bbs_id = #{bbs.bbsId}
 	</select>
+	
+	<select id="getImageCount" resultType="Integer">
+		SELECT count(*) FROM image
+	</select>
 
 	<select id="findImages" resultType="Image">
 		SELECT * FROM image LIMIT
 		#{limit} OFFSET #{offset}
 	</select>
+	
 	<!-- VIDEO UPLOAD -->
 	<insert id="insertVideo" parameterType="Video">
 		INSERT INTO video(bbs_id,
