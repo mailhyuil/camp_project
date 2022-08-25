@@ -202,7 +202,7 @@ public class BbsServiceImpl implements BbsService {
 		pagination.paginate(page, totalListCount); // 페이지네이션 초기화
 
 		model.addAttribute("pagination", pagination);
-		model.addAttribute("BBS_LIST", bbsDao.findImages(pagination));
+		model.addAttribute("IMG_LIST", bbsDao.findImages(pagination));
 		return null;
 	}
 

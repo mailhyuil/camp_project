@@ -2,73 +2,55 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-	<style>
-		html,
-		body {
-			margin: 0;
-		}
+	<h1>둘러보기</h1>
+    <th:block th:each="img:${IMG_LIST}">
+            <img th:src="|@{/upload/}${img.img}|">
+    </th:block>
+<ul style="list-style:none; display: flex">
+    <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
+            th:onclick="|location.href = '/bbs/board?page=1'|">&#60;&#60;</a>
+    </li>
+    <th:block th:if="${pagination.prev}">
+        <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
+                th:onclick="|fn_prev(${pagination.currentPage})|">&#60;</a>
+        </li>
+    </th:block>
+    <th:block th:each="index:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+        <li th:style="|padding:.5rem 1rem;margin:2px;color:white;${pagination.currentPage==index?'background-color:red':'background-color:skyblue'}|">
+            <a th:onclick="|fn_pagination(${index})|"
+               th:text="${index}"></a>
+        </li>
+    </th:block>
+    <th:block th:if="${pagination.next}">
+        <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
+                th:onclick="|fn_next(${pagination.currentPage})|">&#62;</a>
+        </li>
+    </th:block>
+    <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
+            th:onclick="|location.href = '/bbs/board?page=${pagination.theLastPage}'|">&#62;&#62;</a>
+    </li>
+</ul>
+<script>
+    function fn_prev(currentPage) {
+        var page = currentPage - 1;
+        var url = "/bbs/board";
+        url = url + "?page=" + page;
+        location.href = url;
+    }
 
-		section .box {
-			height: 500px;
-			background: tomato;
-			color: white;
-			box-sizing: border-box;
-			padding: 30px 10px;
-		}
+    function fn_pagination(page) {
+        var url = "/bbs/board";
+        url = url + "?page=" + page;
+        location.href = url;
+    }
 
-		section .box:nth-child(2n) {
-			background: teal;
-		}
-	</style>
-	<!-- /////////////////////////////////////////////// -->
-	<h1>collection</h1>
-	<!-- 이미지, 비디오 모아서 보기 -->
-	<div id="img-wrapper">
-	</div>
-	<!-- /////////////////////////////////////////////// -->
-	<script th:inline="javascript">
-		const imgWrapper = document.querySelector("#img-wrapper")
-		let offset = 0; // 사진을 가지고 있는 json 데이터
-
-		window.onload = () => {
-			fetch(`http://localhost:8080/bbs/collection/5/${offset}`, {
-				method: "post",
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			}).then(res => res.json())
-				.then(json => json.map((item) => {
-					console.log(item)
-					const img = document.createElement("img");
-					img.src = "/upload/" + item.img;
-					imgWrapper.appendChild(img);
-				}))
-
-			offset += 5;
-		}
-
-		window.onscroll = () => {
-			if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-				//todo fetch로 json 가져와서 배열에 추가하기
-
-				fetch(`http://localhost:8080/bbs/collection/5/${offset}`, {
-					method: "post",
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}).then(res => res.json())
-					.then(json => json.map((item) => {
-						console.log(item)
-						const img = document.createElement("img");
-						img.src = "/upload/" + item.img;
-						imgWrapper.appendChild(img);
-					}))
-
-				offset += 5;
-				console.log(offset)
-			}
-		}
-	</script>
+    function fn_next(currentPage) {
+        var page = currentPage + 1;
+        var url = "/bbs/board";
+        url = url + "?page=" + page;
+        location.href = url;
+    }
+</script>
 </th:block>
 
 </html>

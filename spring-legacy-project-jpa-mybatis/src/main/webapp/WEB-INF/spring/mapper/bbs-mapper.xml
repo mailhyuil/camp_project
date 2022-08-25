@@ -70,7 +70,7 @@
 
 	<select id="findImages" resultType="Image">
 		SELECT * FROM image LIMIT
-		#{limit} OFFSET #{offset}
+		#{cri}, #{LIST_SIZE}
 	</select>
 	
 	<!-- VIDEO UPLOAD -->
