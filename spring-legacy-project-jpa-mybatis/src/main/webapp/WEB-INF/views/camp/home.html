@@ -3,7 +3,7 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 	<h1>camp 페이지</h1>
-	<th:block th:each="camp:${CAMP_LIST}">
+	<th:block th:each="camp:${campList}">
 	<div>
 	<a th:href="|@{/camp/detail?id=}${camp.campId}|">
 		<h1 th:text="${camp.facltNm}"></h1>

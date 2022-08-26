@@ -6,20 +6,19 @@ import java.security.Principal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.sb.camp.domain.Bbs;
-import com.sb.camp.domain.Camp;
 import com.sb.camp.domain.Image;
 import com.sb.camp.domain.Pagination;
 import com.sb.camp.domain.Video;
@@ -86,10 +85,6 @@ public class BbsServiceImpl implements BbsService {
 			bbsDao.insertImages(imgs);
 		}
 
-//      em.persist(img); // 안됨 @Transactional 사용해도 안됨
-//      ImageRepository.save(img); // 안됨
-//		bbsRepository.save(bbs); // 안됨
-
 		try {
 			Video video = Video.builder().bbs(bbs).data(file.getBytes()).user(userDao.findById(loggedInUser)).build();
 			bbsDao.insertVideo(video);
@@ -101,33 +96,35 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public Bbs findBbsById(Model model, long id) {
+	public Bbs getBbsById(long id) {
 		Bbs bbs = bbsDao.findById(id);
 		
 		if(bbs == null) {
 			throw new CustomException(ErrorCode.NOT_FOUND_POST, "게시글을 찾을 수 없습니다.");
 		}
 		
-		bbs.setImgs(bbsDao.getImagesByBbsId(bbs.getBbsId()));
-		model.addAttribute("BBS", bbs);
+		bbs.setImgs(bbsDao.findImagesByBbsId(bbs.getBbsId()));
 		return bbs;
 	}
 
 	@Override
-	public void getBbsList(Model model, int page, long campId) {
-		int totalListCount = bbsDao.getBoardListCnt(campId);
+	public Map<String, Object> getPaginationAndBbsList(int page, long campId) {
+		int totalListCount = bbsDao.findBoardListCnt(campId);
 
 		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
 
 		pagination.paginate(page, totalListCount); // 페이지네이션 초기화
-
-		model.addAttribute("pagination", pagination);
-		model.addAttribute("BBS_LIST", bbsDao.getBoardList(pagination, campId));
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("pagination", pagination);
+		map.put("bbsList", bbsDao.findBoardList(pagination, campId));
+		
+		return map;
 	}
 
 	@Override
 	public void deleteBbs(long id) {
-		List<Image> imgs = bbsDao.getImagesByBbsId(id);
+		List<Image> imgs = bbsDao.findImagesByBbsId(id);
 		for (Image img : imgs) {
 
 			File file = new File("c:/Temp/upload", img.getImg());
@@ -143,7 +140,7 @@ public class BbsServiceImpl implements BbsService {
 	public void updateBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files) {
 		bbsDao.update(bbs);
 		
-		List<Image> imgs = bbsDao.getImagesByBbsId(bbs.getBbsId());
+		List<Image> imgs = bbsDao.findImagesByBbsId(bbs.getBbsId());
 		
 		for (Image img : imgs) {
 			
@@ -195,16 +192,23 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public List<Image> findImageList(Model model, int page) {
-		int totalListCount = bbsDao.getImageCount();
+	public Map<String, Object> getPaginationAndImageList(int page) {
+		int totalListCount = bbsDao.findImageCount();
 
 		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
 
 		pagination.paginate(page, totalListCount); // 페이지네이션 초기화
+		
+		Map<String, Object> map = new HashMap<>();
+		
+		map.put("pagination", pagination);
+		map.put("imageLIST", bbsDao.findImages(pagination));
+		return map;
+	}
 
-		model.addAttribute("pagination", pagination);
-		model.addAttribute("IMG_LIST", bbsDao.findImages(pagination));
-		return null;
+	@Override
+	public Video getVideoByBbsId(long id) {
+		return bbsDao.findVideoByBbsId(id);
 	}
 	
 }

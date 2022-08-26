@@ -3,7 +3,10 @@ package com.sb.camp.service.impl;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -15,7 +18,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 import org.springframework.web.client.RestTemplate;
 
 import com.sb.camp.domain.Camp;
@@ -26,28 +28,24 @@ import com.sb.camp.domain.campapi.Root;
 import com.sb.camp.exception.CustomException;
 import com.sb.camp.exception.ErrorCode;
 import com.sb.camp.persistence.CampDao;
-import com.sb.camp.persistence.CampLikeDao;
 import com.sb.camp.persistence.UserDao;
 import com.sb.camp.repository.CampLikeRepository;
 import com.sb.camp.repository.CampRepository;
+import com.sb.camp.repository.UserRepository;
 import com.sb.camp.service.CampService;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Service
 public class CampServiceImpl implements CampService{
 	
 	@Autowired
 	private CampDao campDao;
 	@Autowired
-	private UserDao userDao;
-	@Autowired
 	private CampRepository campRepository;
 	@Autowired
 	private CampLikeRepository campLikeRepository;
 	@Autowired
-	private CampLikeDao campLikeDao;
+	private UserRepository userRepository;
+	
 //    private BooleanExpression nameContain(String name) {
 //        return hasText(name) ? camp.facltNm.contains(name) : null;
 //    }
@@ -91,60 +89,58 @@ public class CampServiceImpl implements CampService{
 	}
 
 	@Override
-	public void findByKeywords(Model model, String doNm, String sigunguNm, String facltNm, int page) {
+	public Map<String, Object> getPaginationAndCampListByKeywords(String doNm, String sigunguNm, String facltNm, int page) {
 		
 //        List<Camp> content = queryFactory
 //                .selectFrom(camp)
 //                .where(nameContain(name), doNmContain(doNm), sigunguNmContain(sigunguNm))
 //                .fetch();
 		
-		int totalListCount = campDao.getCampListCnt(doNm, sigunguNm, facltNm);
+		int totalListCount = campDao.findCampListCnt(doNm, sigunguNm, facltNm);
 		
 		Pagination pagination = new Pagination();
 		
 		pagination.paginate(page, totalListCount);
 		
-        model.addAttribute("pagination", pagination);
-        model.addAttribute("CAMP_LIST", campDao.getCampList(doNm, sigunguNm, facltNm, pagination.getCri(), pagination.getLIST_SIZE()));
+		Map<String, Object> map = new HashMap<>();
+        map.put("pagination", pagination);
+        map.put("campList", campDao.findCampListByKeywords(doNm, sigunguNm, facltNm, pagination.getCri(), pagination.getLIST_SIZE()));
+        
+        return map;
 	}
 
 	@Override
-	public Camp findCampById(long id) {
+	public Camp getCampById(long id) {
 		return campDao.findById(id);
 	}
 
 	@Override
 	@Transactional
-	public void likeCamp(long id, String username, Model model) {
-		Camp foundCamp = campRepository.findById(id).orElseThrow(()->{
+	public void likeCamp(long campId, String username) { // Spring Data JPA 구현
+		
+		Camp foundCamp = campRepository.findById(campId).orElseThrow(()->{
 			throw new CustomException(ErrorCode.NOT_FOUND_CAMP, "ID에 맞는 캠핑장이 없습니다");
 		});
-		// camp 찾기 성공
-		System.out.println("Camp " + foundCamp);
 		
-		User foundUser = userDao.findById(username);
-		// 유저 찾기 성공
-		System.out.println("User " + foundUser);
+		User foundUser = userRepository.findOneByUsername(username);
 		
-		CampLike campLike = campLikeDao.findByCampIdAndUsername(foundCamp.getCampId(), foundUser.getUsername());
+		Optional<CampLike> campLike = campLikeRepository.findByCampIdAndUserId(campId, foundUser.getId());
 		System.out.println("campLike " + campLike);
 		
-		// 좋아요 찾기 성공
-		if (campLike == null) {
-			model.addAttribute("isLiked", "FALSE");
-			foundCamp.increaseCampLikeCnt();
-			CampLike saveCampLike = CampLike.builder()
-					.camp(foundCamp)
-					.user(foundUser)
-					.build();
-			campLikeDao.save(saveCampLike);
+		if (campLike.isPresent()) {
+			foundCamp.decreaseCampLikeCnt();
+			
+			campLikeRepository.deleteById(campLike.get().getCampLikeId());
         } else {
-        	model.addAttribute("isLiked", "TRUE");
-        	foundCamp.decreaseCampLikeCnt();
-        	campLikeDao.deleteById(campLike.getCampLikeId());
+        	foundCamp.increaseCampLikeCnt();
+        	
+        	CampLike savedCampLike = campLikeRepository.save(CampLike.builder()
+        			.camp(foundCamp)
+        			.user(foundUser)
+        			.build());
+        	
+        	foundCamp.getCampLikeList().add(savedCampLike);
         }
-		campDao.update(foundCamp);
-		// 저장 실패
 		
 	}
 }

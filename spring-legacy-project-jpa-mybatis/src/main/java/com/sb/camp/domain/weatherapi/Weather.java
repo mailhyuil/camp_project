@@ -1,7 +1,5 @@
 package com.sb.camp.domain.weatherapi;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

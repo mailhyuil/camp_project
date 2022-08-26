@@ -1,7 +1,7 @@
 package com.sb.camp.controller;
 
 import java.security.Principal;
-import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.sb.camp.domain.Bbs;
-import com.sb.camp.domain.Camp;
-import com.sb.camp.domain.Image;
 import com.sb.camp.service.BbsService;
 
 @Controller
@@ -28,7 +26,8 @@ public class BbsController {
 
     @GetMapping("/board")
     public String board(Model model, @RequestParam(required = false, defaultValue = "1") int page, long id){
-    	bbsService.getBbsList(model, page, id);
+    	Map<String, Object> map = bbsService.getPaginationAndBbsList(page, id);
+    	model.addAllAttributes(map);
     	model.addAttribute("campId", id);
         return null;
     }
@@ -47,15 +46,14 @@ public class BbsController {
     }
 
     @PostMapping ("/insert")
-    public String insert(Bbs bbs, MultipartHttpServletRequest files, @RequestParam("video") MultipartFile file, Principal principal){
-    	System.out.println(bbs);
+    public String insert(Bbs bbs, MultipartHttpServletRequest files, MultipartFile file, Principal principal){
         bbsService.insertBbs(bbs, file, files, principal);
         return "redirect:/bbs/board?id="+bbs.getCampId();
     }
 
     @GetMapping("/detail")
     public String detail(Model model, long id){
-        bbsService.findBbsById(model, id);
+        model.addAttribute("BBS", bbsService.getBbsById(id));
         return null;
     }
     
@@ -68,7 +66,7 @@ public class BbsController {
     
     @GetMapping("/update/{campId}/{id}")
     public String update(Model model, @PathVariable(name = "id") long id,@PathVariable(name="campId") long campId){
-    	bbsService.findBbsById(model, id);
+    	model.addAttribute("BBS", bbsService.getBbsById(id));
         return "/bbs/update";
     }
     
@@ -82,13 +80,13 @@ public class BbsController {
     @GetMapping("/collection")
     public String collection(Model model,
             @RequestParam(required = false, defaultValue = "1") int page){
-    	List<Image> imgList = bbsService.findImageList(model, page);
+    	model.addAllAttributes(bbsService.getPaginationAndImageList(page));
         return null;
     }
+    
     @GetMapping("/goToCamp")
-    public String goToCamp(Model model, long id) {
-    	Bbs bbs = bbsService.findBbsById(model, id);
-    	System.out.println(bbs.getCampId());
+    public String goToCamp(long id) {
+    	Bbs bbs = bbsService.getBbsById(id);
     	return "redirect:/camp/detail?id=" + bbs.getCampId();
     }
 }

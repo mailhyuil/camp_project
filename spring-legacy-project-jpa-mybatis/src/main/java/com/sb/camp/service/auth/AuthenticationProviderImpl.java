@@ -9,6 +9,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.sb.camp.domain.User;
@@ -19,6 +20,8 @@ public class AuthenticationProviderImpl implements AuthenticationProvider{
 	@Autowired
 	@Qualifier("userDetailsService")
 	UserDetailsService userService;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 	
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -28,14 +31,14 @@ public class AuthenticationProviderImpl implements AuthenticationProvider{
 		User user = (User) userService.loadUserByUsername(username);
 		
 		if(user == null) {
-			throw new UsernameNotFoundException(username+"은 회원가입이 필요");
+			throw new UsernameNotFoundException(username+"은 가입되지 않은 회원입니다.");
 		}
 		
-		if(user.getPassword().equals(password) == false) {
-			throw new BadCredentialsException("비밀번호 오류");
+		if(!passwordEncoder.matches(password, user.getPassword())) {
+			throw new BadCredentialsException("비밀번호가 틀립니다.");
 		}
 		
-		return new UsernamePasswordAuthenticationToken(user, password, user.getAuthorities());
+		return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
 	}
 
 	@Override

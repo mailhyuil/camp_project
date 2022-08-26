@@ -81,7 +81,7 @@
 		)
 	</insert>
 
-	<select id="getCampListCnt" resultType="int">
+	<select id="findCampListCnt" resultType="int">
 		SELECT count(*) AS
 		listCnt FROM (
 		SELECT * FROM camp
@@ -93,7 +93,7 @@
 		) AS SUB
 	</select>
 
-	<select id="getCampList" resultType="Camp">
+	<select id="findCampListByKeywords" resultType="Camp">
 		SELECT camp_id,
 				addr1,
 				doNm,
@@ -119,6 +119,7 @@
 		) AS SUB
 		LIMIT #{cri}, #{LIST_SIZE}
 	</select>
+	
 	<update id="update" parameterType="Camp">
 		UPDATE camp
 		SET

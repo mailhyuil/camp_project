@@ -26,6 +26,10 @@
 		logout-success-url="/user/login"/>
 	</sec:http>
 	
+	<bean id="passwordEncoder" class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder">
+		<constructor-arg value="4"/>
+	</bean>
+	
 	<sec:authentication-manager>
 		<sec:authentication-provider ref="authenticationProvider" />
 	</sec:authentication-manager>

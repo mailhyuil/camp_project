@@ -11,9 +11,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,6 +28,8 @@ import lombok.Setter;
 public class Camp {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "camp_id")
+    private long id;
+    @Transient
     private long campId;
     
 	private String facltNm;
@@ -46,6 +48,9 @@ public class Camp {
 	private String mapY;
 	private int likeCnt;
 	
+	@OneToMany(mappedBy = "camp", fetch = FetchType.LAZY)
+	private List<Bbs> bbsList = new ArrayList<>();
+	
     @OneToMany(mappedBy = "camp",fetch = FetchType.EAGER)
     private List<CampLike> campLikeList = new ArrayList<>();
     
@@ -59,7 +64,7 @@ public class Camp {
 	
 	@Override
 	public String toString() {
-		return "Camp [campId=" + campId + ", facltNm=" + facltNm + ", lineIntro=" + lineIntro + ", intro=" + intro
+		return "Camp [id=" + id + ", facltNm=" + facltNm + ", lineIntro=" + lineIntro + ", intro=" + intro
 				+ ", doNm=" + doNm + ", featureNm=" + featureNm + ", sigunguNm=" + sigunguNm + ", zipcode=" + zipcode
 				+ ", addr1=" + addr1 + ", tel=" + tel + ", homepage=" + homepage + ", firstImageUrl=" + firstImageUrl
 				+ ", mapX=" + mapX + ", mapY=" + mapY + ", likeCnt=" + likeCnt + "]";

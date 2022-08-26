@@ -23,6 +23,7 @@ public class HomeController {
 	CampLikeRepository campLikeRepository;
 	@Autowired
 	UserRepository userRepository;
+	
 	@GetMapping("/")
 	public String home() {
 		return "home";
@@ -32,12 +33,6 @@ public class HomeController {
 	@ResponseBody
 	@Transactional
 	public String test() {
-		Camp camp = campRepository.findById(1l).get();
-		System.out.println("Camp " + camp);		
-		User user = userRepository.findById("sb").get();
-		System.out.println("User " + user);		
-		CampLike campLike = campLikeRepository.save(CampLike.builder().camp(camp).user(user).build());
-		System.out.println(campLike);
 		return null;
 	}
 }

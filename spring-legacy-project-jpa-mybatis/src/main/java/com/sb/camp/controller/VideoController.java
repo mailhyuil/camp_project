@@ -9,16 +9,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.camp.persistence.BbsDao;
+import com.sb.camp.service.BbsService;
 
 @RestController
 @RequestMapping("video")
 public class VideoController {
 	@Autowired
-	private BbsDao bbsDao;
+	private BbsService bbsService;
+	
     @GetMapping("{id}")
     public ResponseEntity<Resource> getVideoByName(@PathVariable("id") long id){
+    	
         return ResponseEntity
-                .ok(new ByteArrayResource(bbsDao.getVideoByBbsId(id).getData()));
+                .ok(new ByteArrayResource(bbsService.getVideoByBbsId(id).getData()));
     }
 }

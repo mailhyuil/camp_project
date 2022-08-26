@@ -13,7 +13,7 @@
         <th>제목</th>
         <th>작성자</th>
     </tr>
-    <th:block th:each="bbs,index:${BBS_LIST}">
+    <th:block th:each="bbs,index:${bbsList}">
         <tr>
             <td th:text="${index.count}"></td>
             <td th:text="${bbs.date}"></td>

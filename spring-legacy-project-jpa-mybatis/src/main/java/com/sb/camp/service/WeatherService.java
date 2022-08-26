@@ -1,7 +1,7 @@
 package com.sb.camp.service;
 
-import org.springframework.ui.Model;
+import java.util.Map;
 
 public interface WeatherService {
-	public void getWeatherByLatAndLon(Model model, String lat, String lon);
+	public Map<String, Object> getWeatherByLatAndLon(String lat, String lon);
 }

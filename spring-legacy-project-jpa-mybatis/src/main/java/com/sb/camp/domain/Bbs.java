@@ -13,11 +13,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -39,18 +37,31 @@ public class Bbs {
     
     @Column(columnDefinition = "varchar(50)")
     private String title;
+    
     private String date;
+    
     private String time;
+    
 	@Column(columnDefinition = "varchar(2048)")
     private String content;
-	@Column(name = "camp_id")
-	private long campId;
+
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "camp_id")
+	private Camp camp;
+	
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "username")
+	@JoinColumn(name = "username", referencedColumnName = "username")
     private User user;
 	
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "bbs")
     private List<Image> imgs = new ArrayList<>();
+    
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "bbs")
+    private Video video;
+    
+    @Transient
+    private long campId;
     
     @Transient
     private String username;

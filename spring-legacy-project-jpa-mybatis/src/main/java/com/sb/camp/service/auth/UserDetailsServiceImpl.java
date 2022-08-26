@@ -23,10 +23,6 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		this.userDao = userDao;
 	}
 
-	/*
-	 * 로그인 한 사용자의 username 을 매개변수로 전달받아
-	 * UserDao 를 통해 로그인한 사용자 정보를 DB 로 부터 가져온다
-	 */
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		User user = userDao.findById(username);
@@ -38,7 +34,7 @@ public class UserDetailsServiceImpl implements UserDetailsService{
 		List<Authority> authList = userDao.findAuthsById(username);
 
 		List<GrantedAuthority> grantList = new ArrayList<>();
-		
+
 		for(Authority auth : authList) {
 			grantList.add(new SimpleGrantedAuthority(auth.getAuthority()));
 		}

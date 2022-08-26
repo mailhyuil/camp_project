@@ -1,6 +1,5 @@
 package com.sb.camp.domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,7 +18,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 @Setter
 @Getter
@@ -42,8 +40,8 @@ public class Image {
     @Transient
     private long bbsId;
     
-    @ManyToOne(fetch = FetchType.LAZY,cascade = {CascadeType.REMOVE})
-    @JoinColumn(name = "username",insertable = false,updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "username", referencedColumnName = "username")
     private User user;
     
     @Transient
