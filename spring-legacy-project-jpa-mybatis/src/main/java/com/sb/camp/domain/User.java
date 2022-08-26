@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
@@ -34,38 +36,48 @@ import lombok.ToString;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails  {
+public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
-	
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
-    private long id;
-    @NaturalId
-	@Column(columnDefinition = "VARCHAR(25)")
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "user_id")
+	private long id;
+
+	@NotEmpty
+	@NaturalId
+	@Column(columnDefinition = "VARCHAR(25)", nullable = false)
 	private String username;
-	
-	@Column(columnDefinition = "VARCHAR(255)")
+
+	@NotEmpty
+	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
 	private String password;
-	
-	@Column(columnDefinition = "boolean default false")
+
+	@Column(columnDefinition = "boolean default false", nullable = false)
 	private boolean enabled;
-	
-	@Column(columnDefinition = "boolean default false")
+
+	@Column(columnDefinition = "boolean default false", nullable = false)
 	private boolean accountNonExpired;
-	
-	@Column(columnDefinition = "boolean default false")
+
+	@Column(columnDefinition = "boolean default false", nullable = false)
 	private boolean accountNonLocked;
-	
-	@Column(columnDefinition = "boolean default false")
+
+	@Column(columnDefinition = "boolean default false", nullable = false)
 	private boolean credentialsNonExpired;
-	
+
 	@Transient
 	Collection<? extends GrantedAuthority> authorities;
-	
+
+	@NotEmpty
+	@Email(message = "형식에 맞지 않는 이메일입니다")
+	@Column(nullable = false)
 	private String email;
+
+	@NotEmpty
+	@Column(nullable = false)
 	private String nickname;
-	
-	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private Set<Authority> auths;
 }

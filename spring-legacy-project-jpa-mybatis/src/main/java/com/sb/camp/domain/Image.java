@@ -29,26 +29,28 @@ import lombok.Setter;
 public class Image {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "image_id")
+	@Column(name = "image_id")
 	private long imageId;
-	
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "bbs_id")
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "bbs_id", nullable = false)
 	private Bbs bbs;
-    
-    @Transient
-    private long bbsId;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "username", referencedColumnName = "username")
-    private User user;
-    
-    @Transient
+
+	@Transient
+	private long bbsId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+	private User user;
+
+	@Transient
 	private String username;
-    
+	
+	@Column(nullable = false)
 	private String img;
 	
+	@Column(nullable = false)
 	private String original_img;
-	
+
 }

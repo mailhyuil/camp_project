@@ -18,7 +18,7 @@
 		keyProperty="bbsId" keyColumn="bbs_id">
 		INSERT INTO bbs(title, username, date, time, content, camp_id
 		) VALUES (
-		#{title}, #{user.username}, #{date}, #{time}, #{content}, #{campId}
+		#{title}, #{user.username}, now(), now(), #{content}, #{campId}
 		)
 	</insert>
 

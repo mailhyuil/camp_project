@@ -34,17 +34,17 @@ public class CampController {
 	}
 
 	@GetMapping("/detail")
-	public String detail(Model model, long id) {
-		Camp camp = campService.getCampById(id);
+	public String detail(Model model,@RequestParam(name = "id") long campId) {
+		Camp camp = campService.getCampById(campId);
 		model.addAllAttributes(weatherService.getWeatherByLatAndLon(camp.getMapY(), camp.getMapX()));
-		model.addAttribute("CAMP", campService.getCampById(id));
+		model.addAttribute("CAMP", campService.getCampById(campId));
 		return "/camp/detail";
 	}
 
 	@ResponseBody
 	@GetMapping("/getLatAndLon")
-	public ResponseEntity<Map<String, String>> getLatAndLon(long id) {
-		Camp camp = campService.getCampById(id);
+	public ResponseEntity<Map<String, String>> getLatAndLon(@RequestParam(name = "id") long campId) {
+		Camp camp = campService.getCampById(campId);
 		Map<String, String> latlon = new HashMap<>();
 		latlon.put("lat", camp.getMapY());
 		latlon.put("lon", camp.getMapX());
@@ -52,8 +52,8 @@ public class CampController {
 	}
 
 	@GetMapping("/like/{id}")
-	public String like(@PathVariable("id") long id, Principal principal) {
-		campService.likeCamp(id, principal.getName());
-		return "redirect:/camp/detail?id=" + id;
+	public String like(@PathVariable("id") long campId, Principal principal) {
+		campService.likeCamp(campId, principal.getName());
+		return "redirect:/camp/detail?id=" + campId;
 	}
 }

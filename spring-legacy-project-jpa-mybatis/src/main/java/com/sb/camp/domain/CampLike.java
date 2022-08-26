@@ -24,15 +24,16 @@ import lombok.ToString;
 @ToString
 @Entity
 public class CampLike {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "camp_like_id")
-    private long campLikeId;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "camp_id")
-    private Camp camp;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "camp_like_id")
+	private long campLikeId;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "camp_id", nullable = false)
+	private Camp camp;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_id", nullable = false)
+	private User user;
 }

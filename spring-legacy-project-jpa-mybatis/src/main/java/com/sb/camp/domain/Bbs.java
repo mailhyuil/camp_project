@@ -30,39 +30,40 @@ import lombok.Setter;
 @Entity
 @Table(name = "bbs")
 public class Bbs {
-    @Id 
+	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "bbs_id")
-    private long bbsId;
-    
-    @Column(columnDefinition = "varchar(50)")
-    private String title;
-    
-    private String date;
-    
-    private String time;
-    
-	@Column(columnDefinition = "varchar(2048)")
-    private String content;
+	@Column(name = "bbs_id")
+	private long bbsId;
 
-	
+	@Column(columnDefinition = "varchar(50)", nullable = false)
+	private String title;
+
+	@Column(columnDefinition = "date", nullable = false)
+	private String date;
+
+	@Column(columnDefinition = "time", nullable = false)
+	private String time;
+
+	@Column(columnDefinition = "varchar(2048)", nullable = false)
+	private String content;
+
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "camp_id")
+	@JoinColumn(name = "camp_id", nullable = false)
 	private Camp camp;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-	@JoinColumn(name = "username", referencedColumnName = "username")
-    private User user;
-	
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "bbs")
-    private List<Image> imgs = new ArrayList<>();
-    
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "bbs")
-    private Video video;
-    
-    @Transient
-    private long campId;
-    
-    @Transient
-    private String username;
+	@JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+	private User user;
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "bbs")
+	private List<Image> imgs = new ArrayList<>();
+
+	@OneToOne(fetch = FetchType.LAZY, mappedBy = "bbs")
+	private Video video;
+
+	@Transient
+	private long campId;
+
+	@Transient
+	private String username;
 }

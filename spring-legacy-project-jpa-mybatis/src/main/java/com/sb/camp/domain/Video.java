@@ -29,22 +29,23 @@ import lombok.ToString;
 @Builder
 
 @Entity
-public class Video{
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "video_id")
-    private long videoId;
+public class Video {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "video_id")
+	private long videoId;
 
-    @Lob
-    private byte[] data;
+	@Lob
+	@Column(nullable = false)
+	private byte[] data;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "bbs_id")
-    private Bbs bbs;
-    
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "username", referencedColumnName = "username")
-    private User user;
-    
+	@OneToOne(fetch = FetchType.LAZY)
+	@OnDelete(action = OnDeleteAction.CASCADE)
+	@JoinColumn(name = "bbs_id", nullable = false)
+	private Bbs bbs;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+	private User user;
+
 }

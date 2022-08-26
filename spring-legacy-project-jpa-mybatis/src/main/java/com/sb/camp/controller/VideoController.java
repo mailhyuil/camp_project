@@ -18,9 +18,9 @@ public class VideoController {
 	private BbsService bbsService;
 	
     @GetMapping("{id}")
-    public ResponseEntity<Resource> getVideoByName(@PathVariable("id") long id){
+    public ResponseEntity<Resource> getVideoByName(@PathVariable("id") long BbsId){
     	
         return ResponseEntity
-                .ok(new ByteArrayResource(bbsService.getVideoByBbsId(id).getData()));
+                .ok(new ByteArrayResource(bbsService.getVideoByBbsId(BbsId).getData()));
     }
 }

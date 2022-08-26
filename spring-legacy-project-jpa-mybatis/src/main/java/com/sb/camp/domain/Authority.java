@@ -29,12 +29,10 @@ public class Authority {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long seq;
 
-	private String username;
-	
 	private String authority;
-	
-    @ManyToOne
-    @JoinColumn(name = "username", referencedColumnName = "username", insertable = false, updatable = false)
-    private User user;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "username", referencedColumnName = "username", nullable = false, insertable = false, updatable = false)
+	private User user;
+
 }

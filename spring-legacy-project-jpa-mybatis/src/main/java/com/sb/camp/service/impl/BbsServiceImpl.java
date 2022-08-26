@@ -46,12 +46,12 @@ public class BbsServiceImpl implements BbsService {
 	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) {
 		String loggedInUser = principal.getName();
 
-		Date date = new Date(System.currentTimeMillis());
-		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-
-		bbs.setDate(dateFormat.format(date));
-		bbs.setTime(timeFormat.format(date));
+//		Date date = new Date(System.currentTimeMillis());
+//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+//
+//		bbs.setDate(dateFormat.format(date));
+//		bbs.setTime(timeFormat.format(date)); // MySQL 함수로 대체
 		bbs.setUser(userDao.findById(loggedInUser));
 
 
