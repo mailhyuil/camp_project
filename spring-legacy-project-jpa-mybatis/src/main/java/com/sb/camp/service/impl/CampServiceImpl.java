@@ -28,7 +28,6 @@ import com.sb.camp.domain.campapi.Root;
 import com.sb.camp.exception.CustomException;
 import com.sb.camp.exception.ErrorCode;
 import com.sb.camp.persistence.CampDao;
-import com.sb.camp.persistence.UserDao;
 import com.sb.camp.repository.CampLikeRepository;
 import com.sb.camp.repository.CampRepository;
 import com.sb.camp.repository.UserRepository;
@@ -37,15 +36,19 @@ import com.sb.camp.service.CampService;
 @Service
 public class CampServiceImpl implements CampService{
 	
-	@Autowired
-	private CampDao campDao;
-	@Autowired
-	private CampRepository campRepository;
-	@Autowired
-	private CampLikeRepository campLikeRepository;
-	@Autowired
-	private UserRepository userRepository;
+	private final CampDao campDao;
+	private final CampRepository campRepository;
+	private final CampLikeRepository campLikeRepository;
+	private final UserRepository userRepository;
 	
+public CampServiceImpl(CampDao campDao, CampRepository campRepository, CampLikeRepository campLikeRepository,
+			UserRepository userRepository) {
+		this.campDao = campDao;
+		this.campRepository = campRepository;
+		this.campLikeRepository = campLikeRepository;
+		this.userRepository = userRepository;
+	}
+
 //    private BooleanExpression nameContain(String name) {
 //        return hasText(name) ? camp.facltNm.contains(name) : null;
 //    }

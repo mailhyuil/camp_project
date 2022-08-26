@@ -4,7 +4,6 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,10 +20,13 @@ import com.sb.camp.service.WeatherService;
 @Controller
 @RequestMapping("/camp")
 public class CampController {
-	@Autowired
-	CampService campService;
-	@Autowired
-	WeatherService weatherService;
+	private final CampService campService;
+	private final WeatherService weatherService;
+	
+	public CampController(CampService campService, WeatherService weatherService) {
+		this.campService = campService;
+		this.weatherService = weatherService;
+	}
 
 	@GetMapping({ "/", "" })
 	public String home(Model model, String doNm, String sigunguNm, String facltNm,

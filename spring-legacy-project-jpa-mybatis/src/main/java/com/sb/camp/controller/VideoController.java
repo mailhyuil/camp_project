@@ -1,6 +1,5 @@
 package com.sb.camp.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +13,13 @@ import com.sb.camp.service.BbsService;
 @RestController
 @RequestMapping("video")
 public class VideoController {
-	@Autowired
-	private BbsService bbsService;
+	private final BbsService bbsService;
 	
-    @GetMapping("{id}")
+    public VideoController(BbsService bbsService) {
+		this.bbsService = bbsService;
+	}
+
+	@GetMapping("{id}")
     public ResponseEntity<Resource> getVideoByName(@PathVariable("id") long BbsId){
     	
         return ResponseEntity

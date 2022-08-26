@@ -3,7 +3,6 @@ package com.sb.camp.controller;
 import java.security.Principal;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,10 +20,13 @@ import com.sb.camp.service.BbsService;
 @RequestMapping("/bbs")
 public class BbsController {
 
-    @Autowired
-    private BbsService bbsService;
+    private final  BbsService bbsService;
+    
+    public BbsController(BbsService bbsService) {
+		this.bbsService = bbsService;
+	}
 
-    @GetMapping("/board")
+	@GetMapping("/board")
     public String board(Model model, @RequestParam(required = false, defaultValue = "1") int page, @RequestParam(name = "id") long campId){
     	Map<String, Object> map = bbsService.getPaginationAndBbsList(page, campId);
     	model.addAllAttributes(map);
