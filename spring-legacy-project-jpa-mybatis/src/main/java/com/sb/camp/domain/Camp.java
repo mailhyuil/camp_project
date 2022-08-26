@@ -29,8 +29,6 @@ public class Camp {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "camp_id")
     private long id;
-    @Transient
-    private long campId;
     
 	private String facltNm;
 	private String lineIntro;
@@ -47,6 +45,9 @@ public class Camp {
 	private String mapX;
 	private String mapY;
 	private int likeCnt;
+	
+	@Transient
+	private long campId;
 	
 	@OneToMany(mappedBy = "camp", fetch = FetchType.LAZY)
 	private List<Bbs> bbsList = new ArrayList<>();

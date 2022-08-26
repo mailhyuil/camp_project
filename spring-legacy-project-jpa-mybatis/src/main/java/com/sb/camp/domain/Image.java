@@ -2,6 +2,7 @@ package com.sb.camp.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,6 +13,9 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.sb.camp.domain.base.BaseEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,7 +30,8 @@ import lombok.Setter;
 @Builder
 
 @Entity
-public class Image {
+@EntityListeners(AuditingEntityListener.class)
+public class Image extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "image_id")
@@ -37,20 +42,19 @@ public class Image {
 	@JoinColumn(name = "bbs_id", nullable = false)
 	private Bbs bbs;
 
-	@Transient
-	private long bbsId;
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
 	private User user;
+	
+	@Column(nullable = false)
+	private String uuidImgName;
+	
+	@Column(nullable = false)
+	private String originalImgName;
 
 	@Transient
+	private long bbsId;
+	
+	@Transient
 	private String username;
-	
-	@Column(nullable = false)
-	private String img;
-	
-	@Column(nullable = false)
-	private String original_img;
-
 }

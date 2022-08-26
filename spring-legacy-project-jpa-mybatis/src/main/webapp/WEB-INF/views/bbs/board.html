@@ -9,17 +9,15 @@
     <tr>
         <th>No.</th>
         <th>작성일</th>
-        <th>작성시간</th>
         <th>제목</th>
         <th>작성자</th>
     </tr>
     <th:block th:each="bbs,index:${bbsList}">
         <tr>
             <td th:text="${index.count}"></td>
-            <td th:text="${bbs.date}"></td>
-            <td th:text="${bbs.time}"></td>
+            <td th:text="${bbs.createdDate}"></td>
             <td><a th:text="${bbs.title}" th:href="@{/bbs/detail(id=${bbs.bbsId})}"></a></td>
-            <td th:text="${bbs.username}"></td>
+            <td th:text="${bbs.createdBy}"></td>
         </tr>
     </th:block>
 </table>

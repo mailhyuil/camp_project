@@ -6,6 +6,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +18,12 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.sb.camp.domain.base.BaseEntity;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,10 +32,12 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 
 @Entity
 @Table(name = "bbs")
-public class Bbs {
+@EntityListeners(AuditingEntityListener.class)
+public class Bbs extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "bbs_id")
@@ -37,13 +45,7 @@ public class Bbs {
 
 	@Column(columnDefinition = "varchar(50)", nullable = false)
 	private String title;
-
-	@Column(columnDefinition = "date", nullable = false)
-	private String date;
-
-	@Column(columnDefinition = "time", nullable = false)
-	private String time;
-
+	
 	@Column(columnDefinition = "varchar(2048)", nullable = false)
 	private String content;
 
@@ -66,4 +68,6 @@ public class Bbs {
 
 	@Transient
 	private String username;
+	
+	
 }

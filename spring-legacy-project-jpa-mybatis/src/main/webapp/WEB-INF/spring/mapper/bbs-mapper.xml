@@ -10,15 +10,19 @@
 	</select>
 
 	<select id="findById" resultType="Bbs">
-		SELECT * FROM bbs where bbs_id =
+		SELECT * FROM bbs where bbs_id
+		=
 		#{bbsId}
 	</select>
 
 	<insert id="insert" parameterType="Bbs" useGeneratedKeys="true"
 		keyProperty="bbsId" keyColumn="bbs_id">
-		INSERT INTO bbs(title, username, date, time, content, camp_id
+		INSERT INTO bbs(title, username,
+		createdDate, lastModifiedDate, createdBy,lastModifiedBy, content,
+		camp_id
 		) VALUES (
-		#{title}, #{user.username}, now(), now(), #{content}, #{campId}
+		#{title}, #{user.username}, now(), now(),
+		#{user.username}, #{user.username}, #{content}, #{campId}
 		)
 	</insert>
 
@@ -28,17 +32,19 @@
 	</select>
 
 	<select id="findBoardList" resultType="Bbs">
-		SELECT * FROM bbs WHERE camp_id = #{campId} LIMIT
+		SELECT * FROM bbs WHERE
+		camp_id = #{campId} LIMIT
 		#{pagination.cri}, #{pagination.LIST_SIZE}
 	</select>
-	
+
 	<!-- IMAGE UPLOAD -->
 	<insert id="insertImage" parameterType="Image">
 		INSERT INTO image(bbs_id,
-		img, original_img, username
+		uuidImgName, originalImgName, username
 		) VALUES (
-		#{bbs.bbsId}, #{img},
-		#{original_img}, #{user.username}
+		#{bbs.bbsId},
+		#{uuidImgName},
+		#{originalImgName}, #{user.username}
 		)
 	</insert>
 
@@ -46,16 +52,16 @@
 		INSERT INTO image
 		(
 		bbs_id,
-		img,
-		original_img,
+		uuidImgName,
+		originalImgName,
 		username
 		)
 		VALUES
 		<foreach collection="list" item="vo" separator=", ">
 			(
 			#{vo.bbs.bbsId},
-			#{vo.img},
-			#{vo.original_img},
+			#{vo.uuidImgName},
+			#{vo.originalImgName},
 			#{vo.user.username}
 			)
 		</foreach>
@@ -64,16 +70,17 @@
 		SELECT * FROM image
 		WHERE bbs_id = #{bbs.bbsId}
 	</select>
-	
+
 	<select id="findImageCount" resultType="Integer">
-		SELECT count(*) FROM image
+		SELECT count(*) FROM
+		image
 	</select>
 
 	<select id="findImages" resultType="Image">
 		SELECT * FROM image LIMIT
 		#{cri}, #{LIST_SIZE}
 	</select>
-	
+
 	<!-- VIDEO UPLOAD -->
 	<insert id="insertVideo" parameterType="Video">
 		INSERT INTO video(bbs_id,
@@ -82,29 +89,33 @@
 		#{bbs.bbsId}, #{data}, #{user.username}
 		)
 	</insert>
-	
+
 	<select id="findVideoByBbsId" resultType="Video">
 		SELECT * FROM video
 		WHERE bbs_id = #{bbs.bbsId}
 	</select>
-	
+
 	<update id="update" parameterType="Bbs">
 		UPDATE bbs
 		SET
 		title = #{title},
-		content = #{content}
+		content = #{content},
+		lastModifiedDate = now()
 		WHERE bbs_id = #{bbsId}
 	</update>
-	
+
 	<delete id="delete" parameterType="Long">
 		DELETE FROM bbs WHERE bbs_id =
 		#{bbsId}
 	</delete>
-	
+
 	<delete id="deleteImage" parameterType="Long">
-		DELETE FROM image WHERE image_id = #{imageId}
+		DELETE FROM image WHERE
+		image_id = #{imageId}
 	</delete>
+
 	<delete id="deleteVideo" parameterType="Video">
-		DELETE FROM video WHERE video_id = #{videoId}
+		DELETE FROM video WHERE
+		video_id = #{videoId}
 	</delete>
 </mapper> 

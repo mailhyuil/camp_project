@@ -71,7 +71,7 @@ public class BbsController {
     }
     
     @PostMapping("/update/{campId}/{id}")
-    public String update(@PathVariable(name="campId") long campId, @PathVariable(name = "id") long BbsId, Bbs bbs, MultipartHttpServletRequest files, @RequestParam("video") MultipartFile file){
+    public String update(@PathVariable(name="campId") long campId, @PathVariable(name = "id") long BbsId, Bbs bbs, MultipartHttpServletRequest files, @RequestParam("file") MultipartFile file){
     	bbs.setBbsId(BbsId);
     	bbsService.updateBbs(bbs, file, files);
         return "redirect:/bbs/board?id=" + campId;

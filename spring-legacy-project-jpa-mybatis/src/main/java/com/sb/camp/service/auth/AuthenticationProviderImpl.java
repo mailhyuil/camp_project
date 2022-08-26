@@ -38,7 +38,7 @@ public class AuthenticationProviderImpl implements AuthenticationProvider {
 			throw new BadCredentialsException("비밀번호가 틀립니다.");
 		}
 
-		return new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword(), user.getAuthorities());
+		return new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities());
 	}
 
 	@Override

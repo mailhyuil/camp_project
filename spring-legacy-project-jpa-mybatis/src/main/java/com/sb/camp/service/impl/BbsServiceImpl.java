@@ -64,7 +64,7 @@ public class BbsServiceImpl implements BbsService {
 			if(!img.isEmpty()) {
 			String uuid = UUID.randomUUID().toString();
 			String uuidImg = uuid + img.getOriginalFilename();
-			Image imgVO = Image.builder().img(uuidImg).original_img(img.getOriginalFilename()).user(userDao.findById(loggedInUser))
+			Image imgVO = Image.builder().uuidImgName(uuidImg).originalImgName(img.getOriginalFilename()).user(userDao.findById(loggedInUser))
 					.bbs(bbs).build();
 
 			File uploadFile = new File("c:/Temp/upload/", uuidImg);
@@ -127,7 +127,7 @@ public class BbsServiceImpl implements BbsService {
 		List<Image> imgs = bbsDao.findImagesByBbsId(id);
 		for (Image img : imgs) {
 
-			File file = new File("c:/Temp/upload", img.getImg());
+			File file = new File("c:/Temp/upload", img.getUuidImgName());
 
 			if (file.exists()) {
 				file.delete();
@@ -144,7 +144,7 @@ public class BbsServiceImpl implements BbsService {
 		
 		for (Image img : imgs) {
 			
-			File imgFile = new File("c:/Temp/upload", img.getImg());
+			File imgFile = new File("c:/Temp/upload", img.getUuidImgName());
 			
 			if (imgFile.exists()) {
 				imgFile.delete();
@@ -160,7 +160,7 @@ public class BbsServiceImpl implements BbsService {
 			if(!img.isEmpty()) {
 			String uuid = UUID.randomUUID().toString();
 			String uuidImg = uuid + img.getOriginalFilename();
-			Image imgVO = Image.builder().img(uuidImg).original_img(img.getOriginalFilename()).user(bbs.getUser())
+			Image imgVO = Image.builder().uuidImgName(uuidImg).originalImgName(img.getOriginalFilename()).user(bbs.getUser())
 					.bbs(bbs).build();
 
 			File uploadFile = new File("c:/Temp/upload/", uuidImg);

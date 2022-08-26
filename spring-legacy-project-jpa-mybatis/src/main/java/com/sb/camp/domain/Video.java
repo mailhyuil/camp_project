@@ -2,6 +2,7 @@ package com.sb.camp.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +14,9 @@ import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.sb.camp.domain.base.BaseEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,7 +33,8 @@ import lombok.ToString;
 @Builder
 
 @Entity
-public class Video {
+@EntityListeners(AuditingEntityListener.class)
+public class Video extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "video_id")
