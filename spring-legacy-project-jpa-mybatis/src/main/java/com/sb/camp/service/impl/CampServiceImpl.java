@@ -43,10 +43,10 @@ public class CampServiceImpl implements CampService{
 	
 public CampServiceImpl(CampDao campDao, CampRepository campRepository, CampLikeRepository campLikeRepository,
 			UserRepository userRepository) {
-		this.campDao = campDao;
-		this.campRepository = campRepository;
-		this.campLikeRepository = campLikeRepository;
-		this.userRepository = userRepository;
+				this.campDao = campDao;
+				this.campRepository = campRepository;
+				this.campLikeRepository = campLikeRepository;
+				this.userRepository = userRepository;
 	}
 
 //    private BooleanExpression nameContain(String name) {

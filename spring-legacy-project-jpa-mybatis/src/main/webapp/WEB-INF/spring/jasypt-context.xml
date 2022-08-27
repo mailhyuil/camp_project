@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context-4.3.xsd">
+
+	<bean id="encryptorConfig" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
+		<property name="algorithm" value="PBEWithMD5AndDES" />
+		<property name="password" value="password" />		
+	</bean>
+
+	<bean id="encryptor"
+		class="org.jasypt.encryption.pbe.StandardPBEStringEncryptor">
+		<property name="config" ref="encryptorConfig" />
+	</bean>
+
+	<bean class="org.jasypt.spring31.properties.EncryptablePreferencesPlaceholderConfigurer">
+		<constructor-arg ref="encryptor" />
+		<property name="fileEncoding" value="UTF-8" />
+		<property name="locations">
+			<list>
+				<value>/WEB-INF/spring/props/db.properties</value>
+			</list>
+		</property>
+	</bean>
+</beans>

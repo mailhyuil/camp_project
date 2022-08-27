@@ -11,10 +11,8 @@
 
 	<!-- dataSource -->
 	<bean id="jpaDs" class="org.apache.commons.dbcp2.BasicDataSource">
-		<property name="driverClassName"
-			value="com.mysql.cj.jdbc.Driver" />
-		<property name="url"
-			value="jdbc:mysql://localhost:3306/campdb" />
+		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/campdb" />
 		<property name="username" value="root" />
 		<property name="password" value="1234" />
 	</bean>
@@ -36,8 +34,7 @@
 		<property name="packagesToScan" value="com.sb.camp.domain" /> <!-- @Entity 탐색 시작 위치 -->
 		<property name="jpaVendorAdapter">
 			<!-- 하이버네이트 구현체 사용 -->
-			<bean
-				class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 		</property>
 		<property name="jpaProperties"> <!-- 하이버네이트 상세 설정 -->
 			<props>
