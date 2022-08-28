@@ -32,4 +32,5 @@
             <beans:property name="entityManagerFactory" ref="entityManagerFactory" />
         </beans:bean>
     </interceptors>
+    
 </beans:beans>

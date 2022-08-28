@@ -1,7 +1,11 @@
 package com.sb.camp.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -19,18 +23,23 @@ public class UserController {
 	}
 
 	@GetMapping("join")
-	public String join() {
+	public String join(@ModelAttribute("user") User user) {
 		return null;
 	}
 
 	@PostMapping("join")
-	public String join(User user){
+	public String join(@Valid User user, BindingResult result){
+		
+		if(result.hasErrors()) {
+			return "/user/join";
+		}
+		
 		userService.join(user);
 		return "redirect:/";
 	}
 	
 	@GetMapping("login")
-	public String login() {
+	public String login(@ModelAttribute("user") User user) {
 		return null;
 	}
 }

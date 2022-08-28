@@ -4,10 +4,10 @@
 <th:block layout:fragment="content">
 	<h1>둘러보기</h1>
     <th:block th:each="img:${imgList}">
-    		<div>
+    	<div>
             <img th:src="|@{/upload/}${img.img}|">
             <h3><a th:href="|@{/bbs/goToCamp?id=}${img.bbsId}|">캠프로 가기!</a></h3>
-            </div>
+        </div>
     </th:block>
 <ul style="list-style:none; display: flex">
     <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a

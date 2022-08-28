@@ -20,9 +20,19 @@ public class Pagination {
     private boolean prev;
     private boolean next;
 
-    public void paginate(int currentPage, int totalListSize) {
-        this.PAGE_SIZE = 5;
-        this.LIST_SIZE = 5;
+    /**
+     * @Author sangb
+     * @Date 2022. 8. 28.
+     * @Method paginate
+     * @param currentPage
+     * @param totalListSize
+     * @param PAGE_SIZE
+     * @param LIST_SIZE
+     * @return void
+     */
+    public void paginate(int currentPage, int totalListSize, int PAGE_SIZE, int LIST_SIZE) {
+        this.PAGE_SIZE = PAGE_SIZE;
+        this.LIST_SIZE = LIST_SIZE;
 
         this.theLastPage = (int) Math.ceil(totalListSize / (double) LIST_SIZE); // * int값으로만 나누면 자동 형변환 돼버린다
         

@@ -4,26 +4,30 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-	<form th:action="@{/user/join}" method="post">
+	<form th:action="@{/user/join}" method="post" th:object="${user}">
 		<div>
 	      <label>Username</label>:
-	      <input name="username" autofocus="autofocus" />	
+	      <input th:field="*{username}" autofocus="autofocus" />	
+	      <p th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></p>	
 		</div>
 		<div>
 	      <label>Password</label>:
-	      <input type="password" name="password" />	
+	      <input th:field="*{password}" type="password"/>
+	      <p th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
 		</div>
 		<div>
 	      <label>Repassword</label>:
-	      <input type="password" name="re_password" />	
+	      <input name="re_password" type="password"/>
 		</div>
 		<div>
-	      <label>email</label>:
-	      <input name="email" />	
+	      <label>Email</label>:
+	      <input th:field="*{email}"/>
+	      <p th:errors="*{email}" th:if="${#fields.hasErrors('email')}"></p>	
 		</div>
 		<div>
-	      <label>nickname</label>:
-	      <input name="nickname" />	
+	      <label>Nickname</label>:
+	      <input th:field="*{nickname}"/>
+	      <p th:errors="*{nickname}" th:if="${#fields.hasErrors('nickname')}"></p>
 		</div>
 		<div>
 	      <button>Join</button>	

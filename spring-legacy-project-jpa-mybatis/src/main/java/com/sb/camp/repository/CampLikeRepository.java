@@ -9,5 +9,5 @@ import com.sb.camp.domain.CampLike;
 
 @Repository
 public interface CampLikeRepository extends JpaRepository<CampLike, Long>{
-	Optional<CampLike> findByCampIdAndUserId(long campId, long userId);
+	public Optional<CampLike> findByCampIdAndUserId(long campId, long userId);
 }

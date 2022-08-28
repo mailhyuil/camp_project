@@ -5,7 +5,9 @@ import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
+import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -20,14 +22,24 @@ import com.sb.camp.service.WeatherService;
 
 @Service
 public class WeatherServiceImpl implements WeatherService{
+	
+	private final Properties api;
+	private final StandardPBEStringEncryptor jasypt;
+	
+	public WeatherServiceImpl(Properties api, StandardPBEStringEncryptor jasypt) {
+		this.api = api;
+		this.jasypt = jasypt;
+	}
 
 	@Override
 	public Map<String, Object> getWeatherByLatAndLon(String lat, String lon) {
+		String decryptedKey = jasypt.decrypt((String) api.get("weather.serviceKey"));
+
 		URI uri = null;
+
 		try {
-			uri = new URI("https://api.openweathermap.org/data/2.5/weather?appid=945a820a0cfd85e6354d9c2a9a628ba9&lat="+lat+"&lon="+lon);
+			uri = new URI("https://api.openweathermap.org/data/2.5/weather?appid=" + decryptedKey + "&lat=" + lat + "&lon=" + lon);
 		} catch (URISyntaxException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -36,7 +48,6 @@ public class WeatherServiceImpl implements WeatherService{
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
 				
 		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);
-		// 헤더에 넣은 데이터를 엔티티로 변환 * 헤더에 넣을 데이터가 없다면 null로 설정
 				
 		RestTemplate restTemplate  = new RestTemplate();
 				
@@ -46,7 +57,7 @@ public class WeatherServiceImpl implements WeatherService{
 				HttpMethod.GET,
 				entity,
 				new ParameterizedTypeReference<WeatherRoot>() {});
-				
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("WEATHER", respEntity.getBody().getWeather().get(0));
 		map.put("MAIN", respEntity.getBody().getMain());

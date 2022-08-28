@@ -1,5 +1,6 @@
 package com.sb.camp.domain;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -11,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -45,12 +47,14 @@ public class Video extends BaseEntity{
 	private byte[] data;
 
 	@OneToOne(fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "bbs_id", nullable = false)
+	@OnDelete(action = OnDeleteAction.CASCADE)
 	private Bbs bbs;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
 	private User user;
-
+	
+	@Transient
+	private String username;
 }

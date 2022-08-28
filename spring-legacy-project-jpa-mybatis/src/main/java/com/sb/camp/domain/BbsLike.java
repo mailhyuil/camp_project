@@ -1,6 +1,5 @@
 package com.sb.camp.domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,9 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,23 +16,22 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @ToString
 @Entity
-public class CampLike {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "camp_like_id")
-	private long campLikeId;
-
+public class BbsLike{
+	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "bbs_like_id")
+	private long bbsLikeId;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "camp_id", nullable = false)
-	private Camp camp;
-
+	@JoinColumn(name = "bbs_id", nullable = false)
+	private Bbs bbs;
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;

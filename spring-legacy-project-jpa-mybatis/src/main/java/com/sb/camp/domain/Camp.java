@@ -3,6 +3,7 @@ package com.sb.camp.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -49,10 +50,10 @@ public class Camp {
 	@Transient
 	private long campId;
 	
-	@OneToMany(mappedBy = "camp", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "camp", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
 	private List<Bbs> bbsList = new ArrayList<>();
 	
-    @OneToMany(mappedBy = "camp",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "camp",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<CampLike> campLikeList = new ArrayList<>();
     
     public void increaseCampLikeCnt() {

@@ -26,4 +26,6 @@ public interface BbsService {
 	public Map<String, Object> getPaginationAndImageList(int page);
 
 	public Video getVideoByBbsId(long id);
+
+	public void likeBbs(long bbsId, String username);
 }

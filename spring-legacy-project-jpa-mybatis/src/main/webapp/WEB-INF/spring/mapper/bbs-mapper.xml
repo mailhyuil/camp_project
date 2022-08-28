@@ -6,19 +6,41 @@
 <mapper namespace="com.sb.camp.persistence.BbsDao">
 
 	<select id="selectAll" resultType="Bbs">
-		SELECT * FROM bbs
+		SELECT
+		bbs_id AS id,
+		createdDate,
+		lastModifiedDate,
+		createdBy,
+		lastModifiedBy,
+		content,
+		likeCnt,
+		title,
+		camp_id AS campId,
+		username
+		FROM bbs
 	</select>
 
 	<select id="findById" resultType="Bbs">
-		SELECT * FROM bbs where bbs_id
+		SELECT 		
+		bbs_id AS id,
+		createdDate,
+		lastModifiedDate,
+		createdBy,
+		lastModifiedBy,
+		content,
+		likeCnt,
+		title,
+		camp_id AS campId,
+		username
+		FROM bbs where bbs_id
 		=
 		#{bbsId}
 	</select>
 
 	<insert id="insert" parameterType="Bbs" useGeneratedKeys="true"
-		keyProperty="bbsId" keyColumn="bbs_id">
+		keyProperty="id" keyColumn="bbs_id">
 		INSERT INTO bbs(title, username,
-		createdDate, lastModifiedDate, createdBy,lastModifiedBy, content,
+		createdDate, lastModifiedDate, createdBy, lastModifiedBy, content,
 		camp_id
 		) VALUES (
 		#{title}, #{user.username}, now(), now(),
@@ -32,7 +54,18 @@
 	</select>
 
 	<select id="findBoardList" resultType="Bbs">
-		SELECT * FROM bbs WHERE
+		SELECT 		
+		bbs_id AS id,
+		createdDate,
+		lastModifiedDate,
+		createdBy,
+		lastModifiedBy,
+		content,
+		likeCnt,
+		title,
+		camp_id AS campId,
+		username
+		FROM bbs WHERE
 		camp_id = #{campId} LIMIT
 		#{pagination.cri}, #{pagination.LIST_SIZE}
 	</select>
@@ -42,9 +75,10 @@
 		INSERT INTO image(bbs_id,
 		uuidImgName, originalImgName, username
 		) VALUES (
-		#{bbs.bbsId},
+		#{bbs.id},
 		#{uuidImgName},
-		#{originalImgName}, #{user.username}
+		#{originalImgName},
+		#{username}
 		)
 	</insert>
 
@@ -59,16 +93,17 @@
 		VALUES
 		<foreach collection="list" item="vo" separator=", ">
 			(
-			#{vo.bbs.bbsId},
+			#{vo.bbs.id},
 			#{vo.uuidImgName},
 			#{vo.originalImgName},
-			#{vo.user.username}
+			#{vo.username}
 			)
 		</foreach>
 	</insert>
+	
 	<select id="findImagesByBbsId" resultType="Image">
 		SELECT * FROM image
-		WHERE bbs_id = #{bbs.bbsId}
+		WHERE bbs_id = #{bbs.id}
 	</select>
 
 	<select id="findImageCount" resultType="Integer">
@@ -86,13 +121,13 @@
 		INSERT INTO video(bbs_id,
 		data, username
 		) VALUES (
-		#{bbs.bbsId}, #{data}, #{user.username}
+		#{bbs.id}, #{data}, #{username}
 		)
 	</insert>
 
 	<select id="findVideoByBbsId" resultType="Video">
 		SELECT * FROM video
-		WHERE bbs_id = #{bbs.bbsId}
+		WHERE bbs_id = #{bbs.id}
 	</select>
 
 	<update id="update" parameterType="Bbs">
@@ -101,12 +136,12 @@
 		title = #{title},
 		content = #{content},
 		lastModifiedDate = now()
-		WHERE bbs_id = #{bbsId}
+		WHERE bbs_id = #{id}
 	</update>
 
 	<delete id="delete" parameterType="Long">
 		DELETE FROM bbs WHERE bbs_id =
-		#{bbsId}
+		#{id}
 	</delete>
 
 	<delete id="deleteImage" parameterType="Long">

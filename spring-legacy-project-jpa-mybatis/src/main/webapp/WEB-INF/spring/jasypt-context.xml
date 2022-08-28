@@ -7,7 +7,7 @@
 
 	<bean id="encryptorConfig" class="org.jasypt.encryption.pbe.config.EnvironmentStringPBEConfig">
 		<property name="algorithm" value="PBEWithMD5AndDES" />
-		<property name="password" value="password" />		
+		<property name="passwordEnvName" value="db_password" />		
 	</bean>
 
 	<bean id="encryptor"
@@ -21,6 +21,7 @@
 		<property name="locations">
 			<list>
 				<value>/WEB-INF/spring/props/db.properties</value>
+				<value>/WEB-INF/spring/props/api.properties</value>
 			</list>
 		</property>
 	</bean>

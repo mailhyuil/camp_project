@@ -7,37 +7,38 @@
 
 	<h1>detail</h1>
 	
-	<h1 th:text="|제목 : ${BBS.title}|"></h1>
-	<h5 th:text="|작성자 : ${BBS.createdBy}|"></h5>
-	<h5 th:text="|수정자 : ${BBS.lastModifiedBy}|"></h5>
-	<h5 th:text="|작성일 : ${BBS.createdDate}|"></h5>
-	<h5 th:text="|수정일 : ${BBS.lastModifiedDate}|"></h5>
+	<h1 th:text="|제목 : ${bbs.title}|"></h1>
+	<h5 th:text="|작성자 : ${bbs.createdBy}|"></h5>
+	<h5 th:text="|수정자 : ${bbs.lastModifiedBy}|"></h5>
+	<h5 th:text="|작성일 : ${bbs.createdDate}|"></h5>
+	<h5 th:text="|수정일 : ${bbs.lastModifiedDate}|"></h5>
 	
 	<div style="display:flex;flex-direction:column;">
 	
-	<h2 th:text="|${BBS.content}|"></h2>
+	<h2 th:text="|${bbs.content}|"></h2>
 	
-	<th:block th:if="${not #strings.isEmpty(BBS.imgs)}" th:each="img:${BBS.imgs}">
+	<th:block th:if="${not #strings.isEmpty(bbs.imgs)}" th:each="img:${bbs.imgs}">
 		<img th:src="|@{/upload/}${img.uuidImgName}|" />
 	</th:block>
 	
 	<div class="video_list">
 		<video style="display:none" width="720px" height="480px" controls></video>
 	</div>
-
-	<h2 th:if="${#authentication.name} == ${BBS.username}">
-		<a th:href="|@{/bbs/update/}${BBS.campId}/${BBS.bbsId}|">수정하기</a>
+	<h3 th:text="|좋아요! : ${bbs.likeCnt}|"></h3>
+	<h3><a th:href="|@{/bbs/likeBbs}/${bbs.id}|">❤️</a></h3>
+	<h2 th:if="${#authentication.name} == ${bbs.username}">
+		<a th:href="|@{/bbs/update/}${bbs.campId}/${bbs.id}|">수정하기</a>
 	</h2>
 	
-	<h2 th:if="${#authentication.name} == ${BBS.username}">
-		<a th:href="|@{/bbs/delete/}${BBS.campId}/${BBS.bbsId}|">삭제하기</a>
+	<h2 th:if="${#authentication.name} == ${bbs.username}">
+		<a th:href="|@{/bbs/delete/}${bbs.campId}/${bbs.id}|">삭제하기</a>
 	</h2>
 	</div>
 <script th:inline="javascript">
 /*<![CDATA[*/
 	const videoScreen = document.querySelector("video");
 	/* get videoData */
-	videoScreen.src = "http://localhost:8080/video/" + /*[[${BBS.bbsId}]]*/;
+	videoScreen.src = "http://localhost:8080/video/" + /*[[${bbs.id}]]*/;
 	videoScreen.style.display="block"
 /*]]>*/
 </script>

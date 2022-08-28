@@ -9,9 +9,8 @@
 
 	<!-- properties 파일의 내용을 Controller, Service 에서 사용하기 위한 설정 -->
 	<context:property-placeholder 
-		location="/WEB-INF/spring/props/db.properties"/>
+		location="/WEB-INF/spring/props/db.properties, /WEB-INF/spring/props/api.properties"/>
 		
-	<util:properties  id="mysql"  
-		location="/WEB-INF/spring/props/db.properties" />
+	<util:properties id="api" location="/WEB-INF/spring/props/api.properties" />
 
 </beans>

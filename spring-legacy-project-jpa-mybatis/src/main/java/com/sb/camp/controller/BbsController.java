@@ -55,7 +55,7 @@ public class BbsController {
 
     @GetMapping("/detail")
     public String detail(Model model, @RequestParam(name = "id") long BbsId){
-        model.addAttribute("BBS", bbsService.getBbsById(BbsId));
+        model.addAttribute("bbs", bbsService.getBbsById(BbsId));
         return null;
     }
     
@@ -73,9 +73,13 @@ public class BbsController {
     }
     
     @PostMapping("/update/{campId}/{id}")
-    public String update(@PathVariable(name="campId") long campId, @PathVariable(name = "id") long BbsId, Bbs bbs, MultipartHttpServletRequest files, @RequestParam("file") MultipartFile file){
-    	bbs.setBbsId(BbsId);
-    	bbsService.updateBbs(bbs, file, files);
+    public String update(@PathVariable(name="campId") long campId,
+				    		@PathVariable(name = "id") long BbsId,
+				    		Bbs bbs, 
+				    		MultipartHttpServletRequest img_files,
+				    		MultipartFile video_file){
+    	bbs.setId(BbsId);
+    	bbsService.updateBbs(bbs, video_file, img_files);
         return "redirect:/bbs/board?id=" + campId;
     }
     
@@ -90,5 +94,11 @@ public class BbsController {
     public String goToCamp(@RequestParam(name = "id") long bbsId) {
     	Bbs bbs = bbsService.getBbsById(bbsId);
     	return "redirect:/camp/detail?id=" + bbs.getCampId();
+    }
+    
+    @GetMapping("/likeBbs/{id}")
+    public String likeBbs(@PathVariable(name = "id") long bbsId, Principal principal) {
+    	bbsService.likeBbs(bbsId, principal.getName());
+    	return "redirect:/bbs/detail?id=" + bbsId;
     }
 }

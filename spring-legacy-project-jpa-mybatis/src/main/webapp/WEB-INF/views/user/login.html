@@ -4,14 +4,16 @@
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-	<form th:action="@{/login}" method="post">
+	<form th:action="@{/login}" method="post" th:object="${user}">
 		<div>
 	      <label for="username">Username</label>:
 	      <input name="username" autofocus="autofocus" />
+	      <p th:errors="*{username}" th:if="${#fields.hasErrors('username')}"></p>
 		</div>
 		<div>
 	      <label for="password">Password</label>:
-	      <input type="password" name="password" />	
+	      <input type="password" name="password" />
+	      <p th:errors="*{password}" th:if="${#fields.hasErrors('password')}"></p>
 		</div>
 		<div>
 	      <button>Log in</button>	

@@ -7,22 +7,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.transaction.Transactional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.sb.camp.domain.Bbs;
+import com.sb.camp.domain.BbsLike;
+import com.sb.camp.domain.Camp;
 import com.sb.camp.domain.Image;
 import com.sb.camp.domain.Pagination;
+import com.sb.camp.domain.User;
 import com.sb.camp.domain.Video;
 import com.sb.camp.exception.CustomException;
 import com.sb.camp.exception.ErrorCode;
 import com.sb.camp.persistence.BbsDao;
 import com.sb.camp.persistence.UserDao;
+import com.sb.camp.repository.BbsLikeRepository;
+import com.sb.camp.repository.BbsRepository;
+import com.sb.camp.repository.CampRepository;
+import com.sb.camp.repository.ImageRepository;
+import com.sb.camp.repository.UserRepository;
+import com.sb.camp.repository.VideoRepository;
 import com.sb.camp.service.BbsService;
 
 @Service
@@ -31,10 +42,23 @@ public class BbsServiceImpl implements BbsService {
 
 	private final BbsDao bbsDao;
 	private final UserDao userDao;
+	private final BbsRepository bbsRepository;
+	private final BbsLikeRepository bbsLikeRepository;
+	private final UserRepository userRepository;
+	@Autowired
+	private ImageRepository imageRepository;
+	@Autowired
+	private VideoRepository videoRepository;
+	@Autowired
+	private CampRepository campRepository;
 	
-	public BbsServiceImpl(BbsDao bbsDao, UserDao userDao) {
+	public BbsServiceImpl(BbsDao bbsDao, UserDao userDao, BbsRepository bbsRepository,
+			BbsLikeRepository bbsLikeRepository, UserRepository userRepository) {
 		this.bbsDao = bbsDao;
 		this.userDao = userDao;
+		this.bbsRepository = bbsRepository;
+		this.bbsLikeRepository = bbsLikeRepository;
+		this.userRepository = userRepository;
 	}
 
 	@Override
@@ -52,9 +76,15 @@ public class BbsServiceImpl implements BbsService {
 //
 //		bbs.setDate(dateFormat.format(date));
 //		bbs.setTime(timeFormat.format(date)); // MySQL 함수로 대체
-		bbs.setUser(userDao.findById(loggedInUser));
-
-
+		
+		User foundUser = userRepository.findOneByUsername(loggedInUser);
+		Camp camp = campRepository.findById(bbs.getCampId()).get();
+		bbs.setUser(foundUser);
+		bbs.setCamp(camp);
+		
+		// @CreatedBy @LastModifiedBy 안됨
+		bbs.setCreatedBy(loggedInUser);
+		bbs.setLastModifiedBy(loggedInUser);
 		
 		List<MultipartFile> imgList = files.getFiles("files");
 
@@ -64,8 +94,12 @@ public class BbsServiceImpl implements BbsService {
 			if(!img.isEmpty()) {
 			String uuid = UUID.randomUUID().toString();
 			String uuidImg = uuid + img.getOriginalFilename();
-			Image imgVO = Image.builder().uuidImgName(uuidImg).originalImgName(img.getOriginalFilename()).user(userDao.findById(loggedInUser))
-					.bbs(bbs).build();
+			Image imgVO = Image.builder()
+					.uuidImgName(uuidImg)
+					.originalImgName(img.getOriginalFilename())
+					.user(foundUser)
+					.bbs(bbs)
+					.build();
 
 			File uploadFile = new File("c:/Temp/upload/", uuidImg);
 
@@ -74,24 +108,31 @@ public class BbsServiceImpl implements BbsService {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-
 			imgs.add(imgVO);
 			}
 		}
 		
-		bbsDao.insert(bbs);
+		Bbs savedBbs = bbsRepository.save(bbs);
 		
 		if(!imgs.isEmpty()) {
-			bbsDao.insertImages(imgs);
+			savedBbs.getImgs().addAll(imgs);
+			imageRepository.saveAll(imgs);
+		}
+		
+		if(!file.isEmpty()) {
+			try {
+				Video video = Video.builder()
+						.bbs(bbs)
+						.data(file.getBytes())
+						.user(foundUser)
+						.build();
+				videoRepository.save(video);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 
-		try {
-			Video video = Video.builder().bbs(bbs).data(file.getBytes()).user(userDao.findById(loggedInUser)).build();
-			bbsDao.insertVideo(video);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		return 0;
 	}
 
@@ -103,17 +144,19 @@ public class BbsServiceImpl implements BbsService {
 			throw new CustomException(ErrorCode.NOT_FOUND_POST, "게시글을 찾을 수 없습니다.");
 		}
 		
-		bbs.setImgs(bbsDao.findImagesByBbsId(bbs.getBbsId()));
+		bbs.setImgs(bbsDao.findImagesByBbsId(bbs.getId()));
 		return bbs;
 	}
 
 	@Override
 	public Map<String, Object> getPaginationAndBbsList(int page, long campId) {
-		int totalListCount = bbsDao.findBoardListCnt(campId);
-
+		final int totalListCount = bbsDao.findBoardListCnt(campId);
+		final int PAGE_SIZE = 5;
+		final int LIST_SIZE = 5;
+		
 		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
 
-		pagination.paginate(page, totalListCount); // 페이지네이션 초기화
+		pagination.paginate(page, totalListCount, PAGE_SIZE, LIST_SIZE); // 페이지네이션 초기화
 		
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
@@ -133,14 +176,19 @@ public class BbsServiceImpl implements BbsService {
 				file.delete();
 			}
 		}
-		bbsDao.delete(id);
+		bbsRepository.deleteById(id);
 	}
 
 	@Override
 	public void updateBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files) {
-		bbsDao.update(bbs);
+		Bbs foundBbs = bbsRepository.findById(bbs.getId()).get();
+		User foundUser = foundBbs.getUser();
+		foundBbs.setTitle(bbs.getTitle());
+		foundBbs.setContent(bbs.getContent());
+
+		bbsRepository.save(foundBbs);
 		
-		List<Image> imgs = bbsDao.findImagesByBbsId(bbs.getBbsId());
+		List<Image> imgs = imageRepository.findByBbs(foundBbs);
 		
 		for (Image img : imgs) {
 			
@@ -148,11 +196,10 @@ public class BbsServiceImpl implements BbsService {
 			
 			if (imgFile.exists()) {
 				imgFile.delete();
-				bbsDao.deleteImage(img.getImageId());
-			}
+				imageRepository.deleteById(img.getImageId());}
 		}
 		
-		List<MultipartFile> imgList = files.getFiles("files");
+		List<MultipartFile> imgList = files.getFiles("img_files");
 
 		List<Image> newImgs = new ArrayList<>();
 
@@ -160,8 +207,8 @@ public class BbsServiceImpl implements BbsService {
 			if(!img.isEmpty()) {
 			String uuid = UUID.randomUUID().toString();
 			String uuidImg = uuid + img.getOriginalFilename();
-			Image imgVO = Image.builder().uuidImgName(uuidImg).originalImgName(img.getOriginalFilename()).user(bbs.getUser())
-					.bbs(bbs).build();
+			Image imgVO = Image.builder().uuidImgName(uuidImg).originalImgName(img.getOriginalFilename()).user(foundUser)
+					.bbs(foundBbs).build();
 
 			File uploadFile = new File("c:/Temp/upload/", uuidImg);
 
@@ -170,34 +217,38 @@ public class BbsServiceImpl implements BbsService {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-
 			newImgs.add(imgVO);
 			}
 		}
 		if(!newImgs.isEmpty()) {
-			bbsDao.insertImages(newImgs);
+			imageRepository.saveAll(newImgs);
 		}
 
-		try {
-			if(!file.isEmpty()) {
-			Video video = Video.builder().bbs(bbs).data(file.getBytes()).user(bbs.getUser()).build();
-			bbsDao.insertVideo(video);
-			} else {
-				
+		if(!file.isEmpty()) {
+			try {
+				Video video = Video.builder()
+						.bbs(foundBbs)
+						.data(file.getBytes())
+						.user(foundUser)
+						.build();
+				videoRepository.save(video);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} else {
+			videoRepository.deleteById(foundBbs.getVideo().getVideoId());
 		}
 	}
 
 	@Override
 	public Map<String, Object> getPaginationAndImageList(int page) {
-		int totalListCount = bbsDao.findImageCount();
-
+		final int totalListCount = bbsDao.findImageCount();
+		final int PAGE_SIZE = 5;
+		final int LIST_SIZE = 5;
 		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
 
-		pagination.paginate(page, totalListCount); // 페이지네이션 초기화
+		pagination.paginate(page, totalListCount, PAGE_SIZE, LIST_SIZE); // 페이지네이션 초기화
 		
 		Map<String, Object> map = new HashMap<>();
 		
@@ -209,6 +260,27 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Video getVideoByBbsId(long id) {
 		return bbsDao.findVideoByBbsId(id);
+	}
+
+	@Override
+	public void likeBbs(long bbsId, String username) {
+		Bbs foundBbs = bbsRepository.findById(bbsId).orElseThrow(()->{
+			throw new CustomException(ErrorCode.NOT_FOUND_POST);
+		});
+		
+		User foundUser = userRepository.findOneByUsername(username);
+		
+		Optional<BbsLike> foundBbsLike = bbsLikeRepository.findByBbsIdAndUserId(bbsId, foundUser.getId());
+		
+		if(foundBbsLike.isPresent()) {
+			foundBbs.decreaseLikeCnt();
+			bbsLikeRepository.deleteById(foundBbsLike.get().getBbsLikeId());
+		} else {
+			foundBbs.increaseLikeCnt();
+			BbsLike savedBbsLike = bbsLikeRepository.save(BbsLike.builder().bbs(foundBbs).user(foundUser).build());
+			foundBbs.getBbsLikeList().add(savedBbsLike);
+		}
+		
 	}
 	
 }

@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
 @Slf4j
-public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
+public class GlobalExceptionHandler extends ResponseEntityExceptionHandler { // Controller 내에서 발생하는 에러만 해당
 
     //일반 에러
     @ExceptionHandler

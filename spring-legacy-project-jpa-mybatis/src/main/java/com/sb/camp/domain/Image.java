@@ -11,8 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.sb.camp.domain.base.BaseEntity;
@@ -38,7 +36,6 @@ public class Image extends BaseEntity{
 	private long imageId;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@OnDelete(action = OnDeleteAction.CASCADE)
 	@JoinColumn(name = "bbs_id", nullable = false)
 	private Bbs bbs;
 

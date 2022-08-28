@@ -1,6 +1,8 @@
 package com.sb.camp.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -13,8 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 
 import org.hibernate.annotations.NaturalId;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,14 +46,22 @@ public class User implements UserDetails {
 	@Column(name = "user_id")
 	private long id;
 
-	@NotEmpty
 	@NaturalId
 	@Column(columnDefinition = "VARCHAR(25)", nullable = false)
+	@NotBlank(message = "아이디를 입력해주세요")
 	private String username;
 
-	@NotEmpty
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
+	@NotBlank(message = "비밀번호는 필수 입력 값입니다")
 	private String password;
+
+	@Column(nullable = false)
+	@NotBlank(message = "이메일을 입력해주세요")
+	private String email;
+
+	@Column(nullable = false)
+	@NotBlank(message = "닉네임을 입력해주세요")
+	private String nickname;
 
 	@Column(columnDefinition = "boolean default false", nullable = false)
 	private boolean enabled;
@@ -69,15 +78,9 @@ public class User implements UserDetails {
 	@Transient
 	Collection<? extends GrantedAuthority> authorities;
 
-	@NotEmpty
-	@Email(message = "형식에 맞지 않는 이메일입니다")
-	@Column(nullable = false)
-	private String email;
-
-	@NotEmpty
-	@Column(nullable = false)
-	private String nickname;
-
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private Set<Authority> auths;
+	
+	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+	private List<Bbs> bbs = new ArrayList<>();
 }

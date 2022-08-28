@@ -5,20 +5,20 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 <h1>수정하기</h1>
-<form th:action="|@{/bbs/update/}${BBS.campId}/${BBS.bbsId}?${_csrf.parameterName}=${_csrf.token}|" method="post" enctype="multipart/form-data">
+<form th:action="|@{/bbs/update/}${BBS.campId}/${BBS.id}?${_csrf.parameterName}=${_csrf.token}|" th:object="${BBS}" method="post" enctype="multipart/form-data">
 <div>
-    <input name="title" type="text" placeholder="제목을 입력해주세요" th:value="${BBS.title}"/>
+    <input th:field="*{title}" name="title" type="text" placeholder="제목을 입력해주세요" th:value="*{title}"/>
 </div>
 <div>
-    <textarea name="content" placeholder="글을 작성해주세요"  th:value="${BBS.content}" th:text="${BBS.content}"></textarea>
+    <textarea th:field="*{content}" name="content" placeholder="글을 작성해주세요"  th:value="*{content}" th:text="*{content}"></textarea>
 </div>
 <div>
-    <label for="image">Image File</label>
-    <input id="image" name="files" type="file" accept="image/*" multiple="multiple">
+    <label>Image File</label>
+    <input name="img_files" type="file" accept="image/*" multiple="multiple">
 </div>
 <div>
-    <label for="video">Video File</label>
-    <input id="video" name="file" type="file" accept="application/mp4">
+    <label>Video File</label>
+    <input name="video_file" type="file" accept="application/mp4">
 </div>
     <button>글작성</button>
 </form>

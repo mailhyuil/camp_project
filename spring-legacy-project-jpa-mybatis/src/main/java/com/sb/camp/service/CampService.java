@@ -7,7 +7,7 @@ import com.sb.camp.domain.Camp;
 public interface CampService {
 	public Map<String, Object> getPaginationAndCampListByKeywords(String doNm, String sigunguNm, String facltNm, int page);
 	
-	public void insertAPI();
+	public void insertAPI() throws Throwable;
 	
 	public Camp getCampById(long id);
 	
