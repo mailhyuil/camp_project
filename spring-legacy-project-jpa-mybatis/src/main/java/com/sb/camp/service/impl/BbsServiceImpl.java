@@ -45,20 +45,21 @@ public class BbsServiceImpl implements BbsService {
 	private final BbsRepository bbsRepository;
 	private final BbsLikeRepository bbsLikeRepository;
 	private final UserRepository userRepository;
-	@Autowired
-	private ImageRepository imageRepository;
-	@Autowired
-	private VideoRepository videoRepository;
-	@Autowired
-	private CampRepository campRepository;
-	
+	private final ImageRepository imageRepository;
+	private final VideoRepository videoRepository;
+	private final CampRepository campRepository;
+
 	public BbsServiceImpl(BbsDao bbsDao, UserDao userDao, BbsRepository bbsRepository,
-			BbsLikeRepository bbsLikeRepository, UserRepository userRepository) {
+			BbsLikeRepository bbsLikeRepository, UserRepository userRepository, ImageRepository imageRepository,
+			VideoRepository videoRepository, CampRepository campRepository) {
 		this.bbsDao = bbsDao;
 		this.userDao = userDao;
 		this.bbsRepository = bbsRepository;
 		this.bbsLikeRepository = bbsLikeRepository;
 		this.userRepository = userRepository;
+		this.imageRepository = imageRepository;
+		this.videoRepository = videoRepository;
+		this.campRepository = campRepository;
 	}
 
 	@Override
