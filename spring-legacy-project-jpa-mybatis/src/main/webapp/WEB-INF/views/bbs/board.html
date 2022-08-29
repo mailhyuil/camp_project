@@ -11,6 +11,7 @@
         <th>작성일</th>
         <th>제목</th>
         <th>작성자</th>
+        <th>추천수</th>
     </tr>
     <th:block th:each="bbs,index:${bbsList}">
         <tr>
@@ -18,6 +19,7 @@
             <td th:text="${bbs.createdDate}"></td>
             <td><a th:text="${bbs.title}" th:href="@{/bbs/detail(id=${bbs.id})}"></a></td>
             <td th:text="${bbs.createdBy}"></td>
+            <td th:text="${bbs.likeCnt}"></td>
         </tr>
     </th:block>
 </table>

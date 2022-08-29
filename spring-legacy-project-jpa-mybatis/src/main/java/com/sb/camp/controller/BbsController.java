@@ -79,6 +79,8 @@ public class BbsController {
 				    		MultipartHttpServletRequest img_files,
 				    		MultipartFile video_file){
     	bbs.setId(BbsId);
+    	bbs.setCampId(campId);
+    	
     	bbsService.updateBbs(bbs, video_file, img_files);
         return "redirect:/bbs/board?id=" + campId;
     }
