@@ -71,6 +71,7 @@ public class CampServiceImpl implements CampService {
 		} catch (URISyntaxException e) {
 			throw new CustomException(ErrorCode.BAD_URL_REQUEST);
 		}
+
 		HttpHeaders headers = new HttpHeaders();
 
 		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));

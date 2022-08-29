@@ -30,7 +30,8 @@ public class Camp {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "camp_id")
     private long id;
-    
+    @Column(unique = true)
+    private String contentId;
 	private String facltNm;
 	private String lineIntro;
 	@Column(columnDefinition = "varchar(1024)")

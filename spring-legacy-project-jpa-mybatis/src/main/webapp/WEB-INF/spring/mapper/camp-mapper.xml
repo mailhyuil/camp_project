@@ -16,6 +16,7 @@
 
 	<insert id="insertAPI" parameterType="Camp">
 		INSERT IGNORE INTO camp(
+		contentId,
 		facltNm,
 		lineIntro,
 		intro,
@@ -32,6 +33,7 @@
 		VALUES
 		<foreach collection="list" item="vo" separator=", ">
 			(
+			#{vo.contentId},
 			#{vo.facltNm},
 			#{vo.lineIntro},
 			#{vo.intro},
