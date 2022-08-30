@@ -5,6 +5,7 @@ import javax.persistence.PersistenceContext;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.domain.AuditorAware;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -16,5 +17,10 @@ public class JPAConfig {
 	@Bean
 	public JPAQueryFactory jpaQueryFactory() {
 	    return new JPAQueryFactory(entityManager);
+	}
+	
+	@Bean
+	public AuditorAware<String> auditorAware(){
+		return new AwareAuditConfig();
 	}
 }

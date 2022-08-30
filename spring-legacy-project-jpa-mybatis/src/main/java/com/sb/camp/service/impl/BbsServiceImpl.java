@@ -12,22 +12,23 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import com.querydsl.core.QueryModifiers;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sb.camp.domain.Bbs;
 import com.sb.camp.domain.BbsLike;
 import com.sb.camp.domain.Camp;
 import com.sb.camp.domain.Image;
 import com.sb.camp.domain.Pagination;
+import static com.sb.camp.domain.QImage.image;
 import com.sb.camp.domain.User;
 import com.sb.camp.domain.Video;
 import com.sb.camp.exception.CustomException;
 import com.sb.camp.exception.ErrorCode;
 import com.sb.camp.persistence.BbsDao;
-import com.sb.camp.persistence.UserDao;
 import com.sb.camp.repository.BbsLikeRepository;
 import com.sb.camp.repository.BbsRepository;
 import com.sb.camp.repository.CampRepository;
@@ -41,25 +42,25 @@ import com.sb.camp.service.BbsService;
 public class BbsServiceImpl implements BbsService {
 
 	private final BbsDao bbsDao;
-	private final UserDao userDao;
 	private final BbsRepository bbsRepository;
 	private final BbsLikeRepository bbsLikeRepository;
 	private final UserRepository userRepository;
 	private final ImageRepository imageRepository;
 	private final VideoRepository videoRepository;
 	private final CampRepository campRepository;
+	private final JPAQueryFactory queryFactory;
 
-	public BbsServiceImpl(BbsDao bbsDao, UserDao userDao, BbsRepository bbsRepository,
-			BbsLikeRepository bbsLikeRepository, UserRepository userRepository, ImageRepository imageRepository,
-			VideoRepository videoRepository, CampRepository campRepository) {
+	public BbsServiceImpl(BbsDao bbsDao, BbsRepository bbsRepository, BbsLikeRepository bbsLikeRepository,
+			UserRepository userRepository, ImageRepository imageRepository, VideoRepository videoRepository,
+			CampRepository campRepository, JPAQueryFactory queryFactory) {
 		this.bbsDao = bbsDao;
-		this.userDao = userDao;
 		this.bbsRepository = bbsRepository;
 		this.bbsLikeRepository = bbsLikeRepository;
 		this.userRepository = userRepository;
 		this.imageRepository = imageRepository;
 		this.videoRepository = videoRepository;
 		this.campRepository = campRepository;
+		this.queryFactory = queryFactory;
 	}
 
 	@Override
@@ -71,21 +72,10 @@ public class BbsServiceImpl implements BbsService {
 	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) {
 		String loggedInUser = principal.getName();
 
-//		Date date = new Date(System.currentTimeMillis());
-//		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//		SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
-//
-//		bbs.setDate(dateFormat.format(date));
-//		bbs.setTime(timeFormat.format(date)); // MySQL 함수로 대체
-		
 		User foundUser = userRepository.findOneByUsername(loggedInUser);
 		Camp camp = campRepository.findById(bbs.getCampId()).get();
 		bbs.setUser(foundUser);
 		bbs.setCamp(camp);
-		
-		// @CreatedBy @LastModifiedBy 안됨
-		bbs.setCreatedBy(loggedInUser);
-		bbs.setLastModifiedBy(loggedInUser);
 		
 		List<MultipartFile> imgList = files.getFiles("files");
 
@@ -184,17 +174,15 @@ public class BbsServiceImpl implements BbsService {
 	public void updateBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files) {
 		Bbs foundBbs = bbsRepository.findById(bbs.getId()).get();
 		User foundUser = foundBbs.getUser();
+		
 		foundBbs.setTitle(bbs.getTitle());
 		foundBbs.setContent(bbs.getContent());
-
+		
 		bbsRepository.save(foundBbs);
 		
-		List<Image> imgs = imageRepository.findByBbs(foundBbs);
-		
+		List<Image> imgs = imageRepository.findByBbsId(foundBbs.getId());
 		for (Image img : imgs) {
-			
 			File imgFile = new File("c:/Temp/upload", img.getUuidImgName());
-			
 			if (imgFile.exists()) {
 				imgFile.delete();
 				imageRepository.deleteById(img.getImageId());}
@@ -208,6 +196,7 @@ public class BbsServiceImpl implements BbsService {
 			if(!img.isEmpty()) {
 			String uuid = UUID.randomUUID().toString();
 			String uuidImg = uuid + img.getOriginalFilename();
+			
 			Image imgVO = Image.builder().uuidImgName(uuidImg).originalImgName(img.getOriginalFilename()).user(foundUser)
 					.bbs(foundBbs).build();
 
@@ -237,24 +226,29 @@ public class BbsServiceImpl implements BbsService {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		} else {
-			videoRepository.deleteById(foundBbs.getVideo().getVideoId());
 		}
 	}
 
 	@Override
-	public Map<String, Object> getPaginationAndImageList(int page) {
-		final int totalListCount = bbsDao.findImageCount();
+	public Map<String, Object> getPaginationAndImageList(int page) { // QueryDSL
+		final int totalListCount = (int) imageRepository.count();
 		final int PAGE_SIZE = 5;
 		final int LIST_SIZE = 5;
+		
 		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
 
 		pagination.paginate(page, totalListCount, PAGE_SIZE, LIST_SIZE); // 페이지네이션 초기화
 		
-		Map<String, Object> map = new HashMap<>();
+		QueryModifiers queryModifiers = new QueryModifiers( (long)pagination.getLIST_SIZE(),(long)pagination.getCri()); //limit, offset
+		List<Image> imageList = queryFactory
+                .selectFrom(image)
+                .restrict(queryModifiers)
+                .fetch();
+		System.out.println(imageList.get(0).getBbs());
 		
+		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
-		map.put("imageLIST", bbsDao.findImages(pagination));
+		map.put("imageList", imageList);
 		return map;
 	}
 

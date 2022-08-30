@@ -22,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import com.mysql.cj.conf.url.LoadBalanceDnsSrvConnectionUrl;
 import com.sb.camp.domain.Camp;
 import com.sb.camp.domain.CampLike;
 import com.sb.camp.domain.Pagination;
@@ -66,8 +65,11 @@ public class CampServiceImpl implements CampService {
 
 		try {
 			uri = new URI(
-					"http://apis.data.go.kr/B551011/GoCamping/basedList?numOfRows=3210&pageNo=1&MobileOS=ETC&MobileApp=AppTest&_type=json&serviceKey="
-							+ decryptedKey);
+					"http://apis.data.go.kr/B551011/GoCamping/basedList"
+					+ "?numOfRows=3210"
+					+ "&pageNo=1&MobileOS=ETC"
+					+ "&MobileApp=AppTest"
+					+ "&_type=json&serviceKey="	+ decryptedKey);
 		} catch (URISyntaxException e) {
 			throw new CustomException(ErrorCode.BAD_URL_REQUEST);
 		}

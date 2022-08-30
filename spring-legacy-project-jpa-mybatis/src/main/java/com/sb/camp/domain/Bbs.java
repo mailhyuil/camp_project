@@ -51,7 +51,7 @@ public class Bbs extends BaseEntity{
 	@Column(columnDefinition = "varchar(2048)", nullable = false)
 	private String content;
     
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "camp_id", nullable = false)
 	private Camp camp;
 
@@ -85,4 +85,5 @@ public class Bbs extends BaseEntity{
 
 	@Transient
 	private String username;
+
 }

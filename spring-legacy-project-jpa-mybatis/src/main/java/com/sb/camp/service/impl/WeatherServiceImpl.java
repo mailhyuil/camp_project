@@ -38,7 +38,10 @@ public class WeatherServiceImpl implements WeatherService{
 		URI uri = null;
 
 		try {
-			uri = new URI("https://api.openweathermap.org/data/2.5/weather?appid=" + decryptedKey + "&lat=" + lat + "&lon=" + lon);
+			uri = new URI("https://api.openweathermap.org/data/2.5/weather"
+					+ "?appid=" + decryptedKey 
+					+ "&lat=" + lat 
+					+ "&lon=" + lon);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}

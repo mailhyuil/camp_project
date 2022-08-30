@@ -13,7 +13,6 @@
 		<property name="maxUploadSize" value="200000000" />
 	</bean>
 	
-	<context:component-scan base-package="com.sb.camp.service.auth"/>
-	<context:component-scan base-package="com.sb.camp.service.impl"/>
-	<context:component-scan base-package="com.sb.camp.config"/>
+	<context:component-scan base-package="com.sb.camp.repository"/>
+
 </beans>

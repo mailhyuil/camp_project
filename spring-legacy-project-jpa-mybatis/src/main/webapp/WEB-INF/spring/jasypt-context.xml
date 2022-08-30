@@ -20,8 +20,8 @@
 		<property name="fileEncoding" value="UTF-8" />
 		<property name="locations">
 			<list>
-				<value>/WEB-INF/spring/props/db.properties</value>
-				<value>/WEB-INF/spring/props/api.properties</value>
+				<value>classpath:/props/db.properties</value>
+				<value>classpath:/props/api.properties</value>
 			</list>
 		</property>
 	</bean>

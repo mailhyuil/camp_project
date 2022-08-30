@@ -11,7 +11,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import com.sb.camp.domain.User;
 
 @Configuration
-@EnableJpaAuditing
 public class AwareAuditConfig implements AuditorAware<String> {
 
     @Override

@@ -20,12 +20,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -34,12 +36,12 @@ public class Image extends BaseEntity{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "image_id")
 	private long imageId;
-
-	@ManyToOne(fetch = FetchType.LAZY)
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "bbs_id", nullable = false)
 	private Bbs bbs;
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
 	private User user;
 	
@@ -48,9 +50,6 @@ public class Image extends BaseEntity{
 	
 	@Column(nullable = false)
 	private String originalImgName;
-
-	@Transient
-	private long bbsId;
 	
 	@Transient
 	private String username;

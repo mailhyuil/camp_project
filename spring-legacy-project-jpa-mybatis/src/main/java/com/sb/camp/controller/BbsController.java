@@ -94,8 +94,7 @@ public class BbsController {
     
     @GetMapping("/goToCamp")
     public String goToCamp(@RequestParam(name = "id") long bbsId) {
-    	Bbs bbs = bbsService.getBbsById(bbsId);
-    	return "redirect:/camp/detail?id=" + bbs.getCampId();
+    	return "redirect:/bbs/detail?id=" + bbsId;
     }
     
     @GetMapping("/likeBbs/{id}")
