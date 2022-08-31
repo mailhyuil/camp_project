@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int join(User user) {
+	public int join(User user) { // MyBatis
 			String encodedPassword = passwordEncoder.encode(user.getPassword());
 			user.setPassword(encodedPassword);
 			userDao.insert(user);
@@ -30,12 +30,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public User findUser(String username) {
+	public User findUser(String username) { // MyBatis
 		return userDao.findById(username);
 	}
 
 	@Override
-	public List<Authority> findAuths(String username) {
+	public List<Authority> findAuths(String username) { // MyBatis
 		return userDao.findAuthsById(username);
 	}
 

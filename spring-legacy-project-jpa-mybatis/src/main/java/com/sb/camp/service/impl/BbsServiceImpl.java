@@ -1,5 +1,7 @@
 package com.sb.camp.service.impl;
 
+import static com.sb.camp.domain.QImage.image;
+
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
@@ -23,7 +25,6 @@ import com.sb.camp.domain.BbsLike;
 import com.sb.camp.domain.Camp;
 import com.sb.camp.domain.Image;
 import com.sb.camp.domain.Pagination;
-import static com.sb.camp.domain.QImage.image;
 import com.sb.camp.domain.User;
 import com.sb.camp.domain.Video;
 import com.sb.camp.exception.CustomException;
@@ -64,100 +65,74 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public List<Bbs> selectAll() {
+	public List<Bbs> selectAll() { // MyBatis
 		return bbsDao.selectAll();
 	}
 
 	@Override
-	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) {
+	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) { // Spring
+																												// Data
+																												// JPA
 		String loggedInUser = principal.getName();
 
 		User foundUser = userRepository.findOneByUsername(loggedInUser);
 		Camp camp = campRepository.findById(bbs.getCampId()).get();
 		bbs.setUser(foundUser);
 		bbs.setCamp(camp);
-		
+
 		List<MultipartFile> imgList = files.getFiles("files");
 
 		List<Image> imgs = new ArrayList<>();
 
-		for (MultipartFile img : imgList) {
-			if(!img.isEmpty()) {
-			String uuid = UUID.randomUUID().toString();
-			String uuidImg = uuid + img.getOriginalFilename();
-			Image imgVO = Image.builder()
-					.uuidImgName(uuidImg)
-					.originalImgName(img.getOriginalFilename())
-					.user(foundUser)
-					.bbs(bbs)
-					.build();
+		imgList.stream().map((img) -> {
+			return img.isEmpty() ? null : createImageFile(img, foundUser, bbs);
+		}).forEach((vo) -> imgs.add(vo));
 
-			File uploadFile = new File("c:/Temp/upload/", uuidImg);
-
-			try {
-				img.transferTo(uploadFile);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-			imgs.add(imgVO);
-			}
-		}
-		
 		Bbs savedBbs = bbsRepository.save(bbs);
-		
-		if(!imgs.isEmpty()) {
+
+		if (!imgs.isEmpty()) {
 			savedBbs.getImgs().addAll(imgs);
 			imageRepository.saveAll(imgs);
 		}
-		
-		if(!file.isEmpty()) {
+
+		if (!file.isEmpty()) {
 			try {
-				Video video = Video.builder()
-						.bbs(bbs)
-						.data(file.getBytes())
-						.user(foundUser)
-						.build();
+				Video video = Video.builder().bbs(bbs).data(file.getBytes()).user(foundUser).build();
 				videoRepository.save(video);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
 		return 0;
 	}
 
 	@Override
-	public Bbs getBbsById(long id) {
+	public Bbs getBbsById(long id) { // MyBatis
 		Bbs bbs = bbsDao.findById(id);
-		
-		if(bbs == null) {
+
+		if (bbs == null) {
 			throw new CustomException(ErrorCode.NOT_FOUND_POST, "게시글을 찾을 수 없습니다.");
 		}
-		
+
 		bbs.setImgs(bbsDao.findImagesByBbsId(bbs.getId()));
 		return bbs;
 	}
 
 	@Override
-	public Map<String, Object> getPaginationAndBbsList(int page, long campId) {
+	public Map<String, Object> getPaginationAndBbsList(int page, long campId) { // MyBatis
 		final int totalListCount = bbsDao.findBoardListCnt(campId);
-		final int PAGE_SIZE = 5;
-		final int LIST_SIZE = 5;
-		
-		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
+		Pagination pagination = createPagination(page, totalListCount);
 
-		pagination.paginate(page, totalListCount, PAGE_SIZE, LIST_SIZE); // 페이지네이션 초기화
-		
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
 		map.put("bbsList", bbsDao.findBoardList(pagination, campId));
-		
+
 		return map;
 	}
 
 	@Override
-	public void deleteBbs(long id) {
+	public void deleteBbs(long id) { // MyBatis
 		List<Image> imgs = bbsDao.findImagesByBbsId(id);
 		for (Image img : imgs) {
 
@@ -171,56 +146,39 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public void updateBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files) {
+	public void updateBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files) { // Spring Data JPA
 		Bbs foundBbs = bbsRepository.findById(bbs.getId()).get();
 		User foundUser = foundBbs.getUser();
-		
+
 		foundBbs.setTitle(bbs.getTitle());
 		foundBbs.setContent(bbs.getContent());
-		
+
 		bbsRepository.save(foundBbs);
-		
+
 		List<Image> imgs = imageRepository.findByBbsId(foundBbs.getId());
-		for (Image img : imgs) {
+		
+		imgs.stream().forEach((img)->{
 			File imgFile = new File("c:/Temp/upload", img.getUuidImgName());
 			if (imgFile.exists()) {
 				imgFile.delete();
-				imageRepository.deleteById(img.getImageId());}
-		}
-		
-		List<MultipartFile> imgList = files.getFiles("img_files");
+				imageRepository.deleteById(img.getImageId());
+			}
+		});
 
+		List<MultipartFile> imgList = files.getFiles("img_files");
 		List<Image> newImgs = new ArrayList<>();
 
-		for (MultipartFile img : imgList) {
-			if(!img.isEmpty()) {
-			String uuid = UUID.randomUUID().toString();
-			String uuidImg = uuid + img.getOriginalFilename();
-			
-			Image imgVO = Image.builder().uuidImgName(uuidImg).originalImgName(img.getOriginalFilename()).user(foundUser)
-					.bbs(foundBbs).build();
+		imgList.stream().map((img) -> {
+			return img.isEmpty() ? null : createImageFile(img, foundUser, foundBbs);
+		}).forEach((vo) -> newImgs.add(vo));
 
-			File uploadFile = new File("c:/Temp/upload/", uuidImg);
-
-			try {
-				img.transferTo(uploadFile);
-			} catch (IOException e) {
-				throw new RuntimeException(e);
-			}
-			newImgs.add(imgVO);
-			}
-		}
-		if(!newImgs.isEmpty()) {
+		if (!newImgs.isEmpty()) {
 			imageRepository.saveAll(newImgs);
 		}
-
-		if(!file.isEmpty()) {
+		
+		if (!file.isEmpty()) {
 			try {
-				Video video = Video.builder()
-						.bbs(foundBbs)
-						.data(file.getBytes())
-						.user(foundUser)
-						.build();
+				Video video = Video.builder().bbs(foundBbs).data(file.getBytes()).user(foundUser).build();
 				videoRepository.save(video);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -232,20 +190,13 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Map<String, Object> getPaginationAndImageList(int page) { // QueryDSL
 		final int totalListCount = (int) imageRepository.count();
-		final int PAGE_SIZE = 5;
-		final int LIST_SIZE = 5;
-		
-		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
+		Pagination pagination = createPagination(page, totalListCount);
 
-		pagination.paginate(page, totalListCount, PAGE_SIZE, LIST_SIZE); // 페이지네이션 초기화
-		
-		QueryModifiers queryModifiers = new QueryModifiers( (long)pagination.getLIST_SIZE(),(long)pagination.getCri()); //limit, offset
-		List<Image> imageList = queryFactory
-                .selectFrom(image)
-                .restrict(queryModifiers)
-                .fetch();
-		System.out.println(imageList.get(0).getBbs());
-		
+		QueryModifiers queryModifiers = new QueryModifiers((long) pagination.getLIST_SIZE(),
+				(long) pagination.getCri()); // limit, offset
+
+		List<Image> imageList = queryFactory.selectFrom(image).restrict(queryModifiers).fetch();
+
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
 		map.put("imageList", imageList);
@@ -253,21 +204,21 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public Video getVideoByBbsId(long id) {
+	public Video getVideoByBbsId(long id) { // MyBatis
 		return bbsDao.findVideoByBbsId(id);
 	}
 
 	@Override
-	public void likeBbs(long bbsId, String username) {
-		Bbs foundBbs = bbsRepository.findById(bbsId).orElseThrow(()->{
+	public void likeBbs(long bbsId, String username) { // Spring Data JPA
+		Bbs foundBbs = bbsRepository.findById(bbsId).orElseThrow(() -> {
 			throw new CustomException(ErrorCode.NOT_FOUND_POST);
 		});
-		
+
 		User foundUser = userRepository.findOneByUsername(username);
-		
+
 		Optional<BbsLike> foundBbsLike = bbsLikeRepository.findByBbsIdAndUserId(bbsId, foundUser.getId());
-		
-		if(foundBbsLike.isPresent()) {
+
+		if (foundBbsLike.isPresent()) {
 			foundBbs.decreaseLikeCnt();
 			bbsLikeRepository.deleteById(foundBbsLike.get().getBbsLikeId());
 		} else {
@@ -275,7 +226,55 @@ public class BbsServiceImpl implements BbsService {
 			BbsLike savedBbsLike = bbsLikeRepository.save(BbsLike.builder().bbs(foundBbs).user(foundUser).build());
 			foundBbs.getBbsLikeList().add(savedBbsLike);
 		}
-		
+
 	}
-	
+
+	/**
+	 * 
+	 * @Author sangb
+	 * @Date 2022. 8. 31.
+	 * @Method createImageFile
+	 * @param img
+	 * @param User
+	 * @param bbs
+	 * @return Image
+	 */
+	private Image createImageFile(MultipartFile img, User User, Bbs bbs) {
+		String uuid = UUID.randomUUID().toString();
+		String uuidImg = uuid + img.getOriginalFilename();
+		Image image = Image.builder()
+				.uuidImgName(uuidImg)
+				.originalImgName(img.getOriginalFilename())
+				.user(User)
+				.bbs(bbs)
+				.build();
+
+		File uploadFile = new File("c:/Temp/upload/", uuidImg);
+
+		try {
+			img.transferTo(uploadFile);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+		return image;
+	}
+
+	/**
+	 * 
+	 * @Author sangb
+	 * @Date 2022. 8. 31.
+	 * @Method createPagination
+	 * @param page
+	 * @param totalListCount
+	 * @return Pagination
+	 */
+	private Pagination createPagination(int page, int totalListCount) {
+		final int PAGE_SIZE = 5;
+		final int LIST_SIZE = 5;
+
+		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
+
+		pagination.paginate(page, totalListCount, PAGE_SIZE, LIST_SIZE); // 페이지네이션 초기화
+		return pagination;
+	}
 }

@@ -57,7 +57,7 @@ public class CampServiceImpl implements CampService {
 
 	@Autowired
 	@Override
-	public void insertAPI() { // api로 json데이터를 받아서 DB에 insert
+	public void insertAPI() { // api로 json데이터를 받아서 DB에 insert // MyBatis
 
 		String decryptedKey = jasypt.decrypt((String) api.get("camp.serviceKey"));
 
@@ -92,7 +92,7 @@ public class CampServiceImpl implements CampService {
 
 	@Override
 	public Map<String, Object> getPaginationAndCampListByKeywords(String doNm, String sigunguNm, String facltNm,
-			int page) {
+			int page) { // MyBatis
 
 		final int totalListCount = campDao.findCampListCnt(doNm, sigunguNm, facltNm);
 		final int PAGE_SIZE = 5;
@@ -111,13 +111,13 @@ public class CampServiceImpl implements CampService {
 	}
 
 	@Override
-	public Camp getCampById(long id) {
+	public Camp getCampById(long id) { // MyBatis
 		return campDao.findById(id);
 	}
 
 	@Override
 	@Transactional
-	public void likeCamp(long campId, String username) { // Spring Data JPA 구현
+	public void likeCamp(long campId, String username) { // Spring Data JPA
 
 		Camp foundCamp = campRepository.findById(campId).orElseThrow(() -> {
 			throw new CustomException(ErrorCode.NOT_FOUND_CAMP, "ID에 맞는 캠핑장이 없습니다");
