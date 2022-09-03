@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sb.camp.exception.CustomException;
-import com.sb.camp.exception.ErrorCode;
 import com.sb.camp.service.BbsService;
 
 @RestController

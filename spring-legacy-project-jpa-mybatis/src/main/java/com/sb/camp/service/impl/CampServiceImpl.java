@@ -84,7 +84,22 @@ public class CampServiceImpl implements CampService {
 		ResponseEntity<Root> responseEntity = restTemplate.exchange(uri, HttpMethod.GET, entity,
 				new ParameterizedTypeReference<Root>() {
 				});
-
+		
+//		WebClient webClient = WebClient.create("http://apis.data.go.kr/B551011/GoCamping/basedList");
+//		
+//		Root root = webClient.get()
+//				.uri(uri->uri.queryParam("numOfRows", "3210")
+//						.queryParam("pageNo", "1")
+//						.queryParam("MobileOS", "ETC")
+//						.queryParam("MobileApp", "AppTest")
+//						.queryParam("_type", "json")
+//						.queryParam("serviceKey", decryptedKey).build()
+//						)
+//				.accept(MediaType.APPLICATION_JSON)
+//				.exchange().flatMap(res -> {
+//					return res.bodyToMono(Root.class);
+//				}).block();
+		
 		List<Camp> camps = responseEntity.getBody().response.body.items.item;
 
 		campDao.insertAPI(camps);

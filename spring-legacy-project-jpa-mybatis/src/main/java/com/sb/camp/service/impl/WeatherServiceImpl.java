@@ -1,21 +1,13 @@
 package com.sb.camp.service.impl;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
 import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import com.sb.camp.domain.weatherapi.WeatherRoot;
 import com.sb.camp.service.WeatherService;
@@ -35,36 +27,21 @@ public class WeatherServiceImpl implements WeatherService{
 	public Map<String, Object> getWeatherByLatAndLon(String lat, String lon) {
 		String decryptedKey = jasypt.decrypt((String) api.get("weather.serviceKey"));
 
-		URI uri = null;
+		WebClient webClient = WebClient.create("https://api.openweathermap.org/data/2.5/weather");
 
-		try {
-			uri = new URI("https://api.openweathermap.org/data/2.5/weather"
-					+ "?appid=" + decryptedKey 
-					+ "&lat=" + lat 
-					+ "&lon=" + lon);
-		} catch (URISyntaxException e) {
-			e.printStackTrace();
-		}
-		
-		HttpHeaders headers = new HttpHeaders();
-		
-		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-				
-		HttpEntity<String> entity = new HttpEntity<String>("parameter", headers);
-				
-		RestTemplate restTemplate  = new RestTemplate();
-				
-		ResponseEntity<WeatherRoot> respEntity =
-		restTemplate.exchange(
-				uri, 
-				HttpMethod.GET,
-				entity,
-				new ParameterizedTypeReference<WeatherRoot>() {});
+		WeatherRoot weather = webClient.get()
+				.uri("https://api.openweathermap.org/data/2.5/weather"
+						+ "?appid=" + decryptedKey 
+						+ "&lat=" + lat 
+						+ "&lon=" + lon)
+				.accept(MediaType.APPLICATION_JSON).exchange().flatMap(res -> {
+					return res.bodyToMono(WeatherRoot.class);
+				}).block();
 		
 		Map<String, Object> map = new HashMap<>();
-		map.put("WEATHER", respEntity.getBody().getWeather().get(0));
-		map.put("MAIN", respEntity.getBody().getMain());
-		map.put("WIND", respEntity.getBody().getWind());
+		map.put("WEATHER", weather.getWeather().get(0));
+		map.put("MAIN", weather.getMain());
+		map.put("WIND", weather.getWind());
 		
 		return map;
 	}

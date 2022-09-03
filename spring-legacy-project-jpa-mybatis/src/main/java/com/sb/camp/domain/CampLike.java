@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -27,6 +28,7 @@ import lombok.ToString;
 @Builder
 @ToString
 @Entity
+@Table(name = "campLike")
 public class CampLike {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

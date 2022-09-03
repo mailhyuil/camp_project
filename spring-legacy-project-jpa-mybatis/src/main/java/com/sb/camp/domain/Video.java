@@ -1,6 +1,5 @@
 package com.sb.camp.domain;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
@@ -12,6 +11,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.OnDelete;
@@ -36,6 +36,7 @@ import lombok.ToString;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
+@Table(name = "video")
 public class Video extends BaseEntity{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -70,9 +70,7 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) { // Spring
-																												// Data
-																												// JPA
+	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) { // Spring Data JPA										
 		String loggedInUser = principal.getName();
 
 		User foundUser = userRepository.findOneByUsername(loggedInUser);
@@ -192,10 +190,12 @@ public class BbsServiceImpl implements BbsService {
 		final int totalListCount = (int) imageRepository.count();
 		Pagination pagination = createPagination(page, totalListCount);
 
-		QueryModifiers queryModifiers = new QueryModifiers((long) pagination.getLIST_SIZE(),
-				(long) pagination.getCri()); // limit, offset
+		QueryModifiers queryModifiers = new QueryModifiers((long) pagination.getLIST_SIZE(), (long) pagination.getCri()); // limit, offset
 
-		List<Image> imageList = queryFactory.selectFrom(image).restrict(queryModifiers).fetch();
+		List<Image> imageList = queryFactory
+				.selectFrom(image)
+				.restrict(queryModifiers)
+				.fetch();
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
@@ -223,7 +223,10 @@ public class BbsServiceImpl implements BbsService {
 			bbsLikeRepository.deleteById(foundBbsLike.get().getBbsLikeId());
 		} else {
 			foundBbs.increaseLikeCnt();
-			BbsLike savedBbsLike = bbsLikeRepository.save(BbsLike.builder().bbs(foundBbs).user(foundUser).build());
+			BbsLike savedBbsLike = bbsLikeRepository.save(BbsLike.builder()
+																	.bbs(foundBbs)
+																	.user(foundUser)
+																	.build());
 			foundBbs.getBbsLikeList().add(savedBbsLike);
 		}
 
