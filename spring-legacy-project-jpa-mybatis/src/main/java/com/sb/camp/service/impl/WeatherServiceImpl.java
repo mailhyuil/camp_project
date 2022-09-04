@@ -33,7 +33,8 @@ public class WeatherServiceImpl implements WeatherService{
 				.uri("https://api.openweathermap.org/data/2.5/weather"
 						+ "?appid=" + decryptedKey 
 						+ "&lat=" + lat 
-						+ "&lon=" + lon)
+						+ "&lon=" + lon
+						+ "&units=metric")
 				.accept(MediaType.APPLICATION_JSON).exchange().flatMap(res -> {
 					return res.bodyToMono(WeatherRoot.class);
 				}).block();

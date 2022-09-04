@@ -1,73 +1,110 @@
 <!DOCTYPE html>
-<html lang="ko"
-	xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-<h1>방명록</h1>
-<table>
-    <tr>
-        <th>No.</th>
-        <th>작성일</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>추천수</th>
-    </tr>
-    <th:block th:each="bbs,index:${bbsList}">
-        <tr>
-            <td th:text="${index.count}"></td>
-            <td th:text="${bbs.createdDate}"></td>
-            <td><a th:text="${bbs.title}" th:href="@{/bbs/detail(id=${bbs.id})}"></a></td>
-            <td th:text="${bbs.createdBy}"></td>
-            <td th:text="${bbs.likeCnt}"></td>
-        </tr>
-    </th:block>
-</table>
-<a th:href="|@{/bbs/insert?id=}${campId}|">글쓰기</a>
-<ul style="list-style:none; display: flex">
-    <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
-            th:onclick="|location.href = '/bbs/board?page=1'|">&#60;&#60;</a>
-    </li>
-    <th:block th:if="${pagination.prev}">
-        <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
-                th:onclick="|fn_prev(${pagination.currentPage})|">&#60;</a>
-        </li>
-    </th:block>
-    <th:block th:each="index:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
-        <li th:style="|padding:.5rem 1rem;margin:2px;color:white;${pagination.currentPage==index?'background-color:red':'background-color:skyblue'}|">
-            <a th:onclick="|fn_pagination(${index})|"
-               th:text="${index}"></a>
-        </li>
-    </th:block>
-    <th:block th:if="${pagination.next}">
-        <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
-                th:onclick="|fn_next(${pagination.currentPage})|">&#62;</a>
-        </li>
-    </th:block>
-    <li style="padding:.5rem 1rem;margin:2px;background-color:skyblue;color:white;"><a
-            th:onclick="|location.href = '/bbs/board?page=${pagination.theLastPage}'|">&#62;&#62;</a>
-    </li>
-</ul>
-<script>
-    function fn_prev(currentPage) {
-        var page = currentPage - 1;
-        var url = "/bbs/board";
-        url = url + "?page=" + page;
-        location.href = url;
-    }
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="py-3 px-6">No.</th>
+                <th scope="col" class="py-3 px-6">작성일</th>
+                <th scope="col" class="py-3 px-6">제목</th>
+                <th scope="col" class="py-3 px-6">작성자</th>
+                <th scope="col" class="py-3 px-6">추천수</th>
+            </tr>
+        </thead>
+        <tbody>
+            <th:block th:each="bbs,index:${bbsList}">
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+                    th:onclick="|location.href='@{/bbs/detail(id=${bbs.id})}'|">
+                    <td class="py-4 px-6" th:text="${index.count}"></td>
+                    <td class="py-4 px-6" th:text="${bbs.createdDate}"></td>
+                    <td class="py-4 px-6" th:text="${bbs.title}"></td>
+                    <td class="py-4 px-6" th:text="${bbs.createdBy}"></td>
+                    <td class="py-4 px-6" th:text="${bbs.likeCnt}"></td>
+                </tr>
+            </th:block>
+        </tbody>
+    </table>
+    <div>
+        <a th:href="|@{/bbs/insert?id=}${campId}|">글쓰기</a>
+    </div>
+    <nav class="flex justify-center">
+        <ul class="inline-flex items-center -space-x-px cursor-pointer">
+            <li>
+                <a class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    th:onclick="|fn_first()|">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+                    </svg>
+                </a>
+            </li>
+            <th:block th:if="${pagination.prev}">
+                <li>
+                    <a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        th:onclick="|fn_prev(${pagination.currentPage})|">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+                        </svg>
+                    </a>
+                </li>
+            </th:block>
+            <th:block th:each="index:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+                <li>
+                    <a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        th:classappend="|${pagination.currentPage == index ? 'bg-blue-300' : ''}|"
+                        th:onclick="|fn_pagination(${index})|">
+                        <span th:text="${index}"></span>
+                    </a>
+                </li>
+            </th:block>
+            <th:block th:if="${pagination.next}">
+                <li>
+                    <a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                        th:onclick="|fn_next(${pagination.currentPage})|">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                            stroke="currentColor" class="w-5 h-5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                        </svg>
 
-    function fn_pagination(page) {
-        var url = "/bbs/board";
-        url = url + "?page=" + page;
-        location.href = url;
-    }
+                    </a>
+                </li>
+            </th:block>
+            <li>
+                <a class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                    th:onclick="|fn_last(${pagination.theLastPage})|">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <script>
+        function fn_prev(currentPage) {
+            var page = currentPage - 1;
+            var url = "/bbs/board";
+            url = url + "?page=" + page;
+            location.href = url;
+        }
 
-    function fn_next(currentPage) {
-        var page = currentPage + 1;
-        var url = "/bbs/board";
-        url = url + "?page=" + page;
-        location.href = url;
-    }
-</script>
+        function fn_pagination(page) {
+            var url = "/bbs/board";
+            url = url + "?page=" + page;
+            location.href = url;
+        }
+
+        function fn_next(currentPage) {
+            var page = currentPage + 1;
+            var url = "/bbs/board";
+            url = url + "?page=" + page;
+            location.href = url;
+        }
+    </script>
 </th:block>
+
 </html>

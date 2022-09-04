@@ -1,27 +1,37 @@
 <!DOCTYPE html>
-<html lang="ko" 
-	xmlns:th="http://www.thymeleaf.org"
-    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	layout:decorate="~{layout/layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-<h1>글쓰기</h1>
-<form th:action="@{/bbs/insert(${_csrf.parameterName}=${_csrf.token})}" method="post" enctype="multipart/form-data">
-<div>
-	<input type="hidden" name="campId" th:value="${BBS.campId}">
-    <input name="title" type="text" placeholder="제목을 입력해주세요" th:value="${BBS.title}"/>
-</div>
-<div>
-    <textarea name="content" placeholder="글을 작성해주세요"  th:value="${BBS.content}" th:text="${BBS.content}"></textarea>
-</div>
-<div>
-    <label for="image">Image File</label>
-    <input id="image" name="files" type="file" accept="image/*" multiple="multiple">
-</div>
-<div>
-    <label for="video">Video File</label>
-    <input id="video" name="file" type="file" accept="application/mp4">
-</div>
-    <button>글작성</button>
-</form>
+    <form th:action="@{/bbs/insert(${_csrf.parameterName}=${_csrf.token})}" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="campId" th:value="${BBS.campId}">
+        <div class="mb-6">
+            <input
+                class="block p-2 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                name="title" type="text" placeholder="제목을 입력해주세요" th:value="${BBS.title}" />
+        </div>
+        <div>
+            <textarea
+                class="block p-4 h-96 w-full text-gray-900 bg-gray-50 rounded-lg border border-gray-300 sm:text-md focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                name="content" placeholder="글을 작성해주세요" th:value="${BBS.content}" th:text="${BBS.content}"></textarea>
+        </div>
+        <div class="flex justify-center">
+            <div class="mx-5">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="image">Image
+                    File</label>
+                <input
+                    class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    id="image" name="files" type="file" accept="image/*" multiple="multiple">
+            </div>
+            <div class="mx-5">
+                <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300" for="video">Video
+                    File</label>
+                <input
+                    class="block w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 cursor-pointer dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    id="video" name="file" type="file" accept="application/mp4">
+            </div>
+        </div>
+        <button>글작성</button>
+    </form>
 </th:block>
+
 </html>

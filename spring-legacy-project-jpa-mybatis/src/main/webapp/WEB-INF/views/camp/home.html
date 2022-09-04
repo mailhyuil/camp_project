@@ -2,35 +2,73 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-	<h1>camp 페이지</h1>
-	<th:block th:each="camp:${campList}">
-	<div>
-	<a th:href="|@{/camp/detail?id=}${camp.campId}|">
-		<h1 th:text="${camp.facltNm}"></h1>
-	</a>
+	<div class="flex flex-col flex-1">
+		<div class="grid grid-cols-4 gap-5 p-5 flex-1">
+			<th:block th:each="camp:${campList}">
+				<div class="cursor-pointer drop-shadow-xl relative flex flex-col bg-gray-100 rounded-lg"
+					th:onclick="|location.href='@{/camp/detail?id=}${camp.campId}'|">
+					<h1 class="absolute p-5 font-bold text-gray-800" th:text="${camp.facltNm}"></h1>
+					<img class="object-cover h-full rounded-lg" th:src="${camp.firstImageUrl}">
+				</div>
+			</th:block>
+		</div>
+		<nav class="flex justify-center">
+			<ul class="inline-flex items-center -space-x-px cursor-pointer">
+				<li>
+					<a class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+						th:onclick="|fn_first()|">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+							stroke="currentColor" class="w-5 h-5">
+							<path stroke-linecap="round" stroke-linejoin="round"
+								d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+						</svg>
+					</a>
+				</li>
+				<th:block th:if="${pagination.prev}">
+					<li>
+						<a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+							th:onclick="|fn_prev(${pagination.currentPage})|">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+								stroke="currentColor" class="w-5 h-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
+							</svg>
+						</a>
+					</li>
+				</th:block>
+				<th:block th:each="index:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
+					<li>
+						<a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+							th:classappend="|${pagination.currentPage == index ? 'bg-blue-300' : ''}|"
+							th:onclick="|fn_pagination(${index})|">
+							<span th:text="${index}"></span>
+						</a>
+					</li>
+				</th:block>
+				<th:block th:if="${pagination.next}">
+					<li>
+						<a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+							th:onclick="|fn_next(${pagination.currentPage})|">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+								stroke="currentColor" class="w-5 h-5">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+							</svg>
+
+						</a>
+					</li>
+				</th:block>
+				<li>
+					<a class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+						th:onclick="|fn_last(${pagination.theLastPage})|">
+						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+							stroke="currentColor" class="w-5 h-5">
+							<path stroke-linecap="round" stroke-linejoin="round"
+								d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+						</svg>
+					</a>
+				</li>
+			</ul>
+		</nav>
 	</div>
-	</th:block>
-	<ul style="list-style: none; display: flex">
-		<li style="padding: .5rem 1rem; margin: 2px; background-color: skyblue; color: white;"><a
-				th:onclick="|fn_first()|">&#60;&#60;</a></li>
-		<th:block th:if="${pagination.prev}">
-			<li style="padding: .5rem 1rem; margin: 2px; background-color: skyblue; color: white;"><a
-					th:onclick="|fn_prev(${pagination.currentPage})|">&#60;</a></li>
-		</th:block>
-		<th:block th:each="index:${#numbers.sequence(pagination.startPage, pagination.endPage)}">
-			<li
-				th:style="|padding:.5rem 1rem;margin:2px;color:white;${pagination.currentPage==index?'background-color:red':'background-color:skyblue'}|">
-				<a th:onclick="|fn_pagination(${index})|" th:text="${index}"></a>
-			</li>
-		</th:block>
-		<th:block th:if="${pagination.next}">
-			<li style="padding: .5rem 1rem; margin: 2px; background-color: skyblue; color: white;"><a
-					th:onclick="|fn_next(${pagination.currentPage})|">&#62;</a></li>
-		</th:block>
-		<li style="padding: .5rem 1rem; margin: 2px; background-color: skyblue; color: white;"><a
-				th:onclick="|fn_last(${pagination.theLastPage})|">&#62;&#62;</a>
-		</li>
-	</ul>
 	<script>
 		function fn_prev(currentPage) {
 

@@ -1,11 +1,19 @@
-
 <th:block th:fragment="searchFragment">
-	<main>
+	<main class="m-5">
 		<form th:action="@{/camp}">
-			<input name="doNm" placeholder="도, 시">
-			<input name="sigunguNm" placeholder="시, 군, 구">
-			<input name="facltNm" placeholder="캠핑장 이름">
-			<button>검색</button>
+			<div class="grid grid-cols-4 items-center mb-6">
+				<input
+					class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					name="doNm" placeholder="도, 시">
+				<input
+					class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					name="sigunguNm" placeholder="시, 군, 구">
+				<input
+					class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+					name="facltNm" placeholder="캠핑장 이름">
+				<button
+					class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">검색</button>
+			</div>
 		</form>
 	</main>
 </th:block>

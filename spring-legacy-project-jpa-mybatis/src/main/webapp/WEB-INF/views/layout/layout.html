@@ -1,20 +1,19 @@
 <!DOCTYPE html>
-<html lang="ko" 
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security4">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security4">
 
-    <!-- config fragment 사용 -->
-    <th:block th:replace="fragment/config :: configFragment" ></th:block>
-    
-    <body>
+<!-- config fragment 사용 -->
+<th:block th:replace="fragment/config :: configFragment"></th:block>
 
-        <th:block th:replace="fragment/header :: headerFragment"></th:block>
-        
-        <th:block th:replace="fragment/home :: searchFragment"></th:block>
-        <th:block layout:fragment="content"></th:block>
-        
-        <th:block th:replace="fragment/footer :: footerFragment"> </th:block>
-    </body>
+<body class="flex flex-col w-full h-screen">
+
+    <th:block th:replace="fragment/header :: headerFragment"></th:block>
+
+    <th:block th:replace="fragment/home :: searchFragment"></th:block>
+
+    <th:block layout:fragment="content"></th:block>
+
+    <th:block th:replace="fragment/footer :: footerFragment"> </th:block>
+</body>
 
 </html>

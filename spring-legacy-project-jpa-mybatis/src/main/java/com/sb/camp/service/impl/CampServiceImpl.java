@@ -110,8 +110,8 @@ public class CampServiceImpl implements CampService {
 			int page) { // MyBatis
 
 		final int totalListCount = campDao.findCampListCnt(doNm, sigunguNm, facltNm);
-		final int PAGE_SIZE = 5;
-		final int LIST_SIZE = 5;
+		final int PAGE_SIZE = 7;
+		final int LIST_SIZE = 8;
 
 		Pagination pagination = new Pagination();
 
