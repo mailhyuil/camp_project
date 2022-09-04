@@ -2,13 +2,16 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-	<div class="flex flex-col flex-1">
-		<div class="grid grid-cols-4 gap-5 p-5 flex-1">
+	<div class="flex flex-col flex-1 ">
+		<div class="grid md:grid-cols-4 grid-rows gap-3 p-5 flex-1">
 			<th:block th:each="camp:${campList}">
-				<div class="cursor-pointer drop-shadow-xl relative flex flex-col bg-gray-100 rounded-lg"
+				<div class="h-72 w-80 cursor-pointer drop-shadow-xl relative flex flex-col bg-gray-100 rounded-lg"
 					th:onclick="|location.href='@{/camp/detail?id=}${camp.campId}'|">
-					<h1 class="absolute p-5 font-bold text-gray-800" th:text="${camp.facltNm}"></h1>
-					<img class="object-cover h-full rounded-lg" th:src="${camp.firstImageUrl}">
+					<h1 class="absolute rounded-lg shadow-lg p-1 font-bold text-white bg-black/70"
+						th:text="${camp.facltNm}"></h1>
+
+					<img class="object-cover h-full rounded-lg" th:if="${camp.firstImageUrl != null}"
+						th:src="${camp.firstImageUrl}">
 				</div>
 			</th:block>
 		</div>

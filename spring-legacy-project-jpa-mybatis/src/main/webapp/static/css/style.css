@@ -1103,6 +1103,23 @@ input:checked + .toggle-bg {
   left: 0px;
 }
 
+.inset-1\/2 {
+  top: 50%;
+  right: 50%;
+  bottom: 50%;
+  left: 50%;
+}
+
+.inset-x-2\/4 {
+  left: 50%;
+  right: 50%;
+}
+
+.inset-x-1\/2 {
+  left: 50%;
+  right: 50%;
+}
+
 .top-0 {
   top: 0px;
 }
@@ -1121,6 +1138,10 @@ input:checked + .toggle-bg {
 
 .bottom-0 {
   bottom: 0px;
+}
+
+.right-1\/2 {
+  right: 50%;
 }
 
 .z-50 {
@@ -1175,6 +1196,11 @@ input:checked + .toggle-bg {
   margin-right: 0.5rem;
 }
 
+.my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
 .mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -1201,6 +1227,34 @@ input:checked + .toggle-bg {
 
 .ml-auto {
   margin-left: auto;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
+}
+
+.ml-1 {
+  margin-left: 0.25rem;
+}
+
+.mt-3 {
+  margin-top: 0.75rem;
+}
+
+.mt-5 {
+  margin-top: 1.25rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+.mr-5 {
+  margin-right: 1.25rem;
 }
 
 .block {
@@ -1271,6 +1325,30 @@ input:checked + .toggle-bg {
   height: 24rem;
 }
 
+.h-12 {
+  height: 3rem;
+}
+
+.h-48 {
+  height: 12rem;
+}
+
+.h-24 {
+  height: 6rem;
+}
+
+.h-44 {
+  height: 11rem;
+}
+
+.h-64 {
+  height: 16rem;
+}
+
+.h-72 {
+  height: 18rem;
+}
+
 .w-64 {
   width: 16rem;
 }
@@ -1313,6 +1391,26 @@ input:checked + .toggle-bg {
 
 .w-44 {
   width: 11rem;
+}
+
+.w-12 {
+  width: 3rem;
+}
+
+.w-24 {
+  width: 6rem;
+}
+
+.w-72 {
+  width: 18rem;
+}
+
+.w-80 {
+  width: 20rem;
+}
+
+.w-48 {
+  width: 12rem;
 }
 
 .flex-1 {
@@ -1401,6 +1499,10 @@ input:checked + .toggle-bg {
   grid-template-rows: repeat(1, minmax(0, 1fr));
 }
 
+.flex-row {
+  flex-direction: row;
+}
+
 .flex-col {
   flex-direction: column;
 }
@@ -1441,6 +1543,10 @@ input:checked + .toggle-bg {
   gap: 1.25rem;
 }
 
+.gap-3 {
+  gap: 0.75rem;
+}
+
 .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 0;
   margin-right: calc(0.5rem * var(--tw-space-x-reverse));
@@ -1457,12 +1563,20 @@ input:checked + .toggle-bg {
   overflow: hidden;
 }
 
+.text-ellipsis {
+  text-overflow: ellipsis;
+}
+
 .rounded-lg {
   border-radius: 0.5rem;
 }
 
 .rounded {
   border-radius: 0.25rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
 }
 
 .rounded-l-lg {
@@ -1581,6 +1695,28 @@ input:checked + .toggle-bg {
   background-color: rgb(164 202 254 / var(--tw-bg-opacity));
 }
 
+.bg-gray-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
+
+.bg-gray-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
+}
+
+.bg-gray-300\/50 {
+  background-color: rgb(209 213 219 / 0.5);
+}
+
+.bg-gray-300\/70 {
+  background-color: rgb(209 213 219 / 0.7);
+}
+
+.bg-black\/70 {
+  background-color: rgb(0 0 0 / 0.7);
+}
+
 .bg-opacity-50 {
   --tw-bg-opacity: 0.5;
 }
@@ -1668,6 +1804,21 @@ input:checked + .toggle-bg {
   padding-bottom: 1rem;
 }
 
+.px-16 {
+  padding-left: 4rem;
+  padding-right: 4rem;
+}
+
+.px-24 {
+  padding-left: 6rem;
+  padding-right: 6rem;
+}
+
+.px-44 {
+  padding-left: 11rem;
+  padding-right: 11rem;
+}
+
 .pt-2 {
   padding-top: 0.5rem;
 }
@@ -1735,6 +1886,10 @@ input:checked + .toggle-bg {
 
 .font-bold {
   font-weight: 700;
+}
+
+.font-normal {
+  font-weight: 400;
 }
 
 .uppercase {
@@ -1811,6 +1966,21 @@ input:checked + .toggle-bg {
 .text-gray-700 {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+
+.text-gray-200 {
+  --tw-text-opacity: 1;
+  color: rgb(229 231 235 / var(--tw-text-opacity));
+}
+
+.text-gray-600 {
+  --tw-text-opacity: 1;
+  color: rgb(75 85 99 / var(--tw-text-opacity));
+}
+
+.text-blue-500 {
+  --tw-text-opacity: 1;
+  color: rgb(63 131 248 / var(--tw-text-opacity));
 }
 
 .placeholder-green-700::-moz-placeholder {
@@ -1940,6 +2110,11 @@ input:checked + .toggle-bg {
 .hover\:text-gray-700:hover {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+
+.hover\:text-yellow-500:hover {
+  --tw-text-opacity: 1;
+  color: rgb(194 120 3 / var(--tw-text-opacity));
 }
 
 .focus\:z-10:focus {
@@ -2160,6 +2335,10 @@ input:checked + .toggle-bg {
     width: auto;
   }
 
+  .sm\:w-96 {
+    width: 24rem;
+  }
+
   .sm\:text-xs {
     font-size: 0.75rem;
     line-height: 1rem;
@@ -2169,5 +2348,17 @@ input:checked + .toggle-bg {
 @media (min-width: 768px) {
   .md\:grid-cols-2 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .md\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .md\:flex-row {
+    flex-direction: row;
+  }
+
+  .md\:flex-col {
+    flex-direction: column;
   }
 }

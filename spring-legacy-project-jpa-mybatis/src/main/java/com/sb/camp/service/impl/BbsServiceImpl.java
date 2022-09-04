@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -81,11 +82,13 @@ public class BbsServiceImpl implements BbsService {
 		List<MultipartFile> imgList = files.getFiles("files");
 
 		List<Image> imgs = new ArrayList<>();
-
-		imgList.stream().map((img) -> {
-			return img.isEmpty() ? null : createImageFile(img, foundUser, bbs);
+		
+		imgList.stream().filter((item)->{
+			return !item.isEmpty();
+		}).map((img) -> {
+			return createImageFile(img, foundUser, bbs);
 		}).forEach((vo) -> imgs.add(vo));
-
+		
 		Bbs savedBbs = bbsRepository.save(bbs);
 
 		if (!imgs.isEmpty()) {
@@ -166,8 +169,10 @@ public class BbsServiceImpl implements BbsService {
 		List<MultipartFile> imgList = files.getFiles("img_files");
 		List<Image> newImgs = new ArrayList<>();
 
-		imgList.stream().map((img) -> {
-			return img.isEmpty() ? null : createImageFile(img, foundUser, foundBbs);
+		imgList.stream().filter((item)->{
+			return !item.isEmpty();
+		}).map((img) -> {
+			return createImageFile(img, foundUser, foundBbs);
 		}).forEach((vo) -> newImgs.add(vo));
 
 		if (!newImgs.isEmpty()) {

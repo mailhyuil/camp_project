@@ -8,11 +8,11 @@
 <body class="flex flex-col w-full h-screen">
 
     <th:block th:replace="fragment/header :: headerFragment"></th:block>
-
     <th:block th:replace="fragment/home :: searchFragment"></th:block>
 
-    <th:block layout:fragment="content"></th:block>
-
+    <main class="px-44">
+        <th:block layout:fragment="content"></th:block>
+    </main>
     <th:block th:replace="fragment/footer :: footerFragment"> </th:block>
 </body>
 
