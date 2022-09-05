@@ -71,7 +71,9 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) { // Spring Data JPA										
+	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) { // Spring
+																												// Data
+																												// JPA
 		String loggedInUser = principal.getName();
 
 		User foundUser = userRepository.findOneByUsername(loggedInUser);
@@ -82,13 +84,13 @@ public class BbsServiceImpl implements BbsService {
 		List<MultipartFile> imgList = files.getFiles("files");
 
 		List<Image> imgs = new ArrayList<>();
-		
-		imgList.stream().filter((item)->{
+
+		imgList.stream().filter((item) -> {
 			return !item.isEmpty();
 		}).map((img) -> {
 			return createImageFile(img, foundUser, bbs);
 		}).forEach((vo) -> imgs.add(vo));
-		
+
 		Bbs savedBbs = bbsRepository.save(bbs);
 
 		if (!imgs.isEmpty()) {
@@ -123,7 +125,7 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Map<String, Object> getPaginationAndBbsList(int page, long campId) { // MyBatis
 		final int totalListCount = bbsDao.findBoardListCnt(campId);
-		Pagination pagination = createPagination(page, totalListCount);
+		Pagination pagination = createPagination(page, totalListCount, 5, 5);
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
@@ -157,8 +159,8 @@ public class BbsServiceImpl implements BbsService {
 		bbsRepository.save(foundBbs);
 
 		List<Image> imgs = imageRepository.findByBbsId(foundBbs.getId());
-		
-		imgs.stream().forEach((img)->{
+
+		imgs.stream().forEach((img) -> {
 			File imgFile = new File("c:/Temp/upload", img.getUuidImgName());
 			if (imgFile.exists()) {
 				imgFile.delete();
@@ -169,7 +171,7 @@ public class BbsServiceImpl implements BbsService {
 		List<MultipartFile> imgList = files.getFiles("img_files");
 		List<Image> newImgs = new ArrayList<>();
 
-		imgList.stream().filter((item)->{
+		imgList.stream().filter((item) -> {
 			return !item.isEmpty();
 		}).map((img) -> {
 			return createImageFile(img, foundUser, foundBbs);
@@ -178,7 +180,7 @@ public class BbsServiceImpl implements BbsService {
 		if (!newImgs.isEmpty()) {
 			imageRepository.saveAll(newImgs);
 		}
-		
+
 		if (!file.isEmpty()) {
 			try {
 				Video video = Video.builder().bbs(foundBbs).data(file.getBytes()).user(foundUser).build();
@@ -193,14 +195,12 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Map<String, Object> getPaginationAndImageList(int page) { // QueryDSL
 		final int totalListCount = (int) imageRepository.count();
-		Pagination pagination = createPagination(page, totalListCount);
+		Pagination pagination = createPagination(page, totalListCount, 5, 8);
 
-		QueryModifiers queryModifiers = new QueryModifiers((long) pagination.getLIST_SIZE(), (long) pagination.getCri()); // limit, offset
+		QueryModifiers queryModifiers = new QueryModifiers((long) pagination.getLIST_SIZE(),
+				(long) pagination.getCri()); // limit, offset
 
-		List<Image> imageList = queryFactory
-				.selectFrom(image)
-				.restrict(queryModifiers)
-				.fetch();
+		List<Image> imageList = queryFactory.selectFrom(image).restrict(queryModifiers).fetch();
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
@@ -228,10 +228,7 @@ public class BbsServiceImpl implements BbsService {
 			bbsLikeRepository.deleteById(foundBbsLike.get().getBbsLikeId());
 		} else {
 			foundBbs.increaseLikeCnt();
-			BbsLike savedBbsLike = bbsLikeRepository.save(BbsLike.builder()
-																	.bbs(foundBbs)
-																	.user(foundUser)
-																	.build());
+			BbsLike savedBbsLike = bbsLikeRepository.save(BbsLike.builder().bbs(foundBbs).user(foundUser).build());
 			foundBbs.getBbsLikeList().add(savedBbsLike);
 		}
 		return foundBbs.getLikeCnt();
@@ -250,12 +247,8 @@ public class BbsServiceImpl implements BbsService {
 	private Image createImageFile(MultipartFile img, User User, Bbs bbs) {
 		String uuid = UUID.randomUUID().toString();
 		String uuidImg = uuid + img.getOriginalFilename();
-		Image image = Image.builder()
-				.uuidImgName(uuidImg)
-				.originalImgName(img.getOriginalFilename())
-				.user(User)
-				.bbs(bbs)
-				.build();
+		Image image = Image.builder().uuidImgName(uuidImg).originalImgName(img.getOriginalFilename()).user(User)
+				.bbs(bbs).build();
 
 		File uploadFile = new File("c:/Temp/upload/", uuidImg);
 
@@ -270,15 +263,15 @@ public class BbsServiceImpl implements BbsService {
 	/**
 	 * 
 	 * @Author sangb
-	 * @Date 2022. 8. 31.
+	 * @Date 2022. 9. 5.
 	 * @Method createPagination
 	 * @param page
 	 * @param totalListCount
+	 * @param PAGE_SIZE
+	 * @param LIST_SIZE
 	 * @return Pagination
 	 */
-	private Pagination createPagination(int page, int totalListCount) {
-		final int PAGE_SIZE = 5;
-		final int LIST_SIZE = 5;
+	private Pagination createPagination(int page, int totalListCount, int PAGE_SIZE, int LIST_SIZE) {
 
 		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
 

@@ -23,6 +23,8 @@
 		doNm,
 		featureNm,
 		sigunguNm,
+		sbrsCl,
+		glampInnerFclty,
 		zipcode,
 		addr1,
 		tel,
@@ -40,6 +42,8 @@
 			#{vo.doNm},
 			#{vo.featureNm},
 			#{vo.sigunguNm},
+			#{vo.sbrsCl},
+			#{vo.glampInnerFclty},
 			#{vo.zipcode},
 			#{vo.addr1},
 			#{vo.tel},
@@ -59,6 +63,8 @@
 		doNm,
 		featureNm,
 		sigunguNm,
+		sbrsCl,
+		glampInnerFclty,
 		zipcode,
 		addr1,
 		tel,
@@ -66,13 +72,16 @@
 		firstImageUrl,
 		mapX,
 		mapY
-		) VALUES (
+		)
+		VALUES (
 		#{facltNm},
 		#{lineIntro},
 		#{intro},
 		#{doNm},
 		#{featureNm},
 		#{sigunguNm},
+		#{sbrsCl},
+		#{glampInnerFclty},
 		#{zipcode},
 		#{addr1},
 		#{tel},
@@ -97,35 +106,42 @@
 
 	<select id="findCampListByKeywords" resultType="Camp">
 		SELECT camp_id,
-				addr1,
-				doNm,
-				facltNm,
-				featureNm,
-				firstImageUrl,
-				homepage,
-				intro,
-				likeCnt,
-				lineIntro,
-				mapX,
-				mapY,
-				sigunguNm,
-				tel,
-				zipcode
+		addr1,
+		doNm,
+		facltNm,
+		featureNm,
+		firstImageUrl,
+		homepage,
+		intro,
+		likeCnt,
+		lineIntro,
+		mapX,
+		mapY,
+		sigunguNm,
+		sbrsCl,
+		glampInnerFclty,
+		tel,
+		zipcode
 		FROM (
 		SELECT * FROM camp
-		WHERE doNm LIKE CONCAT('%', #{doNm}, '%')
+		WHERE doNm LIKE
+		CONCAT('%', #{doNm}, '%')
 		AND
-		sigunguNm LIKE CONCAT('%', #{sigunguNm}, '%')
+		sigunguNm LIKE CONCAT('%',
+		#{sigunguNm},
+		'%')
 		AND facltNm LIKE
 		CONCAT('%', #{facltNm}, '%')
 		) AS SUB
-		LIMIT #{cri}, #{LIST_SIZE}
+		LIMIT #{cri},
+		#{LIST_SIZE}
 	</select>
-	
+
 	<update id="update" parameterType="Camp">
 		UPDATE camp
 		SET
-		likeCnt = #{likeCnt}
+		likeCnt =
+		#{likeCnt}
 		WHERE camp_id = #{campId}
 	</update>
 

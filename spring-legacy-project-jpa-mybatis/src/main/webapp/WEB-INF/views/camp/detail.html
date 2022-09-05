@@ -3,33 +3,39 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 	<div>
-		<div class="p-3 flex font-bold items-center border-y">
+		<div class="p-3 text-gray-500 flex justify-between font-medium items-center border-y">
 			<img th:src="|http://openweathermap.org/img/w/${WEATHER.icon}.png|">
-			<h5
-				th:text="|기온:${MAIN.temp}도   체감온도:${MAIN.feels_like}도   최저기온:${MAIN.temp_min}도   최고기온:${MAIN.temp_max}도   습도:${MAIN.humidity}   풍속:${WIND.speed}|">
-			</h5>
+			<p th:text="|기온 ${MAIN.temp}도|"></p>
+			<p th:text="|체감온도 ${MAIN.feels_like}도|"></p>
+			<p th:text="|최저기온 ${MAIN.temp_min}도|"></p>
+			<p th:text="|최고기온 ${MAIN.temp_max}도|"></p>
+			<p th:text="|습도 ${MAIN.humidity}|"></p>
+			<p th:text="|풍속 ${WIND.speed}|"></p>
 		</div>
 		<div class="flex py-3">
 			<img class="flex-1 rounded" th:src="${CAMP.firstImageUrl}" />
 			<div class="px-3 flex flex-col flex-2 text-ellipsis overflow-hidden">
 				<div>
-					<h5 class="p-3 font-bold text-lg" th:text="${CAMP.facltNm}"></h5>
+					<div class="flex items-center">
+						<h5 class="p-3 font-bold text-lg" th:text="${CAMP.facltNm}"></h5>
+						<h5 class="ml-5 text-gray-500 text-sm text-light" th:text="${CAMP.lineIntro}"></h5>
+					</div>
 					<h5 th:text="${CAMP.intro}"></h5>
 				</div>
 
-				<div class="my-3 p-3 border-y">
-					<h5 th:text="${CAMP.lineIntro}"></h5>
+				<div class="my-3 py-2 border-y text-sm">
+					<h5 class="my-2" th:text="${CAMP.glampInnerFclty}"></h5>
+					<h5 class="my-2" th:text="${CAMP.sbrsCl}"></h5>
 				</div>
 
-				<div class="flex justify-between rounded bg-gray-100">
-					<div class="font-medium p-3">
-						<h5 th:text="${CAMP.featureNm}"></h5>
-						<h5 th:text="${CAMP.addr1}"></h5>
-						<h5 th:text="${CAMP.tel}"></h5>
-						<h5 class="text-blue-500 hover:text-yellow-500"><a th:href="${CAMP.homepage}"
+				<div class="flex justify-between rounded">
+					<div class="font-medium">
+						<h5 th:text="|Address. ${CAMP.addr1}|"></h5>
+						<h5 class="my-2" th:text="|Tel. ${CAMP.tel}|"></h5>
+						<h5 class="text-blue-500 hover:text-yellow-500 text-sm"><a th:href="${CAMP.homepage}"
 								th:text="${CAMP.homepage}"></a></h5>
 					</div>
-					<div class="rounded" id="map" style="width:600px;height:350px;"></div>
+					<div class="rounded" id="map" style="min-width:20rem;height:20rem;"></div>
 				</div>
 			</div>
 		</div>

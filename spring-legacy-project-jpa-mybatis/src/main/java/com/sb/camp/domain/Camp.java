@@ -39,6 +39,10 @@ public class Camp {
 	private String doNm;
 	private String featureNm;
 	private String sigunguNm;
+	
+	private String sbrsCl;
+	private String glampInnerFclty;
+	
 	private String zipcode;
 	private String addr1;
 	private String tel;
