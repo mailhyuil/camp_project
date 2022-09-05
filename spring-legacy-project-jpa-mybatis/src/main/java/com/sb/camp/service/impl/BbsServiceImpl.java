@@ -214,7 +214,7 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public void likeBbs(long bbsId, String username) { // Spring Data JPA
+	public int likeBbs(long bbsId, String username) { // Spring Data JPA
 		Bbs foundBbs = bbsRepository.findById(bbsId).orElseThrow(() -> {
 			throw new CustomException(ErrorCode.NOT_FOUND_POST);
 		});
@@ -234,7 +234,7 @@ public class BbsServiceImpl implements BbsService {
 																	.build());
 			foundBbs.getBbsLikeList().add(savedBbsLike);
 		}
-
+		return foundBbs.getLikeCnt();
 	}
 
 	/**

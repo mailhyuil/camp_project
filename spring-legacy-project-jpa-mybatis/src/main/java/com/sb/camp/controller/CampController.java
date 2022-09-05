@@ -54,8 +54,10 @@ public class CampController {
 	}
 
 	@GetMapping("/like/{id}")
+	@ResponseBody
 	public String like(@PathVariable("id") long campId, Principal principal) {
-		campService.likeCamp(campId, principal.getName());
-		return "redirect:/camp/detail?id=" + campId;
+		int res = campService.likeCamp(campId, principal.getName());
+		
+		return res + "";
 	}
 }

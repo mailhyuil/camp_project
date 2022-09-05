@@ -11,5 +11,5 @@ public interface CampService {
 	
 	public Camp getCampById(long id);
 	
-	public void likeCamp(long id, String username);
+	public int likeCamp(long id, String username);
 }

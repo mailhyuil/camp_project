@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -98,8 +99,9 @@ public class BbsController {
     }
     
     @GetMapping("/likeBbs/{id}")
+    @ResponseBody
     public String likeBbs(@PathVariable(name = "id") long bbsId, Principal principal) {
-    	bbsService.likeBbs(bbsId, principal.getName());
-    	return "redirect:/bbs/detail?id=" + bbsId;
+    	int res = bbsService.likeBbs(bbsId, principal.getName());
+    	return res + "";
     }
 }

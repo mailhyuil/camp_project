@@ -132,7 +132,7 @@ public class CampServiceImpl implements CampService {
 
 	@Override
 	@Transactional
-	public void likeCamp(long campId, String username) { // Spring Data JPA
+	public int likeCamp(long campId, String username) { // Spring Data JPA
 
 		Camp foundCamp = campRepository.findById(campId).orElseThrow(() -> {
 			throw new CustomException(ErrorCode.NOT_FOUND_CAMP, "ID에 맞는 캠핑장이 없습니다");
@@ -154,6 +154,6 @@ public class CampServiceImpl implements CampService {
 
 			foundCamp.getCampLikeList().add(savedCampLike);
 		}
-
+		return foundCamp.getLikeCnt();
 	}
 }

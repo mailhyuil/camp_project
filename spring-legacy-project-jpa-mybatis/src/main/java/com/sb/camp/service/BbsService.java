@@ -27,5 +27,5 @@ public interface BbsService {
 
 	public Video getVideoByBbsId(long id);
 
-	public void likeBbs(long bbsId, String username);
+	public int likeBbs(long bbsId, String username);
 }
