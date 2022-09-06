@@ -1,7 +1,7 @@
 <!--headerFragment 선언-->
 <div th:fragment="headerFragment" class="flex justify-end border-b text-gray-800 font-bold text-lg">
 	<div class="absolute inset-x-1/2 flex flex-col justify-center items-center">
-		<h1 class="text-center w-48 cursor-pointer uppercase text-lg" th:onclick="|location.href='@{/}'|">eying-camp
+		<h1 class="text-center w-48 cursor-pointer font-logo hover:text-black text-primary" th:onclick="|location.href='@{/}'|">Eying-Camp
 		</h1>
 		<div>
 			<div class="face">
@@ -19,7 +19,6 @@
 			<li class="mx-5"><a th:href="@{/bbs/collection}">둘러보기</a></li>
 			<li class="mx-5" sec:authorize="!isAuthenticated()"><a th:href="@{/user/login}">로그인</a></li>
 			<li class="mx-5" sec:authorize="!isAuthenticated()"><a th:href="@{/user/join}">회원가입</a></li>
-			<li class="mx-5" sec:authorize="isAuthenticated()"><a th:href="@{/user/join}">마이페이지</a></li>
 			<li class="mx-5" sec:authorize="isAuthenticated()"><a class="cursor-pointer" onclick="logout()">로그아웃</a>
 			</li>
 		</ul>

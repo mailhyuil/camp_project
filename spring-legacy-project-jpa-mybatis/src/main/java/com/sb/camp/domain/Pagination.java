@@ -34,7 +34,7 @@ public class Pagination {
         this.PAGE_SIZE = PAGE_SIZE;
         this.LIST_SIZE = LIST_SIZE;
 
-        this.theLastPage = (int) Math.ceil(totalListSize / (double) LIST_SIZE); // * int값으로만 나누면 자동 형변환 돼버린다
+        this.theLastPage = (int) Math.ceil(totalListSize / (double) LIST_SIZE);
         
         this.currentPage = currentPage;
 

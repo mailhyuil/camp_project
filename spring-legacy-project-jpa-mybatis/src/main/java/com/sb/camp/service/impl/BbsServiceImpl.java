@@ -71,9 +71,9 @@ public class BbsServiceImpl implements BbsService {
 	}
 
 	@Override
-	public int insertBbs(Bbs bbs, MultipartFile file, MultipartHttpServletRequest files, Principal principal) { // Spring
-																												// Data
-																												// JPA
+	public int insertBbs(Bbs bbs, MultipartFile file, 
+			MultipartHttpServletRequest files, Principal principal) { // Spring Data JPA
+		
 		String loggedInUser = principal.getName();
 
 		User foundUser = userRepository.findOneByUsername(loggedInUser);

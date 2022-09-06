@@ -1,20 +1,13 @@
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
-<!--configFragment 선언-->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+	
 <th:block th:fragment="configFragment">
+	<link rel="stylesheet" th:href="|@{/static/css/style.css}?asdssssf|">
+	<link rel="stylesheet" type="text/css" th:href="|@{/static/css/Face.css}?asdf|">
 
-    <!-- 이 영역에 공통으로 사용할 css, js library를 선언한다. -->
-    <link rel="stylesheet" th:href="|@{/static/css/style.css}?asdssssf|">
-    <!-- <script th:src="@{/js/common/common.js}"></script> -->
+	<script th:src="@{/static/js/Face.js}"></script>
 
-    <!-- Content Page의 CSS fragment 삽입 -->
-    <th:block layout:fragment="css">
-        <link rel="stylesheet" type="text/css" th:href="|@{/static/css/Face.css}?asdf|">
-    </th:block>
-    <!-- Content Page의 script fragment 삽입 -->
-    <th:block layout:fragment="script">
-        <script th:src="@{/static/js/Face.js}"></script>
-    </th:block>
-    <title>아잉캠프</title>
+	<title>아잉캠프</title>
 </th:block>
 
 </html>

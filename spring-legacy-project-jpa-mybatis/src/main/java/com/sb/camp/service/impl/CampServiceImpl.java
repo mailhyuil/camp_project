@@ -85,6 +85,10 @@ public class CampServiceImpl implements CampService {
 				new ParameterizedTypeReference<Root>() {
 				});
 		
+		List<Camp> camps = responseEntity.getBody().response.body.items.item;
+		
+		campDao.insertAPI(camps);
+		
 //		WebClient webClient = WebClient.create("http://apis.data.go.kr/B551011/GoCamping/basedList");
 //		
 //		Root root = webClient.get()
@@ -99,15 +103,11 @@ public class CampServiceImpl implements CampService {
 //				.exchange().flatMap(res -> {
 //					return res.bodyToMono(Root.class);
 //				}).block();
-		
-		List<Camp> camps = responseEntity.getBody().response.body.items.item;
-
-		campDao.insertAPI(camps);
 	}
 
 	@Override
-	public Map<String, Object> getPaginationAndCampListByKeywords(String doNm, String sigunguNm, String facltNm,
-			int page) { // MyBatis
+	public Map<String, Object> getPaginationAndCampListByKeywords(
+			String doNm, String sigunguNm, String facltNm, int page) { // MyBatis
 
 		final int totalListCount = campDao.findCampListCnt(doNm, sigunguNm, facltNm);
 		final int PAGE_SIZE = 7;
