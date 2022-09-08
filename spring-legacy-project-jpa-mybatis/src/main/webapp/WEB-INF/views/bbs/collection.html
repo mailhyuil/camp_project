@@ -66,25 +66,34 @@
         </ul>
     </nav>
     <script>
+        let url = "/bbs/collection";
+        
         function fn_prev(currentPage) {
-            var page = currentPage - 1;
-            var url = "/bbs/collection";
+        	const page = currentPage - 1;
             url = url + "?page=" + page;
             location.href = url;
         }
 
         function fn_pagination(page) {
-            var url = "/bbs/collection";
             url = url + "?page=" + page;
             location.href = url;
         }
 
         function fn_next(currentPage) {
-            var page = currentPage + 1;
-            var url = "/bbs/collection";
+            const page = currentPage + 1;
             url = url + "?page=" + page;
             location.href = url;
         }
+        
+		function fn_first() {
+            url = url + "?page=1";
+			location.href = url;
+		}
+
+		function fn_last(theLastPage) {
+            url = url + "?page=" + theLastPage;
+			location.href = url;
+		}
     </script>
 </th:block>
 

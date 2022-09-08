@@ -74,16 +74,18 @@
 		</nav>
 	</div>
 	<script>
+		let url = "/camp";
+		
 		function fn_prev(currentPage) {
 
 			const urlParams = new URLSearchParams(location.search);
-			var page = currentPage - 1;
+			const page = currentPage - 1;
 
 			const doNm = urlParams.get('doNm')
 			const sigunguNm = urlParams.get('sigunguNm')
 			const facltNm = urlParams.get('facltNm')
 
-			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
+			url += `?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
 			location.href = url;
 		}
 
@@ -93,12 +95,13 @@
 			const doNm = urlParams.get('doNm')
 			const sigunguNm = urlParams.get('sigunguNm')
 			const facltNm = urlParams.get('facltNm')
-			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
+			
+			url += `?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
 			location.href = url;
 		}
 
 		function fn_next(currentPage) {
-			var page = currentPage + 1;
+			const page = currentPage + 1;
 
 			const urlParams = new URLSearchParams(location.search);
 
@@ -106,7 +109,7 @@
 			const sigunguNm = urlParams.get('sigunguNm')
 			const facltNm = urlParams.get('facltNm')
 
-			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
+			url += `?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
 			location.href = url;
 		}
 
@@ -117,7 +120,7 @@
 			const sigunguNm = urlParams.get('sigunguNm')
 			const facltNm = urlParams.get('facltNm')
 
-			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=1`;
+			url += `?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=1`;
 			location.href = url;
 		}
 
@@ -128,7 +131,7 @@
 			const sigunguNm = urlParams.get('sigunguNm')
 			const facltNm = urlParams.get('facltNm')
 
-			var url = `/camp?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${theLastPage}`;
+			url += `?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${theLastPage}`;
 			location.href = url;
 		}
 	</script>
