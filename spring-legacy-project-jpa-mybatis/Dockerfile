@@ -1,6 +1,5 @@
 FROM maven AS builder
 
-
 WORKDIR /usr/src/camp
 COPY pom.xml .
 
@@ -12,7 +11,7 @@ RUN mvn package
 FROM openjdk
 
 WORKDIR /app
-COPY --from=builder /usr/src/camp/target/camp-1.0.0.war .
+COPY --from=builder /usr/src/camp/target/camp-1.0.0-BUILD-SNAPSHOT.war .
 
 EXPOSE 80
-ENTRYPOINT ["java", "-war", "/app/camp-1.0.0.war"]
+ENTRYPOINT ["java", "-war", "/app/camp-1.0.0-BUILD-SNAPSHOT.war"]

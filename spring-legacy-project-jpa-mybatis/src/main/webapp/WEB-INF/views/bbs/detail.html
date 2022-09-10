@@ -47,7 +47,7 @@
 		/*<![CDATA[*/
 		const likeCnt = document.querySelector(".likeCnt")
 		likeCnt.onclick = () => {
-			fetch("http://localhost:8080" + /*[[|@{/bbs/likeBbs}/${bbs.id}|]]*/)
+			fetch(/*[[|@{/bbs/likeBbs}/${bbs.id}|]]*/)
 				.then(res => res.text())
 				.then(result => {
 					likeCnt.querySelector("p").textContent = result;
@@ -58,12 +58,12 @@
 	</script>
 	<script th:inline="javascript">
 		/*<![CDATA[*/
-		fetch("http://localhost:8080/video/" + /*[[${bbs.id}]]*/ )
+		fetch(/*[[|@{/video}/${bbs.id}|]]*/)
 			.then(res => {
 				if (res.ok) {
 					const videoScreen = document.createElement("video");
 					/* get videoData */
-					videoScreen.src = "http://localhost:8080/video/" + /*[[${bbs.id}]]*/;
+					videoScreen.src = /*[[|@{/video}/${bbs.id}|]]*/;
 					videoScreen.setAttribute("controls", true);
 					document.querySelector(".video_list").appendChild(videoScreen);
 				}
