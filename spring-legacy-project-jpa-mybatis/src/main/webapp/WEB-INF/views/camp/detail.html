@@ -3,7 +3,7 @@
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
 	<div>
-		<div class="p-3 text-gray-500 flex justify-between font-medium items-center border-y">
+		<div class="flex justify-between font-medium items-center text-sm xl:text-md border-y p-3 text-gray-500">
 			<img th:src="|http://openweathermap.org/img/w/${WEATHER.icon}.png|">
 			<p th:text="|기온 ${MAIN.temp}도|"></p>
 			<p th:text="|체감온도 ${MAIN.feels_like}도|"></p>
@@ -12,7 +12,7 @@
 			<p th:text="|습도 ${MAIN.humidity}|"></p>
 			<p th:text="|풍속 ${WIND.speed}|"></p>
 		</div>
-		<div class="flex py-3">
+		<div class="flex py-3 2xl:flex-row flex-col">
 			<img class="flex-1 w-full h-full rounded" th:src="${CAMP.firstImageUrl}" />
 			<div class="px-3 flex flex-col flex-2 text-ellipsis overflow-hidden">
 				<div>

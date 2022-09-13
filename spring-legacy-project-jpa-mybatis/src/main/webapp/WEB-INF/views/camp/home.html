@@ -2,12 +2,12 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layout/layout}">
 <th:block layout:fragment="content">
-	<div class="flex flex-col flex-1 ">
-		<div class="grid lg:grid-cols-4 grid-rows gap-3 p-5 flex-1">
+	<div class="flex flex-col flex-1">
+		<div class="grid lg:grid-cols-4 grid-rows lg:gap-2 gap-y-10 p-5 flex-1">
 			<th:block th:each="camp:${campList}">
-				<div class="camp h-72 w-80 cursor-pointer drop-shadow-xl relative flex flex-col bg-gray-100 rounded-lg"
+				<div class="camp h-72 cursor-pointer drop-shadow-xl relative flex flex-col bg-gray-100 rounded-lg"
 					th:onclick="|location.href='@{/camp/detail?id=}${camp.campId}'|">
-					<img class="object-cover w-full h-full rounded-t-lg" th:if="${camp.firstImageUrl != null}"
+					<img class=" object-cover w-auto h-full rounded-t-lg" th:if="${camp.firstImageUrl != null}"
 						th:src="${camp.firstImageUrl}">
 					<h1 class="rounded-lg shadow-lg p-1 font-bold text-gray-700 text-center" th:text="${camp.facltNm}">
 					</h1>
@@ -75,7 +75,7 @@
 	</div>
 	<script>
 		let url = "/camp";
-		
+
 		function fn_prev(currentPage) {
 
 			const urlParams = new URLSearchParams(location.search);
@@ -95,7 +95,7 @@
 			const doNm = urlParams.get('doNm')
 			const sigunguNm = urlParams.get('sigunguNm')
 			const facltNm = urlParams.get('facltNm')
-			
+
 			url += `?doNm=${doNm}&sigunguNm=${sigunguNm}&facltNm=${facltNm}&page=${page}`;
 			location.href = url;
 		}
