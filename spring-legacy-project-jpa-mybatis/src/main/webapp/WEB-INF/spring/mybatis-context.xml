@@ -12,7 +12,7 @@
 	<!-- dataSource -->
 	<bean id="ds" class="org.apache.commons.dbcp2.BasicDataSource">
 		<property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-		<property name="url" value="jdbc:mysql://localhost:3306/campdb?serverTimezone=Asia/Seoul&amp;allowPublicKeyRetrieval=true&amp;useSSL=false"/>
+		<property name="url" value="jdbc:mysql://mysql-container:3306/campdb?serverTimezone=Asia/Seoul&amp;allowPublicKeyRetrieval=true&amp;useSSL=false"/>
 		<property name="username" value="${mysql.username}"/>
 		<property name="password" value="${mysql.password}"/>
 	</bean>

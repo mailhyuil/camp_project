@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,7 +41,7 @@ import com.sb.camp.service.BbsService;
 @Service
 @Transactional
 public class BbsServiceImpl implements BbsService {
-
+	private final String uploadDir;
 	private final BbsDao bbsDao;
 	private final BbsRepository bbsRepository;
 	private final BbsLikeRepository bbsLikeRepository;
@@ -52,9 +51,12 @@ public class BbsServiceImpl implements BbsService {
 	private final CampRepository campRepository;
 	private final JPAQueryFactory queryFactory;
 
-	public BbsServiceImpl(BbsDao bbsDao, BbsRepository bbsRepository, BbsLikeRepository bbsLikeRepository,
-			UserRepository userRepository, ImageRepository imageRepository, VideoRepository videoRepository,
-			CampRepository campRepository, JPAQueryFactory queryFactory) {
+
+
+	public BbsServiceImpl(String uploadDir, BbsDao bbsDao, BbsRepository bbsRepository,
+			BbsLikeRepository bbsLikeRepository, UserRepository userRepository, ImageRepository imageRepository,
+			VideoRepository videoRepository, CampRepository campRepository, JPAQueryFactory queryFactory) {
+		this.uploadDir = uploadDir;
 		this.bbsDao = bbsDao;
 		this.bbsRepository = bbsRepository;
 		this.bbsLikeRepository = bbsLikeRepository;
@@ -139,7 +141,7 @@ public class BbsServiceImpl implements BbsService {
 		List<Image> imgs = bbsDao.findImagesByBbsId(id);
 		for (Image img : imgs) {
 
-			File file = new File("c:/Temp/upload", img.getUuidImgName());
+			File file = new File(uploadDir, img.getUuidImgName());
 
 			if (file.exists()) {
 				file.delete();
@@ -161,7 +163,7 @@ public class BbsServiceImpl implements BbsService {
 		List<Image> imgs = imageRepository.findByBbsId(foundBbs.getId());
 
 		imgs.stream().forEach((img) -> {
-			File imgFile = new File("c:/Temp/upload", img.getUuidImgName());
+			File imgFile = new File(uploadDir, img.getUuidImgName());
 			if (imgFile.exists()) {
 				imgFile.delete();
 				imageRepository.deleteById(img.getImageId());
@@ -250,7 +252,7 @@ public class BbsServiceImpl implements BbsService {
 		Image image = Image.builder().uuidImgName(uuidImg).originalImgName(img.getOriginalFilename()).user(User)
 				.bbs(bbs).build();
 
-		File uploadFile = new File("c:/Temp/upload/", uuidImg);
+		File uploadFile = new File(uploadDir, uuidImg);
 
 		try {
 			img.transferTo(uploadFile);
