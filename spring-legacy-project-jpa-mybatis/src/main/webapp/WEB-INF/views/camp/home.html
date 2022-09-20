@@ -7,8 +7,10 @@
 			<th:block th:each="camp:${campList}">
 				<div class="camp h-72 cursor-pointer drop-shadow-xl relative flex flex-col bg-gray-100 rounded-lg"
 					th:onclick="|location.href='@{/camp/detail?id=}${camp.campId}'|">
-					<img class=" object-cover w-auto h-full rounded-t-lg" th:if="${camp.firstImageUrl != null}"
+					<img class=" object-cover w-auto h-full rounded-t-lg" th:if="${camp.firstImageUrl != ''}"
 						th:src="${camp.firstImageUrl}">
+					<img class=" object-cover w-auto h-full rounded-t-lg" th:if="${camp.firstImageUrl == ''}"
+						th:src="|@{/static}/img/EyingCamp.jpg|">
 					<h1 class="rounded-lg shadow-lg p-1 font-bold text-gray-700 text-center" th:text="${camp.facltNm}">
 					</h1>
 					<h1 class="absolute shadow-lg top-2 right-2 bg-white/60 rounded-full p-1 font-semibold"

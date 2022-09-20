@@ -36,6 +36,10 @@ public class Pagination {
 
         this.theLastPage = (int) Math.ceil(totalListSize / (double) LIST_SIZE);
         
+        if(this.theLastPage == 0) {
+        	this.theLastPage = 1;
+        }
+        
         this.currentPage = currentPage;
 
         this.endPage = (int) (Math.ceil(currentPage / (double) PAGE_SIZE)) * PAGE_SIZE;

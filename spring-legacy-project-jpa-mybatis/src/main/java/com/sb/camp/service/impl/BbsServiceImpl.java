@@ -212,7 +212,11 @@ public class BbsServiceImpl implements BbsService {
 
 	@Override
 	public Video getVideoByBbsId(long id) { // MyBatis
-		return bbsDao.findVideoByBbsId(id);
+		if(bbsDao.findVideoByBbsId(id) != null) {
+			return bbsDao.findVideoByBbsId(id);			
+		} else {
+			throw new CustomException(ErrorCode.NOT_FOUND_VIDEO,"비디오를 찾지 못했습니다");
+		}
 	}
 
 	@Override

@@ -13,14 +13,19 @@
 			<p th:text="|풍속 ${WIND.speed}|"></p>
 		</div>
 		<div class="flex py-3 2xl:flex-row flex-col">
-			<img class="flex-1 w-full h-full rounded" th:src="${CAMP.firstImageUrl}" />
-			<div class="px-3 flex flex-col flex-2 text-ellipsis overflow-hidden">
+			<div class="2xl:w-[80rem] 2xl:h-[30rem] flex justify-center">
+				<img class="object-cover rounded" th:if="${CAMP.firstImageUrl!=''}" th:src="${CAMP.firstImageUrl}" />
+				<img class="object-cover rounded" th:if="${CAMP.firstImageUrl==''}"
+					th:src="|@{/static}/img/EyingCamp.jpg|" />
+			</div>
+			<div class="px-3 w-full flex flex-col flex-2 text-ellipsis overflow-hidden">
 				<div>
 					<div class="flex items-center">
 						<h5 class="p-3 font-bold text-lg" th:text="${CAMP.facltNm}"></h5>
 						<h5 class="ml-5 text-gray-500 text-sm text-light" th:text="${CAMP.lineIntro}"></h5>
 					</div>
 					<h5 th:text="${CAMP.intro}"></h5>
+					<h5 class="text-gray-200" th:if="${CAMP.intro == ''}" th:text="|intro가 등록되지 않았습니다.|"></h5>
 				</div>
 
 				<div class="my-3 py-2 border-y text-sm">
@@ -68,7 +73,6 @@
 		src="//dapi.kakao.com/v2/maps/sdk.js?appkey=2e1d9784e6d6ac580791dd4e2c958267&libraries=services"></script>
 	<script th:inline="javascript">
 		/*<![CDATA[*/
-		const id = ;
 
 		fetch(/*[[|@{/camp}/getLatAndLon?id=${CAMP.campId}|]]*/)
 			.then(res => res.json())
