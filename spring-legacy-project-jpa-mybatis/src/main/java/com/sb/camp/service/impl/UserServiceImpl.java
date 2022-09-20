@@ -2,6 +2,7 @@ package com.sb.camp.service.impl;
 
 import java.util.List;
 
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,9 +24,14 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int join(User user) { // MyBatis
-			String encodedPassword = passwordEncoder.encode(user.getPassword());
-			user.setPassword(encodedPassword);
-			userDao.insert(user);
+			
+			if(userDao.findAuthsById(user.getUsername()) == null) {
+				String encodedPassword = passwordEncoder.encode(user.getPassword());
+				user.setPassword(encodedPassword);
+				userDao.insert(user);				
+			} else {
+				return -1;
+			}
 		return 0;
 	}
 

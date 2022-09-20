@@ -54,7 +54,8 @@ public class User implements UserDetails {
 	@Column(columnDefinition = "VARCHAR(255)", nullable = false)
 	@NotBlank(message = "비밀번호는 필수 입력 값입니다")
 	private String password;
-
+	@Transient
+	private String re_password;
 	@Column(nullable = false)
 	@NotBlank(message = "이메일을 입력해주세요")
 	private String email;
@@ -77,7 +78,7 @@ public class User implements UserDetails {
 
 	@Transient
 	Collection<? extends GrantedAuthority> authorities;
-
+	
 	@OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
 	private Set<Authority> auths;
 	
