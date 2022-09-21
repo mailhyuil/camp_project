@@ -24,8 +24,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int join(User user) { // MyBatis
-			
-			if(userDao.findAuthsById(user.getUsername()) == null) {
+			if(userDao.findById(user.getUsername()) == null) {
 				String encodedPassword = passwordEncoder.encode(user.getPassword());
 				user.setPassword(encodedPassword);
 				userDao.insert(user);				

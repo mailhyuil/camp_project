@@ -35,12 +35,12 @@ public class UserController {
 			return "/user/join";
 		}
 		
-		int ret = userService.join(user);
-		
 		if(!user.getPassword().equals(user.getRe_password())) {
 			result.addError(new FieldError("User", "re_password", "비밀번호가 일치하지 않습니다."));
 			return "/user/join";
 		}
+		
+		int ret = userService.join(user);
 		
 		if(ret == -1) {
 			result.addError(new FieldError("User", "username", "이미 존재하는 아이디입니다."));
