@@ -5,11 +5,11 @@
 	<div class="flex flex-col flex-1">
 		<div class="grid lg:grid-cols-4 grid-rows lg:gap-2 gap-y-10 p-5 flex-1">
 			<th:block th:each="camp:${campList}">
-				<div class="camp h-72 cursor-pointer drop-shadow-xl relative flex flex-col bg-gray-100 rounded-lg"
+				<div class="camp h-full cursor-pointer drop-shadow-xl relative flex flex-col bg-gray-100 rounded-lg"
 					th:onclick="|location.href='@{/camp/detail?id=}${camp.campId}'|">
-					<img class=" object-cover w-auto h-full rounded-t-lg" th:if="${camp.firstImageUrl != ''}"
+					<img class=" object-cover h-72 rounded-t-lg" th:if="${camp.firstImageUrl != ''}"
 						th:src="${camp.firstImageUrl}">
-					<img class=" object-cover w-auto h-full rounded-t-lg" th:if="${camp.firstImageUrl == ''}"
+					<img class=" object-cover h-72 rounded-t-lg" th:if="${camp.firstImageUrl == ''}"
 						th:src="|@{/static}/img/EyingCamp.jpg|">
 					<h1 class="rounded-lg shadow-lg p-1 font-bold text-gray-700 text-center" th:text="${camp.facltNm}">
 					</h1>
