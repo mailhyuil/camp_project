@@ -1108,12 +1108,20 @@ input:checked + .toggle-bg{
   right: 0.5rem;
 }
 
-.top-0{
-  top: 0px;
+.-top-\[10rem\]{
+  top: -10rem;
 }
 
 .left-0{
   left: 0px;
+}
+
+.top-0{
+  top: 0px;
+}
+
+.-top-\[20rem\]{
+  top: -20rem;
 }
 
 .bottom-\[60px\]{
@@ -1132,16 +1140,16 @@ input:checked + .toggle-bg{
   z-index: 50;
 }
 
+.z-40{
+  z-index: 40;
+}
+
 .z-20{
   z-index: 20;
 }
 
 .z-10{
   z-index: 10;
-}
-
-.z-40{
-  z-index: 40;
 }
 
 .z-30{
@@ -1209,6 +1217,10 @@ input:checked + .toggle-bg{
   margin-left: 1.25rem;
 }
 
+.mr-3{
+  margin-right: 0.75rem;
+}
+
 .mt-2{
   margin-top: 0.5rem;
 }
@@ -1265,6 +1277,10 @@ input:checked + .toggle-bg{
   height: 24rem;
 }
 
+.h-72{
+  height: 18rem;
+}
+
 .h-screen{
   height: 100vh;
 }
@@ -1279,14 +1295,6 @@ input:checked + .toggle-bg{
 
 .h-4{
   height: 1rem;
-}
-
-.h-72{
-  height: 18rem;
-}
-
-.h-64{
-  height: 16rem;
 }
 
 .w-full{
@@ -1329,6 +1337,11 @@ input:checked + .toggle-bg{
   flex-shrink: 1;
 }
 
+.translate-y-full{
+  --tw-translate-y: 100%;
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
 .-translate-x-full{
   --tw-translate-x: -100%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
@@ -1346,11 +1359,6 @@ input:checked + .toggle-bg{
 
 .-translate-y-full{
   --tw-translate-y: -100%;
-  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
-}
-
-.translate-y-full{
-  --tw-translate-y: 100%;
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
 
@@ -1699,6 +1707,16 @@ input:checked + .toggle-bg{
   line-height: 1.75rem;
 }
 
+.text-5xl{
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.text-6xl{
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
 .font-medium{
   font-weight: 500;
 }
@@ -1775,6 +1793,11 @@ input:checked + .toggle-bg{
 .text-green-900{
   --tw-text-opacity: 1;
   color: rgb(1 71 55 / var(--tw-text-opacity));
+}
+
+.text-blue-300{
+  --tw-text-opacity: 1;
+  color: rgb(164 202 254 / var(--tw-text-opacity));
 }
 
 .text-blue-600{
@@ -1854,6 +1877,18 @@ input:checked + .toggle-bg{
   transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+.duration-1000{
+  transition-duration: 1000ms;
+}
+
+.duration-\[1200ms\]{
+  transition-duration: 1200ms;
+}
+
+.ease-\[cubic-bezier\(0\.185\2c 0\.870\2c 1\.000\2c -0\.345\)\]{
+  transition-timing-function: cubic-bezier(0.185,0.870,1.000,-0.345);
 }
 
 .ease-out{

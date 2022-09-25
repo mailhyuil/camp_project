@@ -47,7 +47,7 @@ public class UserController {
 			return "/user/join";
 		}
 
-		return "redirect:/";
+		return "redirect:/user/login";
 	}
 	
 	@GetMapping("login")

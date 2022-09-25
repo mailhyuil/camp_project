@@ -10,10 +10,36 @@
     <th:block th:replace="fragment/header :: headerFragment"></th:block>
     <th:block th:replace="fragment/home :: searchFragment"></th:block>
 
-    <main class="px-44">
+    <main class="px-44 opacity-0 transition-all duration-1000">
         <th:block layout:fragment="content"></th:block>
     </main>
+    <div
+        class="pageshow-mask-1 fixed z-50 w-full h-full transition-all duration-1000 -top-[10rem] left-0 ease-[cubic-bezier(0.185,0.870,1.000,-0.345)]">
+        <h1 class="absolute z-50 top-0 inset-x-1/2 font-logo text-6xl w-full text-primary">Hello!</h1>
+        <img class="absolute z-1 w-full top-0" th:src="@{/static/img/mask-outer.png}">
+    </div>
+    <div
+        class="pageshow-mask-2 fixed z-40 w-full h-full transition-all duration-[1200ms] -top-[20rem] left-0 ease-[cubic-bezier(0.185,0.870,1.000,-0.345)]">
+        <img class="absolute w-full top-0" th:src="@{/static/img/mask-inner.png}">
+    </div>
     <th:block th:replace="fragment/footer :: footerFragment"> </th:block>
 </body>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const main = document.querySelector("main");
+    const page_mask_1 = document.querySelector(".pageshow-mask-1");
+    const page_mask_2 = document.querySelector(".pageshow-mask-2");
+
+    window.onpageshow = (e) => {
+        page_mask_1.classList.add("translate-y-full");
+        page_mask_2.classList.add("translate-y-full");
+        page_mask_1.classList.remove("-top-[10rem]");
+        page_mask_2.classList.remove("-top-[20rem]");
+        main.classList.remove("opacity-0")
+        main.classList.add("opacity-100")
+    }
+    /*]]>*/
+</script>
+
 
 </html>

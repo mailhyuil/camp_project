@@ -12,7 +12,7 @@ module.exports = {
       fontFamily: {
         logo: ['Pacifico'],
         main: ['Noto Sans KR']
-      }
+      },
     },
   },
   plugins: [
