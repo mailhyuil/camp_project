@@ -29,7 +29,7 @@
  		INSERT INTO authorities(username, authority)
  		VALUES
  		<foreach collection="list" item="vo" separator=", ">
- 			(#{vo.username},#{vo.authority})
+ 			(#{vo.user.username},#{vo.authority})
  		</foreach>
  	</insert>
  	

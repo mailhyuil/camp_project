@@ -52,9 +52,16 @@
 			fetch(/*[[|@{/bbs/likeBbs}/${bbs.id}|]]*/)
 				.then(res => res.text())
 				.then(result => {
+					if (result === 'NOT_LOGGED_IN') {
+						if (confirm("로그인 하시겠습니까?")) {
+							location.href = /*[[@{/user/login}]]*/
+						} else {
+							return;
+						}
+					};
 					likeCnt.querySelector("p").textContent = result;
 					document.querySelector(".likeCnt-top").textContent = "추천 수 " + result;
-				});
+				})
 		}
 		/*]]>*/
 	</script>

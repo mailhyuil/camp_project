@@ -22,7 +22,12 @@ public class UserController {
 	public UserController(UserService userService) {
 		this.userService = userService;
 	}
-
+	
+	@GetMapping("home")
+	public String home() {
+		return null;
+	}
+	
 	@GetMapping("join")
 	public String join(@ModelAttribute("user") User user) {
 		return null;
@@ -54,4 +59,5 @@ public class UserController {
 	public String login(@ModelAttribute("user") User user) {
 		return null;
 	}
+
 }

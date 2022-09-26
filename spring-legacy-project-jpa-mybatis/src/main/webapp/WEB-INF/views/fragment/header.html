@@ -19,6 +19,8 @@
 			<li class="mx-5"><a th:href="@{/bbs/collection}">둘러보기</a></li>
 			<li class="mx-5" sec:authorize="!isAuthenticated()"><a th:href="@{/user/login}">로그인</a></li>
 			<li class="mx-5" sec:authorize="!isAuthenticated()"><a th:href="@{/user/join}">회원가입</a></li>
+			<li class="mx-5" sec:authorize="isAuthenticated() AND hasRole('ROLE_USER')"><a th:href="@{/user/home}">마이페이지</a></li>
+			<li class="mx-5" sec:authorize="isAuthenticated() AND hasRole('ROLE_ADMIN')"><a th:href="@{/admin/home}">관리자페이지</a></li>
 			<li class="mx-5" sec:authorize="isAuthenticated()"><a class="cursor-pointer" onclick="logout()">로그아웃</a>
 			</li>
 		</ul>

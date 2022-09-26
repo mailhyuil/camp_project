@@ -56,6 +56,11 @@ public class CampController {
 	@GetMapping("/like/{id}")
 	@ResponseBody
 	public String like(@PathVariable("id") long campId, Principal principal) {
+		
+		if(principal == null) {
+			return "NOT_LOGGED_IN";
+		}
+		
 		int res = campService.likeCamp(campId, principal.getName());
 		
 		return res + "";

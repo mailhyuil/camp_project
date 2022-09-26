@@ -101,6 +101,11 @@ public class BbsController {
     @GetMapping("/likeBbs/{id}")
     @ResponseBody
     public String likeBbs(@PathVariable(name = "id") long bbsId, Principal principal) {
+    	
+		if(principal == null) {
+			return "NOT_LOGGED_IN";
+		}
+    	
     	int res = bbsService.likeBbs(bbsId, principal.getName());
     	return res + "";
     }

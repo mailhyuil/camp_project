@@ -1,8 +1,8 @@
 package com.sb.camp.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,13 +24,28 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int join(User user) { // MyBatis
-			if(userDao.findById(user.getUsername()) == null) {
-				String encodedPassword = passwordEncoder.encode(user.getPassword());
-				user.setPassword(encodedPassword);
-				userDao.insert(user);				
-			} else {
-				return -1;
-			}
+		List<Authority> authList = new ArrayList<>();
+		
+		if (userDao.selectAll().isEmpty()) {
+			Authority auth = new Authority();
+			auth.setUser(user);
+			auth.setAuthority("ROLE_ADMIN");
+			authList.add(auth);
+		}
+		
+		Authority auth = new Authority();
+		auth.setAuthority("ROLE_USER");
+		auth.setUser(user);
+		authList.add(auth);
+
+		if (userDao.findById(user.getUsername()) == null) {
+			String encodedPassword = passwordEncoder.encode(user.getPassword());
+			user.setPassword(encodedPassword);
+			userDao.insert(user);
+			userDao.insertRole(authList);
+		} else {
+			return -1;
+		}
 		return 0;
 	}
 
