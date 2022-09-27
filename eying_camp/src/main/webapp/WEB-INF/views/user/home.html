@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout/layout}">
+<th:block layout:fragment="content">
+	<div class="flex justify-center">
+		<h1 class="text-3xl mb-10">
+			안녕하세요 <strong class="text-primary" sec:authentication="name"></strong>님
+		</h1>
+	</div>
+	<div class="flex justify-between">
+		<div class="w-1/2 m-4">
+			<h1 class="text-xl font-bold text-primary">나의 방명록</h1>
+			<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+				<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+					<tr>
+						<th scope="col" class="py-3 px-6">No.</th>
+						<th scope="col" class="py-3 px-6">제목</th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="bbs,index:${foundBbs}">
+						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+							th:onclick="|location.href='@{/bbs/detail(id=${bbs.bbsId})}'|">
+							<td class="py-4 px-6" th:text="${index.count}"></td>
+							<td class="py-4 px-6" th:text="${bbs.title}"></td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+			<nav class="flex justify-center">
+				<ul class="inline-flex items-center -space-x-px cursor-pointer">
+					<li>
+						<a class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+							th:onclick="|bbs_fn_first()|">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+								stroke="currentColor" class="w-5 h-5">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+							</svg>
+						</a>
+					</li>
+					<th:block th:if="${bbs_pagination.prev}">
+						<li>
+							<a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+								th:onclick="|bbs_fn_prev(${bbs_pagination.currentPage})|">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+									stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M15.75 19.5L8.25 12l7.5-7.5" />
+								</svg>
+							</a>
+						</li>
+					</th:block>
+					<th:block th:each="index:${#numbers.sequence(bbs_pagination.startPage, bbs_pagination.endPage)}">
+						<li>
+							<a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+								th:classappend="|${bbs_pagination.currentPage == index ? 'bg-blue-300' : ''}|"
+								th:onclick="|bbs_fn_pagination(${index})|">
+								<span th:text="${index}"></span>
+							</a>
+						</li>
+					</th:block>
+					<th:block th:if="${bbs_pagination.next}">
+						<li>
+							<a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+								th:onclick="|bbs_fn_next(${bbs_pagination.currentPage})|">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+									stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+								</svg>
+							</a>
+						</li>
+					</th:block>
+					<li>
+						<a class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+							th:onclick="|bbs_fn_last(${bbs_pagination.theLastPage})|">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+								stroke="currentColor" class="w-5 h-5">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+							</svg>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+<!-- 
+		<div class="w-1/2 m-4">
+			<h1 class="text-xl font-bold text-primary">나의 좋아요</h1>
+			<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+				<thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+					<tr>
+						<th scope="col" class="py-3 px-6">No.</th>
+						<th scope="col" class="py-3 px-6">캠프</th>
+					</tr>
+				</thead>
+				<tbody>
+					<th:block th:each="camplike,index:${foundCampLike}">
+						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
+							th:onclick="|location.href='@{/bbs/detail(id=${camplike.campLikeId})}'|">
+							<td class="py-4 px-6" th:text="${index.count}"></td>
+							<td class="py-4 px-6" th:text="${camplike.camp.facltNm}"></td>
+						</tr>
+					</th:block>
+				</tbody>
+			</table>
+			<nav class="flex justify-center">
+				<ul class="inline-flex items-center -space-x-px cursor-pointer">
+					<li>
+						<a class="block py-2 px-3 ml-0 leading-tight text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+							th:onclick="|camplike_fn_first()|">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+								stroke="currentColor" class="w-5 h-5">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+							</svg>
+						</a>
+					</li>
+					<th:block th:if="${camplike_pagination.prev}">
+						<li>
+							<a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+								th:onclick="|camplike_fn_prev(${camplike_pagination.currentPage})|">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+									stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M15.75 19.5L8.25 12l7.5-7.5" />
+								</svg>
+							</a>
+						</li>
+					</th:block>
+					<th:block
+						th:each="index:${#numbers.sequence(camplike_pagination.startPage, camplike_pagination.endPage)}">
+						<li>
+							<a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+								th:classappend="|${camplike_pagination.currentPage == index ? 'bg-blue-300' : ''}|"
+								th:onclick="|camplike_fn_pagination(${index})|">
+								<span th:text="${index}"></span>
+							</a>
+						</li>
+					</th:block>
+					<th:block th:if="${camplike_pagination.next}">
+						<li>
+							<a class="block py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+								th:onclick="|camplike_fn_next(${camplike_pagination.currentPage})|">
+								<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+									stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+									<path stroke-linecap="round" stroke-linejoin="round"
+										d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+								</svg>
+
+							</a>
+						</li>
+					</th:block>
+					<li>
+						<a class="block py-2 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+							th:onclick="|camplike_fn_last(${camplike_pagination.theLastPage})|">
+							<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+								stroke="currentColor" class="w-5 h-5">
+								<path stroke-linecap="round" stroke-linejoin="round"
+									d="M11.25 4.5l7.5 7.5-7.5 7.5m-6-15l7.5 7.5-7.5 7.5" />
+							</svg>
+						</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+		 -->
+	</div>
+	<script th:inline="javascript">
+		/*<![CDATA[*/
+		let url = "/user/home";
+		let bbs_page = "";
+//		let campLike_page = "";
+
+		function bbs_fn_prev(bbs_currentPage) {
+			bbs_page = bbs_currentPage - 1;
+			url = url + "?bbs_page=" + bbs_page + "&campLike_page=" + new URLSearchParams(location.search).get('campLike_page')
+			location.href = url;
+		}
+
+		function bbs_fn_pagination(page) {
+			bbs_page = page;
+			url = url + "?bbs_page=" + bbs_page + "&campLike_page=" + new URLSearchParams(location.search).get('campLike_page')
+			location.href = url;
+		}
+
+		function bbs_fn_next(currentPage) {
+			bbs_page = currentPage + 1;
+			url = url + "?bbs_page=" + bbs_page + "&campLike_page=" + new URLSearchParams(location.search).get('campLike_page')
+			location.href = url;
+		}
+
+		function bbs_fn_first() {
+			bbs_page = 1;
+			url = url + "?bbs_page=" + bbs_page + "&campLike_page=" + new URLSearchParams(location.search).get('campLike_page')
+			location.href = url;
+		}
+
+		function bbs_fn_last(theLastPage) {
+			bbs_page = theLastPage
+			url = url + "?bbs_page=" + bbs_page + "&campLike_page=" + new URLSearchParams(location.search).get('campLike_page')
+			location.href = url;
+		}
+
+/*
+		function camplike_fn_prev(camplike_currentPage) {
+			campLike_page = camplike_currentPage - 1;
+			url = url + "?bbs_page=" + new URLSearchParams(location.search).get('bbs_page') + "&campLike_page=" + campLike_page
+			location.href = url;
+		}
+
+		function camplike_fn_pagination(page) {
+			campLike_page = page;
+			url = url + "?bbs_page=" + new URLSearchParams(location.search).get('bbs_page') + "&campLike_page=" + campLike_page
+			location.href = url;
+		}
+
+		function camplike_fn_next(currentPage) {
+			campLike_page = currentPage + 1;
+			url = url + "?bbs_page=" + new URLSearchParams(location.search).get('bbs_page') + "&campLike_page=" + campLike_page
+			location.href = url;
+		}
+
+		function camplike_fn_first() {
+			campLike_page = 1;
+			url = url + "?bbs_page=" + new URLSearchParams(location.search).get('bbs_page') + "&campLike_page=" + campLike_page
+			location.href = url;
+		}
+
+		function camplike_fn_last(theLastPage) {
+			campLike_page = theLastPage
+			url = url + "?bbs_page=" + new URLSearchParams(location.search).get('bbs_page') + "&campLike_page=" + campLike_page
+			location.href = url;
+		}
+		*/
+        /*]]>*/
+	</script>
+</th:block>
+
+</html>

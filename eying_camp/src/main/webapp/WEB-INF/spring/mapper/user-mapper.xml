@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sb.camp.persistence.UserDao">
+
+	<select id="selectAll" resultType="User">
+		SELECT * FROM users
+	</select>
+	
+	<select id="findById" resultType="User">
+		SELECT * FROM users WHERE username = #{username}
+	</select>
+	
+	<select id="getTotalBbsListSize" resultType="int">
+		SELECT count(*) AS listCnt 
+		FROM bbs 
+		LEFT JOIN users ON bbs.username = users.username
+		WHERE users.username = #{username}
+	</select>
+	
+	<select id="findBbsByUsername" resultType="Bbs">
+		SELECT bbs_id, title FROM bbs LEFT JOIN users ON bbs.username = users.username
+		WHERE users.username = #{username} LIMIT #{pagination.cri}, #{pagination.LIST_SIZE}
+	</select>
+	
+	<insert id="insert" parameterType="User">
+		INSERT INTO users(username, password, enabled, email, nickname
+		) VALUES (
+			#{username}, #{password}, #{enabled}, #{email}, #{nickname}
+		)
+	</insert>
+	
+	
+	 <!-- 권한 정보 불러오기 -->
+ 	<select id="findAuthsById" resultType="Authority">
+ 		SELECT * FROM authorities WHERE username = #{uesrname}
+ 	</select>
+ 	
+ 	 <insert id="insertRole">
+ 		INSERT INTO authorities(username, authority)
+ 		VALUES
+ 		<foreach collection="list" item="vo" separator=", ">
+ 			(#{vo.user.username},#{vo.authority})
+ 		</foreach>
+ 	</insert>
+ 	
+	<update id="update"></update>
+	<delete id="delete"></delete>
+
+</mapper> 
