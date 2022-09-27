@@ -1,12 +1,12 @@
 package com.sb.camp.service.impl;
 
 import static com.sb.camp.domain.QCampLike.campLike;
+import static com.sb.camp.domain.QUser.user;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,6 +21,7 @@ import com.sb.camp.persistence.UserDao;
 import com.sb.camp.repository.CampLikeRepository;
 import com.sb.camp.repository.UserRepository;
 import com.sb.camp.service.UserService;
+import com.sb.camp.util.PaginationUtils;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -80,45 +81,35 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public Map<String,Object> findPaginatedBbsListByUsername(String username, int page) {
 		final int totalListCount = userDao.getTotalBbsListSize(username);
-		final int PAGE_SIZE = 5;
-		final int LIST_SIZE = 5;
 
-		Pagination pagination = new Pagination();
+		Pagination pagination = PaginationUtils.createPagination(page, totalListCount, 5, 5);
 
-		pagination.paginate(page , totalListCount, PAGE_SIZE, LIST_SIZE);
-		
 		Map<String, Object> map = new HashMap<>();
 		
 		map.put("bbs_pagination", pagination);
 		map.put("foundBbs", userDao.findBbsByUsername(username, pagination));
 		return map;
 	}
-/*
+
 	@Override
 	public Map<String,Object> findPaginatedCampLikeLikeByUsername(String username, int page) {
 		User foundUser = userRepository.findOneByUsername(username);
+		
 		List<CampLike> foundCampLike = campLikeRepository.findByUserId(foundUser.getId());
+		
 		final int totalListCount = foundCampLike.size();
 		
-		Pagination pagination = createPagination(page, totalListCount, 5, 5);
+		Pagination pagination = PaginationUtils.createPagination(page, totalListCount, 5, 5);
 
 		QueryModifiers queryModifiers = new QueryModifiers((long) pagination.getLIST_SIZE(),
 				(long) pagination.getCri()); // limit, offset
 		
-		List<CampLike> campLikeList = queryFactory.selectFrom(campLike).restrict(queryModifiers).fetch();
-
+		List<CampLike> campLikeList = queryFactory.selectFrom(campLike).where(user.eq(foundUser)).restrict(queryModifiers).fetch();
+		
 		Map<String, Object> map = new HashMap<>();
 		map.put("camplike_pagination", pagination);
 		map.put("foundCampLike", campLikeList);
 		return map;
 	}
 
-	private Pagination createPagination(int page, int totalListCount, int PAGE_SIZE, int LIST_SIZE) {
-
-		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
-
-		pagination.paginate(page, totalListCount, PAGE_SIZE, LIST_SIZE); // 페이지네이션 초기화
-		return pagination;
-	}
-*/
 }

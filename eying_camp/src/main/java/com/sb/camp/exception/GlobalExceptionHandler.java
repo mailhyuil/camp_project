@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestControllerAdvice
-@Slf4j
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler { // Controller 내에서 발생하는 에러만 해당
 
     //일반 에러

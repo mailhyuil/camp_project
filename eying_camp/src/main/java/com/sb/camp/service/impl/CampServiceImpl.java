@@ -34,6 +34,7 @@ import com.sb.camp.repository.CampLikeRepository;
 import com.sb.camp.repository.CampRepository;
 import com.sb.camp.repository.UserRepository;
 import com.sb.camp.service.CampService;
+import com.sb.camp.util.PaginationUtils;
 
 @Service
 public class CampServiceImpl implements CampService {
@@ -55,6 +56,7 @@ public class CampServiceImpl implements CampService {
 		this.userRepository = userRepository;
 	}
 
+	@Autowired
 	@Override
 	public void insertAPI() { // api로 json데이터를 받아서 DB에 insert // MyBatis
 
@@ -94,12 +96,8 @@ public class CampServiceImpl implements CampService {
 			String doNm, String sigunguNm, String facltNm, int page) { // MyBatis
 
 		final int totalListCount = campDao.findCampListCnt(doNm, sigunguNm, facltNm);
-		final int PAGE_SIZE = 7;
-		final int LIST_SIZE = 8;
 
-		Pagination pagination = new Pagination();
-
-		pagination.paginate(page, totalListCount, PAGE_SIZE, LIST_SIZE);
+		Pagination pagination = PaginationUtils.createPagination(page, totalListCount, 7, 8);
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);

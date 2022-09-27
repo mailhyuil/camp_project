@@ -37,6 +37,7 @@ import com.sb.camp.repository.ImageRepository;
 import com.sb.camp.repository.UserRepository;
 import com.sb.camp.repository.VideoRepository;
 import com.sb.camp.service.BbsService;
+import com.sb.camp.util.PaginationUtils;
 
 @Service
 @Transactional
@@ -127,7 +128,7 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Map<String, Object> getPaginationAndBbsList(int page, long campId) { // MyBatis
 		final int totalListCount = bbsDao.findBoardListCnt(campId);
-		Pagination pagination = createPagination(page, totalListCount, 5, 5);
+		Pagination pagination = PaginationUtils.createPagination(page, totalListCount, 5, 5);
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("pagination", pagination);
@@ -197,7 +198,7 @@ public class BbsServiceImpl implements BbsService {
 	@Override
 	public Map<String, Object> getPaginationAndImageList(int page) { // QueryDSL
 		final int totalListCount = (int) imageRepository.count();
-		Pagination pagination = createPagination(page, totalListCount, 5, 8);
+		Pagination pagination = PaginationUtils.createPagination(page, totalListCount, 5, 8);
 
 		QueryModifiers queryModifiers = new QueryModifiers((long) pagination.getLIST_SIZE(),
 				(long) pagination.getCri()); // limit, offset
@@ -264,24 +265,5 @@ public class BbsServiceImpl implements BbsService {
 			throw new RuntimeException(e);
 		}
 		return image;
-	}
-
-	/**
-	 * 
-	 * @Author sangb
-	 * @Date 2022. 9. 5.
-	 * @Method createPagination
-	 * @param page
-	 * @param totalListCount
-	 * @param PAGE_SIZE
-	 * @param LIST_SIZE
-	 * @return Pagination
-	 */
-	private Pagination createPagination(int page, int totalListCount, int PAGE_SIZE, int LIST_SIZE) {
-
-		Pagination pagination = new Pagination(); // 페이지네이션 객체 생성
-
-		pagination.paginate(page, totalListCount, PAGE_SIZE, LIST_SIZE); // 페이지네이션 초기화
-		return pagination;
 	}
 }

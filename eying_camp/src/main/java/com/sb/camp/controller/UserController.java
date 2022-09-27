@@ -32,7 +32,7 @@ public class UserController {
 			@RequestParam(required = false, defaultValue = "1") int bbs_page,
 			@RequestParam(required = false, defaultValue = "1") int campLike_page) {
 		model.addAllAttributes(userService.findPaginatedBbsListByUsername(principal.getName(), bbs_page));
-//		model.addAllAttributes(userService.findPaginatedCampLikeLikeByUsername(principal.getName(), campLike_page));
+		model.addAllAttributes(userService.findPaginatedCampLikeLikeByUsername(principal.getName(), campLike_page));
 		return null;
 	}
 

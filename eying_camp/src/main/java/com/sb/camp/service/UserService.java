@@ -11,5 +11,5 @@ public interface UserService {
 	public User findUser(String username);
 	public List<Authority> findAuths(String username);
 	public Map<String, Object> findPaginatedBbsListByUsername(String username, int page);
-//	public Map<String, Object> findPaginatedCampLikeLikeByUsername(String username, int page);
+	public Map<String, Object> findPaginatedCampLikeLikeByUsername(String username, int page);
 }

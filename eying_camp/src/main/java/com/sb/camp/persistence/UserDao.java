@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Param;
 
 import com.sb.camp.domain.Authority;
 import com.sb.camp.domain.Bbs;
-import com.sb.camp.domain.CampLike;
 import com.sb.camp.domain.Pagination;
 import com.sb.camp.domain.User;
 

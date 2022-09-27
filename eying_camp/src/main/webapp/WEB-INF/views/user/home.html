@@ -85,7 +85,6 @@
 				</ul>
 			</nav>
 		</div>
-<!-- 
 		<div class="w-1/2 m-4">
 			<h1 class="text-xl font-bold text-primary">나의 좋아요</h1>
 			<table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -98,7 +97,7 @@
 				<tbody>
 					<th:block th:each="camplike,index:${foundCampLike}">
 						<tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 cursor-pointer"
-							th:onclick="|location.href='@{/bbs/detail(id=${camplike.campLikeId})}'|">
+							th:onclick="|location.href='@{/camp/detail(id=${camplike.camp.id})}'|">
 							<td class="py-4 px-6" th:text="${index.count}"></td>
 							<td class="py-4 px-6" th:text="${camplike.camp.facltNm}"></td>
 						</tr>
@@ -165,13 +164,12 @@
 				</ul>
 			</nav>
 		</div>
-		 -->
 	</div>
 	<script th:inline="javascript">
 		/*<![CDATA[*/
 		let url = "/user/home";
 		let bbs_page = "";
-//		let campLike_page = "";
+		let campLike_page = "";
 
 		function bbs_fn_prev(bbs_currentPage) {
 			bbs_page = bbs_currentPage - 1;
@@ -203,7 +201,7 @@
 			location.href = url;
 		}
 
-/*
+
 		function camplike_fn_prev(camplike_currentPage) {
 			campLike_page = camplike_currentPage - 1;
 			url = url + "?bbs_page=" + new URLSearchParams(location.search).get('bbs_page') + "&campLike_page=" + campLike_page
@@ -233,7 +231,6 @@
 			url = url + "?bbs_page=" + new URLSearchParams(location.search).get('bbs_page') + "&campLike_page=" + campLike_page
 			location.href = url;
 		}
-		*/
         /*]]>*/
 	</script>
 </th:block>
