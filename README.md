@@ -4,7 +4,6 @@ Deployement IP : [Eying-camp](https://3.34.191.96)
 
 - frontend
   - javascript
-  - React.js
   - tailwindcss
 
 - backend
@@ -15,7 +14,7 @@ Deployement IP : [Eying-camp](https://3.34.191.96)
   - hibernate
   - thymeleaf
   
-- 배포
+- deployment
   - EC2
   - RDS
     - mysql
