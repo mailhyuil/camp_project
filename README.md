@@ -1,6 +1,6 @@
 # Eying-Camp
 
-Deployement IP : [Eying-camp](https://3.34.191.96)
+Deployement IP : [eying-camp](https://3.34.191.96)
 
 - IDE
   - STS
