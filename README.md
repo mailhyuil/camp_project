@@ -19,10 +19,11 @@ Deployement IP : [Eying-camp](https://3.34.191.96)
   
 - deployment
   - AWS EC2
+    - docker
+      - tomcat container
+      - nginx container
   - AWS RDS
     - mysql
-  - docker
-    - tomcat container
-    - nginx container
+
   
 copyright &copy; mailhyuil@gmail.com
