@@ -30,7 +30,7 @@ public abstract class BaseEntity {
 
     @LastModifiedBy
     private String lastModifiedBy;
-    
+
     @Column(updatable = false, length = 19)
     @CreatedDate
     private String createdDate;

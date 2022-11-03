@@ -10,8 +10,8 @@ public class Jasypt {
         jasypt.setAlgorithm("PBEWithMD5AndDES");
         jasypt.setPassword("password");
         
-        String encryptedUsername = jasypt.encrypt("");
-        String encryptedPwd = jasypt.encrypt("");
+        String encryptedUsername = jasypt.encrypt("root");
+        String encryptedPwd = jasypt.encrypt("1234");
         
         System.out.println(encryptedUsername);
         System.out.println(encryptedPwd);
